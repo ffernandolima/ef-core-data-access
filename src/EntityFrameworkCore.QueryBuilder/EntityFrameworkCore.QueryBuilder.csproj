@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="2.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>EntityFrameworkCore.Repository</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+</Project>

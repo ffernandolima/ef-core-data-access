@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="2.0.50" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\EntityFrameworkCore.QueryBuilder\EntityFrameworkCore.QueryBuilder.csproj" />
+    </ItemGroup>
+
+</Project>
