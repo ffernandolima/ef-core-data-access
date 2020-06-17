@@ -1,8 +1,5 @@
 ﻿using EntityFrameworkCore.Data;
-using EntityFrameworkCore.Data.Repositories;
-using EntityFrameworkCore.Data.Repositories.Interfaces;
 using EntityFrameworkCore.Models;
-using EntityFrameworkCore.Repository.Extensions;
 using EntityFrameworkCore.UnitOfWork.Extensions;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using EntityFramewrokCore.WebAPI.Swagger.Filters;
@@ -15,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -57,7 +55,7 @@ namespace EntityFramewrokCore.WebAPI
                 options.LowercaseQueryStrings = true;
             });
 
-            services.AddMvc().AddJsonOptions(options =>
+            services.AddMvc().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -104,14 +102,15 @@ namespace EntityFramewrokCore.WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApiVersionDescriptionProvider provider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvcWithDefaultRoute();
+            app.UseRouting();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>

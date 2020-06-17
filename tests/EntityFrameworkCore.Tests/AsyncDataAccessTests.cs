@@ -35,7 +35,7 @@ namespace EntityFrameworkCore.Tests
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BloggingContext>(options => options.UseInMemoryDatabase(nameof(BloggingContext)), ServiceLifetime.Transient);
+            services.AddDbContext<BloggingContext>(options => options.UseInMemoryDatabase($"Async-{nameof(BloggingContext)}"), ServiceLifetime.Transient);
             services.AddTransient<DbContext, BloggingContext>();
             services.AddUnitOfWork();
             services.AddUnitOfWork<BloggingContext>();

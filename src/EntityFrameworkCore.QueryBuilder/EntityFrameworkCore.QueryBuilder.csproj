@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="2.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.6" />
+        <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="3.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.5" />
     </ItemGroup>
 
     <ItemGroup>

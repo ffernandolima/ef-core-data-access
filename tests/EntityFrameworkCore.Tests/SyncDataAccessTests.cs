@@ -38,7 +38,7 @@ namespace EntityFrameworkCore.Tests
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BloggingContext>(options => options.UseInMemoryDatabase(nameof(BloggingContext)), ServiceLifetime.Transient);
+            services.AddDbContext<BloggingContext>(options => options.UseInMemoryDatabase($"Sync-{nameof(BloggingContext)}"), ServiceLifetime.Transient);
             services.AddTransient<DbContext, BloggingContext>();
             services.AddUnitOfWork();
             services.AddUnitOfWork<BloggingContext>();
@@ -279,8 +279,6 @@ namespace EntityFrameworkCore.Tests
             var repository = _unitOfWork.Repository<Blog>();
 
             var blog = repository.Add(Seeder.SeedBlog(51));
-
-            _unitOfWork.SaveChanges();
 
             Assert.Equal(51, blog.Id);
         }

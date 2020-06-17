@@ -189,7 +189,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var affectedRows = _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+            var affectedRows = _dbContext.Database.ExecuteSqlRaw(sql, parameters);
 
             return affectedRows;
         }
@@ -203,7 +203,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
             var dbSet = _dbContext.Set<T>();
 
-            var entities = dbSet.FromSql(sql, parameters).ToList();
+            var entities = dbSet.FromSqlRaw(sql, parameters).ToList();
 
             return entities;
         }
@@ -225,9 +225,9 @@ namespace EntityFrameworkCore.UnitOfWork
 
             foreach (var entityType in entityTypes)
             {
-                if (entityType?.Relational() is RelationalEntityTypeAnnotations relationalEntityType)
+                if (entityType is IConventionEntityType conventionEntityType)
                 {
-                    relationalEntityType.Schema = database;
+                    conventionEntityType.SetSchema(database);
                 }
             }
         }
@@ -277,7 +277,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var affectedRows = _dbContext.Database.ExecuteSqlCommandAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken);
+            var affectedRows = _dbContext.Database.ExecuteSqlRawAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken);
 
             return affectedRows;
         }

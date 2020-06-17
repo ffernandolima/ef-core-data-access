@@ -438,7 +438,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var affectedRows = DbContext.Database.ExecuteSqlCommand(sql, parameters);
+            var affectedRows = DbContext.Database.ExecuteSqlRaw(sql, parameters);
 
             return affectedRows;
         }
@@ -450,9 +450,9 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var queryable = GetQueryable();
+            var queryable = GetQueryable(sql: sql, parameters: parameters);
 
-            var entities = queryable.FromSql(sql, parameters).ToList();
+            var entities = queryable.ToList();
 
             return entities;
         }
@@ -461,9 +461,9 @@ namespace EntityFrameworkCore.Repository
         {
             var entityType = DbContext.Model.FindEntityType(typeof(T));
 
-            if (entityType?.Relational() is RelationalEntityTypeAnnotations relationalEntityType)
+            if (entityType is IConventionEntityType conventionEntityType)
             {
-                relationalEntityType.TableName = table;
+                conventionEntityType.SetTableName(table);
             }
         }
 
@@ -693,7 +693,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
 
-            var entityResult = DbSet.AddAsync(entity, cancellationToken).Then(result => result.Entity);
+            var entityResult = DbSet.AddAsync(entity, cancellationToken).AsTask().Then(result => result.Entity);
 
             return entityResult;
         }
@@ -739,7 +739,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var affectedRows = DbContext.Database.ExecuteSqlCommandAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken);
+            var affectedRows = DbContext.Database.ExecuteSqlRawAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken);
 
             return affectedRows;
         }
@@ -873,6 +873,34 @@ namespace EntityFrameworkCore.Repository
                 case QueryTrackingBehavior.NoTracking:
                     {
                         queryable = DbSet.AsNoTracking();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            if (ignoreQueryFilters ?? false)
+            {
+                queryable = queryable.IgnoreQueryFilters();
+            }
+
+            return queryable;
+        }
+
+        private IQueryable<T> GetQueryable(string sql, QueryTrackingBehavior? trackingBehavior = null, bool? ignoreQueryFilters = null, params object[] parameters)
+        {
+            IQueryable<T> queryable = null;
+
+            switch (trackingBehavior ?? QueryTrackingBehavior.NoTracking)
+            {
+                case QueryTrackingBehavior.TrackAll:
+                    {
+                        queryable = DbSet.FromSqlRaw(sql, parameters).AsTracking();
+                    }
+                    break;
+                case QueryTrackingBehavior.NoTracking:
+                    {
+                        queryable = DbSet.FromSqlRaw(sql, parameters).AsNoTracking();
                     }
                     break;
                 default:
