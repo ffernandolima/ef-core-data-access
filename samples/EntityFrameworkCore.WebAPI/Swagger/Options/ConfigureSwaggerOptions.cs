@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 
-namespace EntityFramewrokCore.WebAPI.Swagger.Options
+namespace EntityFrameworkCore.WebAPI.Swagger.Options
 {
     /// <summary>
     /// Configures the Swagger generation options.

@@ -2,8 +2,8 @@
 using EntityFrameworkCore.Models;
 using EntityFrameworkCore.UnitOfWork.Extensions;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
-using EntityFramewrokCore.WebAPI.Swagger.Filters;
-using EntityFramewrokCore.WebAPI.Swagger.Options;
+using EntityFrameworkCore.WebAPI.Swagger.Filters;
+using EntityFrameworkCore.WebAPI.Swagger.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace EntityFramewrokCore.WebAPI
+namespace EntityFrameworkCore.WebAPI
 {
     public class Startup
     {
@@ -95,7 +95,7 @@ namespace EntityFramewrokCore.WebAPI
                 var aseemblyName = entryAssembly?.GetName();
                 var appName = aseemblyName?.Name;
 
-                var filePath = Path.Combine(appPath, $"{appName ?? "EntityFramewrokCore.WebAPI"}.xml");
+                var filePath = Path.Combine(appPath, $"{appName ?? "EntityFrameworkCore.WebAPI"}.xml");
 
                 options.IncludeXmlComments(filePath);
             });

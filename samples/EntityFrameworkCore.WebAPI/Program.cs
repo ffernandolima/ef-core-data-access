@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace EntityFramewrokCore.WebAPI
+namespace EntityFrameworkCore.WebAPI
 {
     public class Program
     {

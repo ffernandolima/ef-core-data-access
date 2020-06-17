@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace EntityFramewrokCore.WebAPI.Controllers
+namespace EntityFrameworkCore.WebAPI.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
