@@ -241,8 +241,8 @@ public void UpdateBlog()
     var repository = _unitOfWork.Repository<Blog>();
 
     var blog = repository.Update(model);
-	
-	_unitOfWork.SaveChanges();
+    
+    _unitOfWork.SaveChanges();
 }
 
 public void DeleteBlog()
@@ -250,10 +250,10 @@ public void DeleteBlog()
     var repository = _unitOfWork.Repository<Blog>();
 
     repository.Remove(x => x.Id == id);
-	
-	repository.Remove(model);
-	
-	_unitOfWork.SaveChanges();
+    
+    repository.Remove(model);
+    
+    _unitOfWork.SaveChanges();
 }
 
 ```
