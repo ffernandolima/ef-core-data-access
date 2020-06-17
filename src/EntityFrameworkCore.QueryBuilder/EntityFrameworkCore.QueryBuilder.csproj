@@ -7,7 +7,7 @@
         <NoWarn>1701;1702;1705;1591</NoWarn>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <AssemblyName>EntityFrameworkCore.QueryBuilder</AssemblyName>
-        <PackageId>EntityFrameworkCore.QueryBuilder</PackageId>
+        <PackageId>EntityFrameworkCore.Data.QueryBuilder</PackageId>
         <Authors>Lima Technology Services;Fernando Luiz de Lima</Authors>
         <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
         <Description>Provides the QueryBuilder pattern for Microsoft.EntityFrameworkCore.</Description>
