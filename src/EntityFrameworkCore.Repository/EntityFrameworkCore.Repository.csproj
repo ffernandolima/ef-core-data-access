@@ -1,7 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>1701;1702;1705;1591</NoWarn>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <AssemblyName>EntityFrameworkCore.Repository</AssemblyName>
+        <PackageId>EntityFrameworkCore.Repository</PackageId>
+        <Authors>Lima Technology Services;Fernando Luiz de Lima</Authors>
+        <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
+        <Description>Provides the Repository pattern for Microsoft.EntityFrameworkCore.</Description>
+        <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-2</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;Repository</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Version>2.0.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
