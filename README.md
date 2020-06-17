@@ -260,7 +260,7 @@ public void DeleteBlog()
 
 The operations above are also available as async.
 
-Please check some available samples [here](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-2/samples)
+Please check some available samples [here](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-3/samples)
 
 ## Support / Contributing
 If you want to help with the project, feel free to open pull requests and submit issues. 
