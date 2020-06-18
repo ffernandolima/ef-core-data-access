@@ -24,7 +24,7 @@ namespace EntityFrameworkCore.Data.Repositories
         public Task<IList<string>> GetAllBlogUrlsAsync(CancellationToken cancellationToken = default)
             => DbContext.Set<Blog>()
                         .Select(blog => blog.Url)
-                        .ToListAsync()
+                        .ToListAsync(cancellationToken)
                         .Then<List<string>, IList<string>>(result => result);
     }
 }
