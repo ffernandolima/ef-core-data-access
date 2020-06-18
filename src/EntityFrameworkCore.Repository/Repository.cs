@@ -480,7 +480,7 @@ namespace EntityFrameworkCore.Repository
 
             var queryable = ToQueryable(query);
 
-            var entities = queryable.ToListAsync(cancellationToken).Then<List<T>, IList<T>>(result => result);
+            var entities = queryable.ToListAsync(cancellationToken).Then<List<T>, IList<T>>(result => result, cancellationToken);
 
             return entities;
         }
@@ -499,7 +499,7 @@ namespace EntityFrameworkCore.Repository
 
             var queryable = ToQueryable(query);
 
-            var entities = queryable.ToListAsync(cancellationToken).Then<List<TResult>, IList<TResult>>(result => result);
+            var entities = queryable.ToListAsync(cancellationToken).Then<List<TResult>, IList<TResult>>(result => result, cancellationToken);
 
             return entities;
         }
@@ -693,7 +693,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
 
-            var entityResult = DbSet.AddAsync(entity, cancellationToken).AsTask().Then(result => result.Entity);
+            var entityResult = DbSet.AddAsync(entity, cancellationToken).AsTask().Then(result => result.Entity, cancellationToken);
 
             return entityResult;
         }

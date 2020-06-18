@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EntityFrameworkCore.Repository.Extensions
 {
     public static class TaskExtensions
     {
-        public static Task<TResult> Then<TSource, TResult>(this Task<TSource> sourceTask, Func<TSource, TResult> selector)
+        public static Task<TResult> Then<TSource, TResult>(this Task<TSource> sourceTask, Func<TSource, TResult> selector, CancellationToken cancellationToken = default)
         {
             var taskCompletionSource = new TaskCompletionSource<TResult>();
 
@@ -32,7 +33,8 @@ namespace EntityFrameworkCore.Repository.Extensions
                         taskCompletionSource.TrySetException(ex);
                     }
                 }
-            });
+
+            }, cancellationToken);
 
             return taskCompletionSource.Task;
         }

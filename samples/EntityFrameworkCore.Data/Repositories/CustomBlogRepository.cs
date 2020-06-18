@@ -25,6 +25,6 @@ namespace EntityFrameworkCore.Data.Repositories
             => DbContext.Set<Blog>()
                         .Select(blog => blog.Url)
                         .ToListAsync(cancellationToken)
-                        .Then<List<string>, IList<string>>(result => result);
+                        .Then<List<string>, IList<string>>(result => result, cancellationToken);
     }
 }
