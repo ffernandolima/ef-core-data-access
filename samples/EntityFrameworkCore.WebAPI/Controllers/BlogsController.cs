@@ -152,9 +152,11 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             }
 
             // Example: IDbContextTransaction
-            // await _unitOfWork.BeginTransactionAsync();
-            // await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = '{title}' WHERE [Id] = {id};");
-            // _unitOfWork.Commit();
+            await _unitOfWork.BeginTransactionAsync();
+
+            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = '{title}' WHERE [Id] = {id};");
+
+            _unitOfWork.Commit();
 
             return NoContent();
         }
