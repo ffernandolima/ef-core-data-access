@@ -179,27 +179,21 @@ namespace EntityFrameworkCore.Repository
 
         public virtual bool Any(Expression<Func<T, bool>> predicate = null)
         {
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.Any() : queryable.Any(predicate);
+            var result = predicate == null ? DbSet.Any() : DbSet.Any(predicate);
 
             return result;
         }
 
         public virtual int Count(Expression<Func<T, bool>> predicate = null)
         {
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.Count() : queryable.Count(predicate);
+            var result = predicate == null ? DbSet.Count() : DbSet.Count(predicate);
 
             return result;
         }
 
         public virtual long LongCount(Expression<Func<T, bool>> predicate = null)
         {
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.LongCount() : queryable.LongCount(predicate);
+            var result = predicate == null ? DbSet.LongCount() : DbSet.LongCount(predicate);
 
             return result;
         }
@@ -211,9 +205,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.Max(selector) : queryable.Where(predicate).Max(selector);
+            var result = predicate == null ? DbSet.Max(selector) : DbSet.Where(predicate).Max(selector);
 
             return result;
         }
@@ -225,9 +217,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.Min(selector) : queryable.Where(predicate).Min(selector);
+            var result = predicate == null ? DbSet.Min(selector) : DbSet.Where(predicate).Min(selector);
 
             return result;
         }
@@ -239,9 +229,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.Average(selector) : queryable.Where(predicate).Average(selector);
+            var result = predicate == null ? DbSet.Average(selector) : DbSet.Where(predicate).Average(selector);
 
             return result;
         }
@@ -253,9 +241,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.Sum(selector) : queryable.Where(predicate).Sum(selector);
+            var result = predicate == null ? DbSet.Sum(selector) : DbSet.Where(predicate).Sum(selector);
 
             return result;
         }
@@ -358,9 +344,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(expression), $"{nameof(expression)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = queryable.Where(predicate).Update(expression);
+            var result = DbSet.Where(predicate).Update(expression);
 
             return result;
         }
@@ -409,9 +393,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = queryable.Where(predicate).Delete();
+            var result = DbSet.Where(predicate).Delete();
 
             return result;
         }
@@ -450,9 +432,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var queryable = GetQueryable(sql: sql, parameters: parameters);
-
-            var entities = queryable.ToList();
+            var entities = DbSet.FromSqlRaw(sql, parameters).ToList();
 
             return entities;
         }
@@ -605,27 +585,21 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.AnyAsync(cancellationToken) : queryable.AnyAsync(predicate, cancellationToken);
+            var result = predicate == null ? DbSet.AnyAsync(cancellationToken) : DbSet.AnyAsync(predicate, cancellationToken);
 
             return result;
         }
 
         public virtual Task<int> CountAsync(Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.CountAsync(cancellationToken) : queryable.CountAsync(predicate, cancellationToken);
+            var result = predicate == null ? DbSet.CountAsync(cancellationToken) : DbSet.CountAsync(predicate, cancellationToken);
 
             return result;
         }
 
         public virtual Task<long> LongCountAsync(Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.LongCountAsync(cancellationToken) : queryable.LongCountAsync(predicate, cancellationToken);
+            var result = predicate == null ? DbSet.LongCountAsync(cancellationToken) : DbSet.LongCountAsync(predicate, cancellationToken);
 
             return result;
         }
@@ -637,9 +611,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.MaxAsync(selector, cancellationToken) : queryable.Where(predicate).MaxAsync(selector, cancellationToken);
+            var result = predicate == null ? DbSet.MaxAsync(selector, cancellationToken) : DbSet.Where(predicate).MaxAsync(selector, cancellationToken);
 
             return result;
         }
@@ -651,9 +623,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.MinAsync(selector, cancellationToken) : queryable.Where(predicate).MinAsync(selector, cancellationToken);
+            var result = predicate == null ? DbSet.MinAsync(selector, cancellationToken) : DbSet.Where(predicate).MinAsync(selector, cancellationToken);
 
             return result;
         }
@@ -665,9 +635,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.AverageAsync(selector, cancellationToken) : queryable.Where(predicate).AverageAsync(selector, cancellationToken);
+            var result = predicate == null ? DbSet.AverageAsync(selector, cancellationToken) : DbSet.Where(predicate).AverageAsync(selector, cancellationToken);
 
             return result;
         }
@@ -679,9 +647,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = predicate == null ? queryable.SumAsync(selector, cancellationToken) : queryable.Where(predicate).SumAsync(selector, cancellationToken);
+            var result = predicate == null ? DbSet.SumAsync(selector, cancellationToken) : DbSet.Where(predicate).SumAsync(selector, cancellationToken);
 
             return result;
         }
@@ -725,9 +691,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(expression), $"{nameof(expression)} cannot be null.");
             }
 
-            var queryable = GetQueryable();
-
-            var result = queryable.Where(predicate).UpdateAsync(expression, cancellationToken);
+            var result = DbSet.Where(predicate).UpdateAsync(expression, cancellationToken);
 
             return result;
         }
@@ -861,46 +825,18 @@ namespace EntityFrameworkCore.Repository
 
         private IQueryable<T> GetQueryable(QueryTrackingBehavior? queryTrackingBehavior = null, bool? ignoreQueryFilters = null)
         {
-            IQueryable<T> queryable = null;
+            IQueryable<T> queryable = DbSet;
 
-            switch (queryTrackingBehavior ?? QueryTrackingBehavior.NoTracking)
+            switch (queryTrackingBehavior)
             {
                 case QueryTrackingBehavior.TrackAll:
                     {
-                        queryable = DbSet.AsTracking();
+                        queryable = queryable.AsTracking();
                     }
                     break;
                 case QueryTrackingBehavior.NoTracking:
                     {
-                        queryable = DbSet.AsNoTracking();
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            if (ignoreQueryFilters ?? false)
-            {
-                queryable = queryable.IgnoreQueryFilters();
-            }
-
-            return queryable;
-        }
-
-        private IQueryable<T> GetQueryable(string sql, QueryTrackingBehavior? trackingBehavior = null, bool? ignoreQueryFilters = null, params object[] parameters)
-        {
-            IQueryable<T> queryable = null;
-
-            switch (trackingBehavior ?? QueryTrackingBehavior.NoTracking)
-            {
-                case QueryTrackingBehavior.TrackAll:
-                    {
-                        queryable = DbSet.FromSqlRaw(sql, parameters).AsTracking();
-                    }
-                    break;
-                case QueryTrackingBehavior.NoTracking:
-                    {
-                        queryable = DbSet.FromSqlRaw(sql, parameters).AsNoTracking();
+                        queryable = queryable.AsNoTracking();
                     }
                     break;
                 default:
