@@ -410,7 +410,10 @@ namespace EntityFrameworkCore.Repository
                 return;
             }
 
-            DbSet.RemoveRange(entities);
+            foreach (var entity in entities)
+            {
+                Remove(entity);
+            }
         }
 
         public int ExecuteSqlCommand(string sql, params object[] parameters)
