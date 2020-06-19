@@ -2,12 +2,14 @@
 using EntityFrameworkCore.Models;
 using EntityFrameworkCore.QueryBuilder.Interfaces;
 using EntityFrameworkCore.Repository.Extensions;
+using EntityFrameworkCore.Repository.Factories;
 using EntityFrameworkCore.UnitOfWork.Factories;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -125,6 +127,10 @@ namespace EntityFrameworkCore.WebAPI.Controllers
                 return Conflict();
             }
 
+            // Example: Update Properties
+            repository.Update(model, x => x.Title);
+
+            // Example: Update Model
             repository.Update(model);
 
             await _unitOfWork.SaveChangesAsync();
@@ -143,10 +149,20 @@ namespace EntityFrameworkCore.WebAPI.Controllers
                 return Conflict();
             }
 
+            var parameters = new object[]
+            {
+                DbParameterFactory.CreateDbParameter<SqlParameter>("Title", title),
+                DbParameterFactory.CreateDbParameter<SqlParameter>("Id", id)
+            };
+
             // Example: TransactionScope
             using (var transactionScope = TransactionScopeFactory.CreateTransactionScope(transactionScopeAsyncFlowOption: TransactionScopeAsyncFlowOption.Enabled))
             {
+                // Without Parameters
                 await repository.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = '{title}' WHERE [Id] = {id};");
+
+                // With Parameters
+                await repository.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = @Title WHERE [Id] = @Id;", parameters);
 
                 transactionScope.Complete();
             }
@@ -154,7 +170,11 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             // Example: IDbContextTransaction
             await _unitOfWork.BeginTransactionAsync();
 
+            // Without Parameters
             await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = '{title}' WHERE [Id] = {id};");
+
+            // With Parameters
+            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = @Title WHERE [Id] = @Id;", parameters);
 
             _unitOfWork.Commit();
 
