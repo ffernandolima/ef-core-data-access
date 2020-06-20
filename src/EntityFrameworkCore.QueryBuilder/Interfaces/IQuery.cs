@@ -17,8 +17,8 @@ namespace EntityFrameworkCore.QueryBuilder.Interfaces
     {
         Expression<Func<T, bool>> Predicate { get; }
         IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; }
-        Expression<Func<T, T>> Selector { get; }
         IList<Sorting<T>> Sortings { get; }
+        Expression<Func<T, T>> Selector { get; }
 
         IQuery<T> UseIgnoreQueryFilters(bool ignoreQueryFilters);
         IQuery<T> UseQueryTrackingBehavior(QueryTrackingBehavior queryTrackingBehavior);
