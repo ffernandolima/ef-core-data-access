@@ -4,7 +4,7 @@ namespace EntityFrameworkCore.QueryBuilder
 {
     public class SingleResultQuery<T> : Query<T>, ISingleResultQuery<T> where T : class
     {
-        public static SingleResultQuery<T> New() => new SingleResultQuery<T>();
+        public static ISingleResultQuery<T> New() => new SingleResultQuery<T>();
 
         #region Ctor
 
