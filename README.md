@@ -7,9 +7,9 @@ It's a modern and generic data access structure for .NET and Microsoft.EntityFra
 EntityFrameworkCore.DataAccess is available on Nuget.
 
 ```
-Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 2.0.0
-Install-Package EntityFrameworkCore.Data.Repository -Version 2.0.0
-Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 2.0.0
+Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 2.0.2
+Install-Package EntityFrameworkCore.Data.Repository -Version 2.0.2
+Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 2.0.2
 ```
 
 P.S.: EntityFrameworkCore.Data.UnitOfWork depends on the other two packages, so installing this package is enough.
