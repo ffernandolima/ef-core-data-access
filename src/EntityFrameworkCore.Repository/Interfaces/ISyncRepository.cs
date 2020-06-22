@@ -1,4 +1,6 @@
 ﻿using EntityFrameworkCore.QueryBuilder.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -36,5 +38,7 @@ namespace EntityFrameworkCore.Repository.Interfaces
         int ExecuteSqlCommand(string sql, params object[] parameters);
         IList<T> FromSql(string sql, params object[] parameters);
         void ChangeTable(string table);
+        void ChangeState(T entity, EntityState state);
+        void TrackGraph(T rootEntity, Action<EntityEntryGraphNode> callback);
     }
 }

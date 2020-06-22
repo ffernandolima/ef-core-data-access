@@ -442,12 +442,42 @@ namespace EntityFrameworkCore.Repository
 
         public virtual void ChangeTable(string table)
         {
+            if (string.IsNullOrWhiteSpace(table))
+            {
+                throw new ArgumentException($"{nameof(table)} cannot be null or white-space.", nameof(table));
+            }
+
             var entityType = DbContext.Model.FindEntityType(typeof(T));
 
             if (entityType is IConventionEntityType conventionEntityType)
             {
                 conventionEntityType.SetTableName(table);
             }
+        }
+
+        public virtual void ChangeState(T entity, EntityState state)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
+            }
+
+            DbContext.Entry(entity).State = state;
+        }
+
+        public virtual void TrackGraph(T rootEntity, Action<EntityEntryGraphNode> callback)
+        {
+            if (rootEntity == null)
+            {
+                throw new ArgumentNullException(nameof(rootEntity), $"{nameof(rootEntity)} cannot be null.");
+            }
+
+            if (callback == null)
+            {
+                throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
+            }
+
+            DbContext.ChangeTracker.TrackGraph(rootEntity, callback);
         }
 
         #endregion ISyncRepository<T> Members

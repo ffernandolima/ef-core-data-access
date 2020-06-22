@@ -3,6 +3,7 @@ using EntityFrameworkCore.Repository.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Factories;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
@@ -210,6 +211,11 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public void ChangeDatabase(string database)
         {
+            if (string.IsNullOrWhiteSpace(database))
+            {
+                throw new ArgumentException($"{nameof(database)} cannot be null or white-space.", nameof(database));
+            }
+
             var dbConnection = _dbContext.Database.GetDbConnection();
 
             if (dbConnection.State.HasFlag(ConnectionState.Open))
@@ -230,6 +236,21 @@ namespace EntityFrameworkCore.UnitOfWork
                     conventionEntityType.SetSchema(database);
                 }
             }
+        }
+
+        public void TrackGraph(object rootEntity, Action<EntityEntryGraphNode> callback)
+        {
+            if (rootEntity == null)
+            {
+                throw new ArgumentNullException(nameof(rootEntity), $"{nameof(rootEntity)} cannot be null.");
+            }
+
+            if (callback == null)
+            {
+                throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
+            }
+
+            _dbContext.ChangeTracker.TrackGraph(rootEntity, callback);
         }
 
         #endregion ISyncUnitOfWork Members

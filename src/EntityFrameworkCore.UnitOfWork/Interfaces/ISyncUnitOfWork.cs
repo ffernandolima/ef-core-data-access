@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,6 +19,7 @@ namespace EntityFrameworkCore.UnitOfWork.Interfaces
         int ExecuteSqlCommand(string sql, params object[] parameters);
         IList<T> FromSql<T>(string sql, params object[] parameters) where T : class;
         void ChangeDatabase(string database);
+        void TrackGraph(object rootEntity, Action<EntityEntryGraphNode> callback);
     }
 
     public interface ISyncUnitOfWork<T> : ISyncUnitOfWork, IRepositoryFactory<T>, IDisposable where T : DbContext
