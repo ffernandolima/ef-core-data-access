@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{485BD1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkCore.WebAPI", "samples\EntityFrameworkCore.WebAPI\EntityFrameworkCore.WebAPI.csproj", "{BE3CD021-583A-4F5D-93E9-FCC63EEBA5AD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkCore.AutoHistory", "src\EntityFrameworkCore.AutoHistory\EntityFrameworkCore.AutoHistory.csproj", "{DC2EF20A-3034-43F3-9B81-49C4A58CB448}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{BE3CD021-583A-4F5D-93E9-FCC63EEBA5AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE3CD021-583A-4F5D-93E9-FCC63EEBA5AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE3CD021-583A-4F5D-93E9-FCC63EEBA5AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC2EF20A-3034-43F3-9B81-49C4A58CB448}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC2EF20A-3034-43F3-9B81-49C4A58CB448}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC2EF20A-3034-43F3-9B81-49C4A58CB448}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC2EF20A-3034-43F3-9B81-49C4A58CB448}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{134E764D-1261-418B-BEB2-4DC5B4579A84} = {5E8F880B-B82C-42B6-A6D0-B4119D354034}
 		{B2054A9D-CC6B-4B8B-AC21-AD49D94759E5} = {5E8F880B-B82C-42B6-A6D0-B4119D354034}
 		{BE3CD021-583A-4F5D-93E9-FCC63EEBA5AD} = {5E8F880B-B82C-42B6-A6D0-B4119D354034}
+		{DC2EF20A-3034-43F3-9B81-49C4A58CB448} = {1D376303-33F2-43D9-8FC0-07F26B7A06B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F68343BA-2511-4D28-85E8-7A897246D27B}
