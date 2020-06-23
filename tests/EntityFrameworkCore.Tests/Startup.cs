@@ -10,7 +10,7 @@ namespace EntityFrameworkCore.Tests
         protected IConfiguration Configuration { get; private set; }
 
         private IServiceProvider _serviceProvider;
-        protected IServiceProvider ServiceProvider => (_serviceProvider = _serviceProvider ?? Services?.BuildServiceProvider());
+        protected IServiceProvider ServiceProvider => (_serviceProvider ??= Services?.BuildServiceProvider());
 
         public Startup(bool configure = true)
         {
