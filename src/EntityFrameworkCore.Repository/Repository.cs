@@ -480,6 +480,21 @@ namespace EntityFrameworkCore.Repository
             DbContext.ChangeTracker.TrackGraph(rootEntity, callback);
         }
 
+        public virtual void TrackGraph<TState>(T rootEntity, TState state, Func<EntityEntryGraphNode, TState, bool> callback)
+        {
+            if (rootEntity == null)
+            {
+                throw new ArgumentNullException(nameof(rootEntity), $"{nameof(rootEntity)} cannot be null.");
+            }
+
+            if (callback == null)
+            {
+                throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
+            }
+
+            DbContext.ChangeTracker.TrackGraph<TState>(rootEntity, state, callback);
+        }
+
         #endregion ISyncRepository<T> Members
 
         #region IAsyncRepository<T> Members
