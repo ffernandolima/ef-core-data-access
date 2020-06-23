@@ -8,7 +8,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
     {
         private const int DefaultChangedMaxLength = 2048;
 
-        public static ModelBuilder EnableAutoHistory(this ModelBuilder modelBuilder, int? changedMaxLength)
+        public static ModelBuilder EnableAutoHistory(this ModelBuilder modelBuilder, int? changedMaxLength = null)
             => EnableAutoHistory<AutoHistory>(modelBuilder, options => { options.ChangedMaxLength = changedMaxLength; options.LimitChangedLength = false; });
 
         public static ModelBuilder EnableAutoHistory<TAutoHistory>(this ModelBuilder modelBuilder, Action<AutoHistoryOptions> configure) where TAutoHistory : AutoHistory
