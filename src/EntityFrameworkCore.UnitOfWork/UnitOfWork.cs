@@ -1,4 +1,5 @@
-﻿using EntityFrameworkCore.Repository;
+﻿using EntityFrameworkCore.AutoHistory.Extensions;
+using EntityFrameworkCore.Repository;
 using EntityFrameworkCore.Repository.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Factories;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
@@ -101,7 +102,7 @@ namespace EntityFrameworkCore.UnitOfWork
             }
         }
 
-        public int SaveChanges(bool acceptAllChangesOnSuccess = true)
+        public int SaveChanges(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false)
         {
             if (!HasChanges())
             {
@@ -117,6 +118,11 @@ namespace EntityFrameworkCore.UnitOfWork
 
             try
             {
+                if (ensureAutoHistory)
+                {
+                    _dbContext.EnsureAutoHistory();
+                }
+
                 return _dbContext.SaveChanges(acceptAllChangesOnSuccess);
             }
             finally
@@ -257,7 +263,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         #region IAsyncUnitOfWork Members
 
-        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess = true, CancellationToken cancellationToken = default)
+        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, CancellationToken cancellationToken = default)
         {
             if (!HasChanges())
             {
@@ -273,6 +279,11 @@ namespace EntityFrameworkCore.UnitOfWork
 
             try
             {
+                if (ensureAutoHistory)
+                {
+                    _dbContext.EnsureAutoHistory();
+                }
+
                 return _dbContext.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
             }
             finally
@@ -307,7 +318,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         #region Public Methods
 
-        public static int SaveChanges(bool useTransaction = true, TimeSpan? timeout = null, bool acceptAllChangesOnSuccess = true, params IUnitOfWork[] unitOfWorks)
+        public static int SaveChanges(bool useTransaction = true, TimeSpan? timeout = null, bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, params IUnitOfWork[] unitOfWorks)
         {
             if (!unitOfWorks?.Any() ?? false)
             {
@@ -320,7 +331,7 @@ namespace EntityFrameworkCore.UnitOfWork
             {
                 foreach (var unitOfWork in unitOfWorks)
                 {
-                    count += unitOfWork.SaveChanges(acceptAllChangesOnSuccess);
+                    count += unitOfWork.SaveChanges(acceptAllChangesOnSuccess, ensureAutoHistory);
                 }
             }
 
@@ -341,7 +352,7 @@ namespace EntityFrameworkCore.UnitOfWork
             return count;
         }
 
-        public static async Task<int> SaveChangesAsync(bool useTransaction = true, TimeSpan? timeout = null, bool acceptAllChangesOnSuccess = true, CancellationToken cancellationToken = default, params IUnitOfWork[] unitOfWorks)
+        public static async Task<int> SaveChangesAsync(bool useTransaction = true, TimeSpan? timeout = null, bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, CancellationToken cancellationToken = default, params IUnitOfWork[] unitOfWorks)
         {
             if (!unitOfWorks?.Any() ?? false)
             {
@@ -354,7 +365,7 @@ namespace EntityFrameworkCore.UnitOfWork
             {
                 foreach (var unitOfWork in unitOfWorks)
                 {
-                    count += await unitOfWork.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+                    count += await unitOfWork.SaveChangesAsync(acceptAllChangesOnSuccess, ensureAutoHistory, cancellationToken);
                 }
             }
 

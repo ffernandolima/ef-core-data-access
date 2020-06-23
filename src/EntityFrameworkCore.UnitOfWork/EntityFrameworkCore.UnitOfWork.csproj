@@ -20,6 +20,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\EntityFrameworkCore.AutoHistory\EntityFrameworkCore.AutoHistory.csproj" />
         <ProjectReference Include="..\EntityFrameworkCore.Repository\EntityFrameworkCore.Repository.csproj" />
     </ItemGroup>
 
