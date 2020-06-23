@@ -259,6 +259,21 @@ namespace EntityFrameworkCore.UnitOfWork
             _dbContext.ChangeTracker.TrackGraph(rootEntity, callback);
         }
 
+        public void TrackGraph<TState>(object rootEntity, TState state, Func<EntityEntryGraphNode<TState>, bool> callback)
+        {
+            if (rootEntity == null)
+            {
+                throw new ArgumentNullException(nameof(rootEntity), $"{nameof(rootEntity)} cannot be null.");
+            }
+
+            if (callback == null)
+            {
+                throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
+            }
+
+            _dbContext.ChangeTracker.TrackGraph<TState>(rootEntity, state, callback);
+        }
+
         #endregion ISyncUnitOfWork Members
 
         #region IAsyncUnitOfWork Members

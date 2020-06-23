@@ -40,5 +40,6 @@ namespace EntityFrameworkCore.Repository.Interfaces
         void ChangeTable(string table);
         void ChangeState(T entity, EntityState state);
         void TrackGraph(T rootEntity, Action<EntityEntryGraphNode> callback);
+        void TrackGraph<TState>(T rootEntity, TState state, Func<EntityEntryGraphNode<TState>, bool> callback);
     }
 }

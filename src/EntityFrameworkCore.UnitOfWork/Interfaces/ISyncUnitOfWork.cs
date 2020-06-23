@@ -20,6 +20,7 @@ namespace EntityFrameworkCore.UnitOfWork.Interfaces
         IList<T> FromSql<T>(string sql, params object[] parameters) where T : class;
         void ChangeDatabase(string database);
         void TrackGraph(object rootEntity, Action<EntityEntryGraphNode> callback);
+        void TrackGraph<TState>(object rootEntity, TState state, Func<EntityEntryGraphNode<TState>, bool> callback);
     }
 
     public interface ISyncUnitOfWork<T> : ISyncUnitOfWork, IRepositoryFactory<T>, IDisposable where T : DbContext
