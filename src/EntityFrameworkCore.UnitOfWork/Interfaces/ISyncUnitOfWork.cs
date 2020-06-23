@@ -11,7 +11,7 @@ namespace EntityFrameworkCore.UnitOfWork.Interfaces
         TimeSpan? Timeout { get; set; }
         bool HasTransaction();
         bool HasChanges();
-        int SaveChanges(bool acceptAllChangesOnSuccess = true);
+        int SaveChanges(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false);
         void DiscardChanges();
         void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted);
         void Commit();
