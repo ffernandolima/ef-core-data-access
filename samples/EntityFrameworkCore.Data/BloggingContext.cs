@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EntityFrameworkCore.AutoHistory.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkCore.Data
 {
@@ -12,6 +13,10 @@ namespace EntityFrameworkCore.Data
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        protected override void OnModelCreating(ModelBuilder builder) => builder.ApplyConfigurationsFromAssembly(typeof(BloggingContext).Assembly);
+        protected override void OnModelCreating(ModelBuilder builder) 
+        {
+            builder.EnableAutoHistory();
+            builder.ApplyConfigurationsFromAssembly(typeof(BloggingContext).Assembly); 
+        }
     }
 }
