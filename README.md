@@ -1,9 +1,10 @@
 # EntityFrameworkCore.DataAccess
 
-It's a modern and generic data access structure for .NET and Microsoft.EntityFrameworkCore. It supports UnitOfWork, Repository and QueryBuilder patterns. It also includes multiple databases support with distributed transactions and databases/tables sharding for some database providers.
+It's a modern and generic data access structure for .NET and Microsoft.EntityFrameworkCore. It supports UnitOfWork, Repository and QueryBuilder patterns. It also includes auto history utilities, multiple databases support with distributed transactions and databases/tables sharding for some database providers.
 
  | Package | NuGet |
  | ------- | ----- |
+| EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v2.0.3-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/2.0.3) |
  | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v2.0.3-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/2.0.3) |
  | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v2.0.3-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/2.0.3) |
  | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v2.0.3-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/2.0.3) |
@@ -13,12 +14,13 @@ It's a modern and generic data access structure for .NET and Microsoft.EntityFra
 EntityFrameworkCore.DataAccess is available on Nuget.
 
 ```
+Install-Package EntityFrameworkCore.Data.AutoHistory -Version 2.0.3
 Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 2.0.3
 Install-Package EntityFrameworkCore.Data.Repository -Version 2.0.3
 Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 2.0.3
 ```
 
-P.S.: EntityFrameworkCore.Data.UnitOfWork depends on the other two packages, so installing this package is enough.
+P.S.: EntityFrameworkCore.Data.UnitOfWork depends on the other three packages, so installing this package is enough.
 
 ## Usage
 
