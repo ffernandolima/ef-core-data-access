@@ -66,6 +66,7 @@ namespace EntityFrameworkCore.WebAPI
 
             var connectionString = Configuration.GetConnectionString("EFCoreDataAccess");
 
+            // SQL Server
             services.AddDbContext<BloggingContext>(options =>
             {
                 options.UseSqlServer(connectionString, sqlServerOptions =>
@@ -78,6 +79,20 @@ namespace EntityFrameworkCore.WebAPI
 
                 options.ConfigureWarnings(x => x.Ignore(RelationalEventId.AmbientTransactionWarning));
             });
+
+            // PostgreSQL
+            // services.AddDbContext<BloggingContext>(options =>
+            // {
+            //     options.UseNpgsql(connectionString, sqlServerOptions =>
+            //     {
+            //         var assembly = typeof(BloggingContext).Assembly;
+            //         var assemblyName = assembly.GetName();
+
+            //         sqlServerOptions.MigrationsAssembly(assemblyName.Name);
+            //     });
+
+            //     options.ConfigureWarnings(x => x.Ignore(RelationalEventId.AmbientTransactionWarning));
+            // });
 
             services.AddScoped<DbContext, BloggingContext>();
             services.AddUnitOfWork();
