@@ -65,7 +65,7 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             IList<Blog> blogs;
 
             // Example: From SQL
-            blogs = await Task.FromResult(repository.FromSql($"SELECT [Id], [Url], [Title], [TypeId] FROM [dbo].[Blog] WHERE [Title] LIKE '%{term}%';"));
+            blogs = await Task.FromResult(repository.FromSql($"SELECT Id, Url, Title, TypeId FROM Blog WHERE Title LIKE '%{term}%';"));
 
             // Example: Filtering
             var query = repository.MultipleResultQuery()
@@ -159,10 +159,10 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             using (var transactionScope = TransactionScopeFactory.CreateTransactionScope(transactionScopeAsyncFlowOption: TransactionScopeAsyncFlowOption.Enabled))
             {
                 // Without Parameters
-                await repository.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = '{title}' WHERE [Id] = {id};");
+                await repository.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = '{title}' WHERE Id = {id};");
 
                 // With Parameters
-                await repository.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = @Title WHERE [Id] = @Id;", parameters);
+                await repository.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = @Title WHERE Id = @Id;", parameters);
 
                 transactionScope.Complete();
             }
@@ -171,10 +171,10 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             await _unitOfWork.BeginTransactionAsync();
 
             // Without Parameters
-            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = '{title}' WHERE [Id] = {id};");
+            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = '{title}' WHERE Id = {id};");
 
             // With Parameters
-            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE [dbo].[Blog] SET [Title] = @Title WHERE [Id] = @Id;", parameters);
+            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = @Title WHERE Id = @Id;", parameters);
 
             _unitOfWork.Commit();
 
