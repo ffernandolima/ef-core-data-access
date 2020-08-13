@@ -246,6 +246,33 @@ namespace EntityFrameworkCore.Repository
             return result;
         }
 
+        public virtual T Attach(T entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
+            }
+
+            DbSet.Attach(entity);
+
+            return entity;
+        }
+
+        public virtual void AttachRange(IEnumerable<T> entities)
+        {
+            if (entities == null)
+            {
+                throw new ArgumentNullException(nameof(entities), $"{nameof(entities)} cannot be null.");
+            }
+
+            if (!entities.Any())
+            {
+                return;
+            }
+
+            DbSet.AttachRange(entities);
+        }
+
         public virtual T Add(T entity)
         {
             if (entity == null)
@@ -280,15 +307,10 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
 
-            var entityEntry = DbContext.Entry(entity);
-
-            if (entityEntry.State == EntityState.Detached)
-            {
-                entityEntry = DbSet.Attach(entity);
-            }
-
             if (properties?.Any() ?? false)
             {
+                var entityEntry = DbContext.Entry(entity);
+
                 foreach (var property in properties)
                 {
                     PropertyEntry propertyEntry;
@@ -316,8 +338,6 @@ namespace EntityFrameworkCore.Repository
                         if (referenceEntry != null)
                         {
                             var referenceEntityEntry = referenceEntry.TargetEntry;
-
-                            DbContext.Attach(referenceEntityEntry.Entity);
 
                             DbContext.Update(referenceEntityEntry.Entity);
                         }
@@ -374,13 +394,6 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
 
-            var entityEntry = DbContext.Entry(entity);
-
-            if (entityEntry.State == EntityState.Detached)
-            {
-                DbSet.Attach(entity);
-            }
-
             DbSet.Remove(entity);
 
             return entity;
@@ -410,10 +423,7 @@ namespace EntityFrameworkCore.Repository
                 return;
             }
 
-            foreach (var entity in entities)
-            {
-                Remove(entity);
-            }
+            DbSet.RemoveRange(entities);
         }
 
         public int ExecuteSqlCommand(string sql, params object[] parameters)
