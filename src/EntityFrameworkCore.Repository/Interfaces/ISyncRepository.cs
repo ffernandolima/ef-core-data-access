@@ -27,6 +27,8 @@ namespace EntityFrameworkCore.Repository.Interfaces
         TResult Min<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null);
         decimal Average(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null);
         decimal Sum(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null);
+        T Attach(T entity);
+        void AttachRange(IEnumerable<T> entities);
         T Add(T entity);
         void AddRange(IEnumerable<T> entities);
         T Update(T entity, params Expression<Func<T, object>>[] properties);
