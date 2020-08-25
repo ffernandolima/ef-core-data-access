@@ -483,7 +483,7 @@ namespace EntityFrameworkCore.UnitOfWork
     {
         #region Ctor
 
-        public UnitOfWork(DbContext dbContext)
+        public UnitOfWork(T dbContext)
             : base(dbContext)
         { }
 
