@@ -8,7 +8,6 @@ namespace EntityFrameworkCore.UnitOfWork.Interfaces
 {
     public interface ISyncUnitOfWork : IRepositoryFactory, IDisposable
     {
-        TimeSpan? Timeout { get; set; }
         bool HasTransaction();
         bool HasChanges();
         int SaveChanges(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false);
