@@ -23,7 +23,6 @@ namespace EntityFrameworkCore.UnitOfWork
     {
         #region Private Fields
 
-        private DbContext _dbContext;
         private IDbContextTransaction _transaction;
         private ConcurrentDictionary<string, IRepository> _repositories;
 
@@ -34,7 +33,7 @@ namespace EntityFrameworkCore.UnitOfWork
         /// <param name="dbContext">Injected</param>
         public UnitOfWork(DbContext dbContext)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} cannot be null.");
+            DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} cannot be null.");
             _repositories = new ConcurrentDictionary<string, IRepository>();
         }
 
@@ -71,13 +70,19 @@ namespace EntityFrameworkCore.UnitOfWork
 
         #endregion IRepositoryFactory Members
 
-        #region ISyncUnitOfWork Members
+        #region IUnitOfWork Members
+
+        public DbContext DbContext { get; private set; }
 
         public TimeSpan? Timeout
         {
-            get { return _dbContext.Database.GetCommandTimeout().HasValue ? new TimeSpan?(TimeSpan.FromSeconds(_dbContext.Database.GetCommandTimeout().Value)) : null; }
-            set { _dbContext.Database.SetCommandTimeout(value.HasValue ? new int?(Convert.ToInt32(value.Value.TotalSeconds)) : null); }
+            get { return DbContext.Database.GetCommandTimeout().HasValue ? new TimeSpan?(TimeSpan.FromSeconds(DbContext.Database.GetCommandTimeout().Value)) : null; }
+            set { DbContext.Database.SetCommandTimeout(value.HasValue ? new int?(Convert.ToInt32(value.Value.TotalSeconds)) : null); }
         }
+
+        #endregion IUnitOfWork Members
+
+        #region ISyncUnitOfWork Members
 
         public bool HasTransaction() => _transaction != null;
 
@@ -85,20 +90,20 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             bool autoDetectChangesEnabled;
 
-            if (!(autoDetectChangesEnabled = _dbContext.ChangeTracker.AutoDetectChangesEnabled))
+            if (!(autoDetectChangesEnabled = DbContext.ChangeTracker.AutoDetectChangesEnabled))
             {
-                _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = true;
             }
 
             try
             {
-                var hasChanges = _dbContext.ChangeTracker.HasChanges();
+                var hasChanges = DbContext.ChangeTracker.HasChanges();
 
                 return hasChanges;
             }
             finally
             {
-                _dbContext.ChangeTracker.AutoDetectChangesEnabled = autoDetectChangesEnabled;
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = autoDetectChangesEnabled;
             }
         }
 
@@ -111,29 +116,29 @@ namespace EntityFrameworkCore.UnitOfWork
 
             bool autoDetectChangesEnabled;
 
-            if (!(autoDetectChangesEnabled = _dbContext.ChangeTracker.AutoDetectChangesEnabled))
+            if (!(autoDetectChangesEnabled = DbContext.ChangeTracker.AutoDetectChangesEnabled))
             {
-                _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = true;
             }
 
             try
             {
                 if (ensureAutoHistory)
                 {
-                    _dbContext.EnsureAutoHistory();
+                    DbContext.EnsureAutoHistory();
                 }
 
-                return _dbContext.SaveChanges(acceptAllChangesOnSuccess);
+                return DbContext.SaveChanges(acceptAllChangesOnSuccess);
             }
             finally
             {
-                _dbContext.ChangeTracker.AutoDetectChangesEnabled = autoDetectChangesEnabled;
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = autoDetectChangesEnabled;
             }
         }
 
         public void DiscardChanges()
         {
-            var dbEntityEntries = _dbContext.ChangeTracker.Entries();
+            var dbEntityEntries = DbContext.ChangeTracker.Entries();
 
             foreach (var dbEntityEntry in dbEntityEntries)
             {
@@ -148,7 +153,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new InvalidOperationException("Can't create more than one transaction.");
             }
 
-            _transaction = _dbContext.Database.BeginTransaction(isolationLevel);
+            _transaction = DbContext.Database.BeginTransaction(isolationLevel);
         }
 
         public void Commit()
@@ -196,7 +201,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var affectedRows = _dbContext.Database.ExecuteSqlRaw(sql, parameters);
+            var affectedRows = DbContext.Database.ExecuteSqlRaw(sql, parameters);
 
             return affectedRows;
         }
@@ -208,7 +213,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var dbSet = _dbContext.Set<T>();
+            var dbSet = DbContext.Set<T>();
 
             var entities = dbSet.FromSqlRaw(sql, parameters).ToList();
 
@@ -222,7 +227,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentException($"{nameof(database)} cannot be null or white-space.", nameof(database));
             }
 
-            var dbConnection = _dbContext.Database.GetDbConnection();
+            var dbConnection = DbContext.Database.GetDbConnection();
 
             if (dbConnection.State.HasFlag(ConnectionState.Open))
             {
@@ -233,7 +238,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 dbConnection.ConnectionString = Regex.Replace(dbConnection.ConnectionString.Replace(" ", string.Empty), @"(?<=[Dd]atabase=)\w+(?=;)", database, RegexOptions.Singleline);
             }
 
-            var entityTypes = _dbContext.Model.GetEntityTypes();
+            var entityTypes = DbContext.Model.GetEntityTypes();
 
             foreach (var entityType in entityTypes)
             {
@@ -256,7 +261,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
             }
 
-            _dbContext.ChangeTracker.TrackGraph(rootEntity, callback);
+            DbContext.ChangeTracker.TrackGraph(rootEntity, callback);
         }
 
         public void TrackGraph<TState>(object rootEntity, TState state, Func<EntityEntryGraphNode<TState>, bool> callback)
@@ -271,7 +276,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
             }
 
-            _dbContext.ChangeTracker.TrackGraph<TState>(rootEntity, state, callback);
+            DbContext.ChangeTracker.TrackGraph<TState>(rootEntity, state, callback);
         }
 
         #endregion ISyncUnitOfWork Members
@@ -287,23 +292,23 @@ namespace EntityFrameworkCore.UnitOfWork
 
             bool autoDetectChangesEnabled;
 
-            if (!(autoDetectChangesEnabled = _dbContext.ChangeTracker.AutoDetectChangesEnabled))
+            if (!(autoDetectChangesEnabled = DbContext.ChangeTracker.AutoDetectChangesEnabled))
             {
-                _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = true;
             }
 
             try
             {
                 if (ensureAutoHistory)
                 {
-                    _dbContext.EnsureAutoHistory();
+                    DbContext.EnsureAutoHistory();
                 }
 
-                return _dbContext.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+                return DbContext.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
             }
             finally
             {
-                _dbContext.ChangeTracker.AutoDetectChangesEnabled = autoDetectChangesEnabled;
+                DbContext.ChangeTracker.AutoDetectChangesEnabled = autoDetectChangesEnabled;
             }
         }
 
@@ -314,7 +319,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new InvalidOperationException("Can't create more than one transaction.");
             }
 
-            _transaction = await _dbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+            _transaction = await DbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
         }
 
         public Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
@@ -324,7 +329,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var affectedRows = _dbContext.Database.ExecuteSqlRawAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken);
+            var affectedRows = DbContext.Database.ExecuteSqlRawAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken);
 
             return affectedRows;
         }
@@ -411,7 +416,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
             if (!_repositories.TryGetValue(typeName, out IRepository repository))
             {
-                repository = repositoryFactory.Invoke(_dbContext, objectType);
+                repository = repositoryFactory.Invoke(DbContext, objectType);
 
                 _repositories[typeName] = repository;
             }
@@ -442,16 +447,16 @@ namespace EntityFrameworkCore.UnitOfWork
                 {
                     DisposeTransaction();
 
-                    var connection = _dbContext.Database.GetDbConnection();
+                    var connection = DbContext.Database.GetDbConnection();
                     if (connection != null && connection.State != ConnectionState.Closed)
                     {
                         connection.Close();
                     }
 
-                    if (_dbContext != null)
+                    if (DbContext != null)
                     {
-                        _dbContext.Dispose();
-                        _dbContext = null;
+                        DbContext.Dispose();
+                        DbContext = null;
                     }
 
                     if (_repositories != null)
