@@ -2,6 +2,7 @@
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Linq;
 
 namespace EntityFrameworkCore.WebAPI.Swagger.Filters
@@ -31,7 +32,12 @@ namespace EntityFrameworkCore.WebAPI.Swagger.Filters
 
             foreach (var parameter in operation.Parameters)
             {
-                var description = apiDescription.ParameterDescriptions.First(p => p.Name == parameter.Name);
+                var description = apiDescription.ParameterDescriptions.FirstOrDefault(p => string.Equals(p.Name, parameter.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (description == null)
+                {
+                    continue;
+                }
 
                 if (parameter.Description == null)
                 {

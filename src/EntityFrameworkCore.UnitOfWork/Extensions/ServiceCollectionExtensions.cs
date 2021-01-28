@@ -29,12 +29,13 @@ namespace EntityFrameworkCore.UnitOfWork.Extensions
                         services.TryAddScoped<IUnitOfWork, UnitOfWork>();
                     }
                     break;
-                default:
                 case ServiceLifetime.Transient:
                     {
                         services.TryAddTransient<IRepositoryFactory, UnitOfWork>();
                         services.TryAddTransient<IUnitOfWork, UnitOfWork>();
                     }
+                    break;
+                default:
                     break;
             }
 
@@ -62,12 +63,13 @@ namespace EntityFrameworkCore.UnitOfWork.Extensions
                         services.TryAddScoped<IUnitOfWork<T>, UnitOfWork<T>>();
                     }
                     break;
-                default:
                 case ServiceLifetime.Transient:
                     {
                         services.TryAddTransient<IRepositoryFactory<T>, UnitOfWork<T>>();
                         services.TryAddTransient<IUnitOfWork<T>, UnitOfWork<T>>();
                     }
+                    break;
+                default:
                     break;
             }
 
