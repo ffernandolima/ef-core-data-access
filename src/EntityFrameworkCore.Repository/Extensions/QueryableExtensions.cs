@@ -38,7 +38,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                     {
                         if (!string.IsNullOrWhiteSpace(sorting.FieldName))
                         {
-                            source = source.OrderBy(sorting.FieldName, out bool success);
+                            source = source.OrderBy(sorting.FieldName, out var success);
 
                             if (success)
                             {
@@ -56,7 +56,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                     {
                         if (!string.IsNullOrWhiteSpace(sorting.FieldName))
                         {
-                            source = ((IOrderedQueryable<T>)source).ThenBy(sorting.FieldName, out bool success);
+                            source = ((IOrderedQueryable<T>)source).ThenBy(sorting.FieldName, out var success);
                         }
                         else if (sorting.KeySelector != null)
                         {
@@ -70,7 +70,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                     {
                         if (!string.IsNullOrWhiteSpace(sorting.FieldName))
                         {
-                            source = source.OrderByDescending(sorting.FieldName, out bool success);
+                            source = source.OrderByDescending(sorting.FieldName, out var success);
 
                             if (success)
                             {
@@ -88,7 +88,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                     {
                         if (!string.IsNullOrWhiteSpace(sorting.FieldName))
                         {
-                            source = ((IOrderedQueryable<T>)source).ThenByDescending(sorting.FieldName, out bool success);
+                            source = ((IOrderedQueryable<T>)source).ThenByDescending(sorting.FieldName, out var success);
                         }
                         else if (sorting.KeySelector != null)
                         {
