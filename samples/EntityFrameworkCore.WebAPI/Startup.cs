@@ -83,28 +83,28 @@ namespace EntityFrameworkCore.WebAPI
             // PostgreSQL
             // services.AddDbContext<BloggingContext>(options =>
             // {
-            //     options.UseNpgsql(connectionString, NpgsqlOptions =>
+            //     options.UseNpgsql(connectionString, npgsqlOptions =>
             //     {
             //         var assembly = typeof(BloggingContext).Assembly;
             //         var assemblyName = assembly.GetName();
-               
-            //         NpgsqlOptions.MigrationsAssembly(assemblyName.Name);
+
+            //         npgsqlOptions.MigrationsAssembly(assemblyName.Name);
             //     });
-               
+
             //     options.ConfigureWarnings(x => x.Ignore(RelationalEventId.AmbientTransactionWarning));
             // });
 
             // MySQL
             // services.AddDbContext<BloggingContext>(options =>
             // {
-            //     options.UseMySQL(connectionString, mySqlOptions =>
+            //     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), mySqlOptions =>
             //     {
             //         var assembly = typeof(BloggingContext).Assembly;
             //         var assemblyName = assembly.GetName();
-               
+
             //         mySqlOptions.MigrationsAssembly(assemblyName.Name);
             //     });
-               
+
             //     options.ConfigureWarnings(x => x.Ignore(RelationalEventId.AmbientTransactionWarning));
             // });
 
