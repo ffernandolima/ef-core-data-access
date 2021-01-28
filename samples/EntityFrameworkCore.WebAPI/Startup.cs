@@ -87,10 +87,10 @@ namespace EntityFrameworkCore.WebAPI
             //     {
             //         var assembly = typeof(BloggingContext).Assembly;
             //         var assemblyName = assembly.GetName();
-               
+
             //         npgsqlOptions.MigrationsAssembly(assemblyName.Name);
             //     });
-               
+
             //     options.ConfigureWarnings(x => x.Ignore(RelationalEventId.AmbientTransactionWarning));
             // });
 
@@ -101,10 +101,10 @@ namespace EntityFrameworkCore.WebAPI
             //     {
             //         var assembly = typeof(BloggingContext).Assembly;
             //         var assemblyName = assembly.GetName();
-               
+
             //         mySqlOptions.MigrationsAssembly(assemblyName.Name);
             //     });
-               
+
             //     options.ConfigureWarnings(x => x.Ignore(RelationalEventId.AmbientTransactionWarning));
             // });
 
@@ -121,8 +121,8 @@ namespace EntityFrameworkCore.WebAPI
                 var appPath = AppDomain.CurrentDomain.BaseDirectory;
 
                 var entryAssembly = Assembly.GetEntryAssembly();
-                var aseemblyName = entryAssembly?.GetName();
-                var appName = aseemblyName?.Name;
+                var assemblyName = entryAssembly?.GetName();
+                var appName = assemblyName?.Name;
 
                 var filePath = Path.Combine(appPath, $"{appName ?? "EntityFrameworkCore.WebAPI"}.xml");
 
