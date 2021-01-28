@@ -121,8 +121,8 @@ namespace EntityFrameworkCore.WebAPI
                 var appPath = AppDomain.CurrentDomain.BaseDirectory;
 
                 var entryAssembly = Assembly.GetEntryAssembly();
-                var aseemblyName = entryAssembly?.GetName();
-                var appName = aseemblyName?.Name;
+                var assemblyName = entryAssembly?.GetName();
+                var appName = assemblyName?.Name;
 
                 var filePath = Path.Combine(appPath, $"{appName ?? "EntityFrameworkCore.WebAPI"}.xml");
 
