@@ -4,3 +4,4 @@ It's a modern and generic data access structure for .NET and Microsoft.EntityFra
 
 - [Implementation for EntityFrameworkCore 2.x](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-2)
 - [Implementation for EntityFrameworkCore 3.x](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-3)
+- [Implementation for EntityFrameworkCore 5.x](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-5)
