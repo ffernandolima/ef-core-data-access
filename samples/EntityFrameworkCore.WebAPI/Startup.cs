@@ -1,8 +1,5 @@
 ﻿using EntityFrameworkCore.Data;
-using EntityFrameworkCore.Data.Repositories;
-using EntityFrameworkCore.Data.Repositories.Interfaces;
 using EntityFrameworkCore.Models;
-using EntityFrameworkCore.Repository.Extensions;
 using EntityFrameworkCore.UnitOfWork.Extensions;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using EntityFrameworkCore.WebAPI.Swagger.Filters;
@@ -94,8 +91,8 @@ namespace EntityFrameworkCore.WebAPI
                 var appPath = AppDomain.CurrentDomain.BaseDirectory;
 
                 var entryAssembly = Assembly.GetEntryAssembly();
-                var aseemblyName = entryAssembly?.GetName();
-                var appName = aseemblyName?.Name;
+                var assemblyName = entryAssembly?.GetName();
+                var appName = assemblyName?.Name;
 
                 var filePath = Path.Combine(appPath, $"{appName ?? "EntityFrameworkCore.WebAPI"}.xml");
 
