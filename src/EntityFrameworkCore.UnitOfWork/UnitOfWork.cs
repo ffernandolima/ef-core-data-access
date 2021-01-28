@@ -49,7 +49,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentException("Generic type should be an interface.");
             }
 
-            IRepository factory(DbContext dbContext, Type type)
+            static IRepository Factory(DbContext dbContext, Type type)
             {
                 return (IRepository)AppDomain.CurrentDomain.GetAssemblies()
                                              .SelectMany(selector => selector.GetTypes())
@@ -58,14 +58,14 @@ namespace EntityFrameworkCore.UnitOfWork
                                              .SingleOrDefault();
             }
 
-            return (T)GetRepository(typeof(T), factory, "Custom");
+            return (T)GetRepository(typeof(T), Factory, "Custom");
         }
 
         public IRepository<T> Repository<T>() where T : class
         {
-            IRepository factory(DbContext dbContext, Type type) => new Repository<T>(dbContext);
+            static IRepository Factory(DbContext dbContext, Type type) => new Repository<T>(dbContext);
 
-            return (IRepository<T>)GetRepository(typeof(T), factory, "Generic");
+            return (IRepository<T>)GetRepository(typeof(T), Factory, "Generic");
         }
 
         #endregion IRepositoryFactory Members
@@ -76,8 +76,8 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public TimeSpan? Timeout
         {
-            get { return DbContext.Database.GetCommandTimeout().HasValue ? new TimeSpan?(TimeSpan.FromSeconds(DbContext.Database.GetCommandTimeout().Value)) : null; }
-            set { DbContext.Database.SetCommandTimeout(value.HasValue ? new int?(Convert.ToInt32(value.Value.TotalSeconds)) : null); }
+            get => DbContext.Database.GetCommandTimeout().HasValue ? new TimeSpan?(TimeSpan.FromSeconds(DbContext.Database.GetCommandTimeout().Value)) : null;
+            set => DbContext.Database.SetCommandTimeout(value.HasValue ? new int?(Convert.ToInt32(value.Value.TotalSeconds)) : null);
         }
 
         #endregion IUnitOfWork Members
@@ -182,10 +182,7 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             try
             {
-                if (_transaction != null)
-                {
-                    _transaction.Rollback();
-                }
+                _transaction?.Rollback();
             }
             catch { }
             finally
@@ -340,7 +337,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public static int SaveChanges(bool useTransaction = true, TimeSpan? timeout = null, bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, params IUnitOfWork[] unitOfWorks)
         {
-            if (!unitOfWorks?.Any() ?? false)
+            if (!(unitOfWorks?.Any() ?? false))
             {
                 return 0;
             }
@@ -374,7 +371,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public static async Task<int> SaveChangesAsync(bool useTransaction = true, TimeSpan? timeout = null, bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, CancellationToken cancellationToken = default, params IUnitOfWork[] unitOfWorks)
         {
-            if (!unitOfWorks?.Any() ?? false)
+            if (!(unitOfWorks?.Any() ?? false))
             {
                 return await Task.FromResult(0);
             }
@@ -414,7 +411,7 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             var typeName = $"{prefix}.{objectType.FullName}";
 
-            if (!_repositories.TryGetValue(typeName, out IRepository repository))
+            if (!_repositories.TryGetValue(typeName, out var repository))
             {
                 repository = repositoryFactory.Invoke(DbContext, objectType);
 
