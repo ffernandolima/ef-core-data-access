@@ -11,6 +11,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -76,8 +77,18 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public TimeSpan? Timeout
         {
-            get => DbContext.Database.GetCommandTimeout().HasValue ? new TimeSpan?(TimeSpan.FromSeconds(DbContext.Database.GetCommandTimeout().Value)) : null;
-            set => DbContext.Database.SetCommandTimeout(value.HasValue ? new int?(Convert.ToInt32(value.Value.TotalSeconds)) : null);
+            get
+            {
+                var commandTimeout = DbContext.Database.GetCommandTimeout();
+
+                return commandTimeout.HasValue ? new TimeSpan?(TimeSpan.FromSeconds(commandTimeout.Value)) : null;
+            }
+            set
+            {
+                var commandTimeout = value.HasValue ? new int?(Convert.ToInt32(value.Value.TotalSeconds)) : null;
+
+                DbContext.Database.SetCommandTimeout(commandTimeout);
+            }
         }
 
         #endregion IUnitOfWork Members
@@ -146,11 +157,38 @@ namespace EntityFrameworkCore.UnitOfWork
             }
         }
 
+        public void UseTransaction(DbTransaction transaction, Guid? transactionId = null)
+        {
+            if (transaction == null)
+            {
+                throw new ArgumentNullException(nameof(transaction), $"{nameof(transaction)} cannot be null.");
+            }
+
+            if (_transaction != null)
+            {
+                throw new InvalidOperationException("There's already an active transaction.");
+            }
+
+            _transaction = !transactionId.HasValue ? DbContext.Database.UseTransaction(transaction) : DbContext.Database.UseTransaction(transaction, transactionId.Value);
+        }
+
+        public void EnlistTransaction(Transaction transaction)
+        {
+            if (transaction == null)
+            {
+                throw new ArgumentNullException(nameof(transaction), $"{nameof(transaction)} cannot be null.");
+            }
+
+            DbContext.Database.EnlistTransaction(transaction);
+        }
+
+        public Transaction GetEnlistedTransaction() => DbContext.Database.GetEnlistedTransaction();
+
         public void BeginTransaction(System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.ReadCommitted)
         {
             if (_transaction != null)
             {
-                throw new InvalidOperationException("Can't create more than one transaction.");
+                throw new InvalidOperationException("There's already an active transaction.");
             }
 
             _transaction = DbContext.Database.BeginTransaction(isolationLevel);
@@ -162,7 +200,7 @@ namespace EntityFrameworkCore.UnitOfWork
             {
                 if (_transaction == null)
                 {
-                    throw new InvalidOperationException("Can't commit because the transaction is null.");
+                    throw new InvalidOperationException("There's no active transaction.");
                 }
 
                 _transaction.Commit();
@@ -184,7 +222,10 @@ namespace EntityFrameworkCore.UnitOfWork
             {
                 _transaction?.Rollback();
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
             finally
             {
                 DisposeTransaction();
@@ -309,14 +350,70 @@ namespace EntityFrameworkCore.UnitOfWork
             }
         }
 
+        public async Task UseTransactionAsync(DbTransaction transaction, Guid? transactionId = null, CancellationToken cancellationToken = default)
+        {
+            if (transaction == null)
+            {
+                throw new ArgumentNullException(nameof(transaction), $"{nameof(transaction)} cannot be null.");
+            }
+
+            if (_transaction != null)
+            {
+                throw new InvalidOperationException("There's already an active transaction.");
+            }
+
+            _transaction = !transactionId.HasValue ? await DbContext.Database.UseTransactionAsync(transaction, cancellationToken) : await DbContext.Database.UseTransactionAsync(transaction, transactionId.Value, cancellationToken);
+        }
+
         public async Task BeginTransactionAsync(System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
         {
             if (_transaction != null)
             {
-                throw new InvalidOperationException("Can't create more than one transaction.");
+                throw new InvalidOperationException("There's already an active transaction.");
             }
 
             _transaction = await DbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+        }
+
+        public async Task CommitAsync()
+        {
+            try
+            {
+                if (_transaction == null)
+                {
+                    throw new InvalidOperationException("There's no active transaction.");
+                }
+
+                await _transaction.CommitAsync();
+            }
+            catch
+            {
+                await RollbackAsync();
+                throw;
+            }
+            finally
+            {
+                await DisposeTransactionAsync();
+            }
+        }
+
+        public async Task RollbackAsync()
+        {
+            try
+            {
+                if (_transaction != null)
+                {
+                    await _transaction.RollbackAsync();
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+            finally
+            {
+                await DisposeTransactionAsync();
+            }
         }
 
         public Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
@@ -426,6 +523,15 @@ namespace EntityFrameworkCore.UnitOfWork
             if (_transaction != null)
             {
                 _transaction.Dispose();
+                _transaction = null;
+            }
+        }
+
+        private async Task DisposeTransactionAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.DisposeAsync();
                 _transaction = null;
             }
         }

@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
+using System.Transactions;
 
 namespace EntityFrameworkCore.UnitOfWork.Interfaces
 {
@@ -12,7 +13,10 @@ namespace EntityFrameworkCore.UnitOfWork.Interfaces
         bool HasChanges();
         int SaveChanges(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false);
         void DiscardChanges();
-        void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted);
+        void UseTransaction(DbTransaction transaction, Guid? transactionId = null);
+        void EnlistTransaction(Transaction transaction);
+        Transaction GetEnlistedTransaction();
+        void BeginTransaction(System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.ReadCommitted);
         void Commit();
         void Rollback();
         int ExecuteSqlCommand(string sql, params object[] parameters);
