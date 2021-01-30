@@ -375,7 +375,7 @@ namespace EntityFrameworkCore.UnitOfWork
             _transaction = await DbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
         }
 
-        public async Task CommitAsync()
+        public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -384,11 +384,15 @@ namespace EntityFrameworkCore.UnitOfWork
                     throw new InvalidOperationException("There's no active transaction.");
                 }
 
-                await _transaction.CommitAsync();
+                await _transaction.CommitAsync(cancellationToken);
             }
             catch
             {
-                await RollbackAsync();
+                using (var source = new CancellationTokenSource())
+                {
+                    await RollbackAsync(source.Token);
+                }
+
                 throw;
             }
             finally
@@ -397,13 +401,13 @@ namespace EntityFrameworkCore.UnitOfWork
             }
         }
 
-        public async Task RollbackAsync()
+        public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 if (_transaction != null)
                 {
-                    await _transaction.RollbackAsync();
+                    await _transaction.RollbackAsync(cancellationToken);
                 }
             }
             catch
