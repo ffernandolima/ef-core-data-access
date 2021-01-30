@@ -12,8 +12,8 @@ namespace EntityFrameworkCore.UnitOfWork.Interfaces
         Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, CancellationToken cancellationToken = default);
         Task UseTransactionAsync(DbTransaction transaction, CancellationToken cancellationToken = default);
         Task BeginTransactionAsync(System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default);
-        Task CommitAsync();
-        Task RollbackAsync();
+        Task CommitAsync(CancellationToken cancellationToken = default);
+        Task RollbackAsync(CancellationToken cancellationToken = default);
         Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default);
     }
 
