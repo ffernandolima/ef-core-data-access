@@ -11,16 +11,42 @@ namespace EntityFrameworkCore.Repository.Extensions
     internal static class QueryableExtensions
     {
         public static IQueryable<T> Include<T>(this IQueryable<T> source, IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> includes) where T : class
-            => includes.Aggregate(source, (queryable, include) => include(queryable));
+        {
+            if (!(includes?.Any() ?? false))
+            {
+                return source;
+            }
+
+            return includes.Aggregate(source, (queryable, include) => include == null ? queryable : include(queryable));
+        }
 
         public static IQueryable<T> Filter<T>(this IQueryable<T> source, Expression<Func<T, bool>> predicate) where T : class
-            => source.AsExpandable().Where(predicate);
+        {
+            if (predicate == null)
+            {
+                return source;
+            }
+
+            return source.AsExpandable().Where(predicate);
+        }
 
         public static IQueryable<T> Top<T>(this IQueryable<T> source, Topping topping) where T : class
-            => source.Take(topping.TopRows.Value);
+        {
+            if (!(topping?.TopRows > 0))
+            {
+                return source;
+            }
+
+            return source.Take(topping.TopRows.Value);
+        }
 
         public static IQueryable<T> Page<T>(this IQueryable<T> source, Paging paging) where T : class
         {
+            if (!(paging?.PageSize > 0))
+            {
+                return source;
+            }
+
             var skipCount = ((paging.PageIndex ?? 1) - 1) * paging.PageSize.Value;
 
             return skipCount < 0 ? source : source.Skip(skipCount).Take(paging.PageSize.Value);
@@ -28,9 +54,14 @@ namespace EntityFrameworkCore.Repository.Extensions
 
         public static IQueryable<T> Sort<T>(this IQueryable<T> source, IList<Sorting<T>> sortings) where T : class
         {
+            if (!(sortings?.Any() ?? false))
+            {
+                return source;
+            }
+
             var orderedQueryable = false;
 
-            foreach (var sorting in sortings)
+            foreach (var sorting in sortings.Where(s => s != null))
             {
                 if (sorting.SortDirection == SortDirection.Ascending)
                 {
@@ -56,7 +87,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                     {
                         if (!string.IsNullOrWhiteSpace(sorting.FieldName))
                         {
-                            source = ((IOrderedQueryable<T>)source).ThenBy(sorting.FieldName, out var success);
+                            source = ((IOrderedQueryable<T>)source).ThenBy(sorting.FieldName, out _);
                         }
                         else if (sorting.KeySelector != null)
                         {
@@ -88,7 +119,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                     {
                         if (!string.IsNullOrWhiteSpace(sorting.FieldName))
                         {
-                            source = ((IOrderedQueryable<T>)source).ThenByDescending(sorting.FieldName, out var success);
+                            source = ((IOrderedQueryable<T>)source).ThenByDescending(sorting.FieldName, out _);
                         }
                         else if (sorting.KeySelector != null)
                         {
