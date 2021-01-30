@@ -26,7 +26,7 @@ namespace EntityFrameworkCore.Repository.Collections
                 PageSize = pageSize;
                 Count = source.Count;
                 TotalCount = totalCount;
-                TotalPages = PageSize.HasValue && PageSize.Value > 0 ? (int)Math.Ceiling((decimal)TotalCount / (decimal)PageSize.Value) : 0;
+                TotalPages = PageSize > 0 ? (int)Math.Ceiling((decimal)TotalCount / (decimal)PageSize.Value) : 0;
                 Items = source;
             }
         }
