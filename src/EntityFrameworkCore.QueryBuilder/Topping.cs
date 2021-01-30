@@ -7,6 +7,6 @@ namespace EntityFrameworkCore.QueryBuilder
         { }
 
         public int? TopRows { get; internal set; }
-        public bool IsEnabled => TopRows.HasValue && TopRows.Value > 0;
+        public bool IsEnabled => TopRows > 0;
     }
 }
