@@ -686,7 +686,7 @@ namespace EntityFrameworkCore.Repository
             return result;
         }
 
-        public virtual Task<decimal> Average(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
+        public virtual Task<decimal> AverageAsync(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
             if (selector == null)
             {
@@ -698,7 +698,7 @@ namespace EntityFrameworkCore.Repository
             return result;
         }
 
-        public virtual Task<decimal> Sum(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
+        public virtual Task<decimal> SumAsync(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
             if (selector == null)
             {
