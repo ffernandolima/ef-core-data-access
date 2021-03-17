@@ -754,6 +754,18 @@ namespace EntityFrameworkCore.Repository
             return result;
         }
 
+        public virtual Task<int> RemoveAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
+            }
+
+            var result = DbSet.Where(predicate).DeleteAsync();
+
+            return result;
+        }
+
         public Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql))
