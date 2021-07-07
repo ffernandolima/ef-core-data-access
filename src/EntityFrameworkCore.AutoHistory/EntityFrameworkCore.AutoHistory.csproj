@@ -16,12 +16,12 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;AutoHistory;Auto History;auto-history</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>5.0.4</Version>
+        <Version>5.0.5</Version>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.4" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.7" />
     </ItemGroup>
 
 </Project>
