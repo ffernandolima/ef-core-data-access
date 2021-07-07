@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace EntityFrameworkCore.UnitOfWork.Interfaces
 {
+    using System.Data;
+
     public interface IAsyncUnitOfWork : IRepositoryFactory, IDisposable
     {
         Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, CancellationToken cancellationToken = default);

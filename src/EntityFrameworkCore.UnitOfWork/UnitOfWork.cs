@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -20,12 +19,14 @@ using System.Transactions;
 
 namespace EntityFrameworkCore.UnitOfWork
 {
+    using System.Data;
+
     public class UnitOfWork : IUnitOfWork
     {
         #region Private Fields
 
         private IDbContextTransaction _transaction;
-        private ConcurrentDictionary<string, IRepository> _repositories;
+        private readonly ConcurrentDictionary<string, IRepository> _repositories;
 
         #endregion Private Fields
 
@@ -73,7 +74,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         #region IUnitOfWork Members
 
-        public DbContext DbContext { get; private set; }
+        public DbContext DbContext { get; }
 
         public TimeSpan? Timeout
         {
@@ -184,7 +185,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public Transaction GetEnlistedTransaction() => DbContext.Database.GetEnlistedTransaction();
 
-        public void BeginTransaction(System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.ReadCommitted)
+        public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             if (_transaction != null)
             {
@@ -350,7 +351,7 @@ namespace EntityFrameworkCore.UnitOfWork
             }
         }
 
-        public async Task BeginTransactionAsync(System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
+        public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
         {
             if (_transaction != null)
             {
@@ -494,7 +495,6 @@ namespace EntityFrameworkCore.UnitOfWork
                     if (DbContext != null)
                     {
                         DbContext.Dispose();
-                        DbContext = null;
                     }
 
                     if (_repositories != null)
@@ -505,7 +505,6 @@ namespace EntityFrameworkCore.UnitOfWork
                         }
 
                         _repositories.Clear();
-                        _repositories = null;
                     }
                 }
             }
