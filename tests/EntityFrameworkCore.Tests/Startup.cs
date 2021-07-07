@@ -6,8 +6,8 @@ namespace EntityFrameworkCore.Tests
 {
     public class Startup : IStartup
     {
-        protected IServiceCollection Services { get; private set; }
-        protected IConfiguration Configuration { get; private set; }
+        protected IServiceCollection Services { get; }
+        protected IConfiguration Configuration { get; }
 
         private IServiceProvider _serviceProvider;
         protected IServiceProvider ServiceProvider => (_serviceProvider ??= Services?.BuildServiceProvider());
