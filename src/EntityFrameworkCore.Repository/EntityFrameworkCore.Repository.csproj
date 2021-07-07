@@ -16,11 +16,11 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;Repository</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>2.0.10</Version>
+        <Version>2.0.11</Version>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="2.1.25" />
+        <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="2.2.2" />
     </ItemGroup>
 
     <ItemGroup>
