@@ -7,6 +7,8 @@ using System.Transactions;
 
 namespace EntityFrameworkCore.UnitOfWork.Interfaces
 {
+    using System.Data;
+
     public interface ISyncUnitOfWork : IRepositoryFactory, IDisposable
     {
         bool HasTransaction();
@@ -16,7 +18,7 @@ namespace EntityFrameworkCore.UnitOfWork.Interfaces
         void UseTransaction(DbTransaction transaction, Guid? transactionId = null);
         void EnlistTransaction(Transaction transaction);
         Transaction GetEnlistedTransaction();
-        void BeginTransaction(System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.ReadCommitted);
+        void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted);
         void Commit();
         void Rollback();
         int ExecuteSqlCommand(string sql, params object[] parameters);
