@@ -492,10 +492,7 @@ namespace EntityFrameworkCore.UnitOfWork
                         connection.Close();
                     }
 
-                    if (DbContext != null)
-                    {
-                        DbContext.Dispose();
-                    }
+                    DbContext.Dispose();
 
                     if (_repositories != null)
                     {
