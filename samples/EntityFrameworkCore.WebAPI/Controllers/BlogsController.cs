@@ -20,7 +20,7 @@ namespace EntityFrameworkCore.WebAPI.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class BlogsController : Controller
     {
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         public BlogsController(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
 
@@ -44,13 +44,15 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             {
                 // Example: PagedList
                 var blogs = await repository.SearchAsync(query)
-                                            .ToPagedListAsync(query.Paging.PageIndex, query.Paging.PageSize, query.Paging.TotalCount);
+                                            .ToPagedListAsync(query.Paging.PageIndex, query.Paging.PageSize, query.Paging.TotalCount)
+                                            .ConfigureAwait(continueOnCapturedContext: false);
 
                 return Ok(blogs);
             }
             else
             {
-                var blogs = await repository.SearchAsync(query);
+                var blogs = await repository.SearchAsync(query)
+                                            .ConfigureAwait(continueOnCapturedContext: false);
 
                 return Ok(blogs);
             }
@@ -65,13 +67,15 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             IList<Blog> blogs;
 
             // Example: From SQL
-            blogs = await Task.FromResult(repository.FromSql($"SELECT Id, Url, Title, TypeId FROM Blog WHERE Title LIKE '%{term}%';"));
+            blogs = await Task.FromResult(repository.FromSql($"SELECT Id, Url, Title, TypeId FROM Blog WHERE Title LIKE '%{term}%';"))
+                              .ConfigureAwait(continueOnCapturedContext: false);
 
             // Example: Filtering
             var query = repository.MultipleResultQuery()
                                   .AndFilter(blog => blog.Title.Contains(term));
 
-            blogs = await repository.SearchAsync(query);
+            blogs = await repository.SearchAsync(query)
+                                    .ConfigureAwait(continueOnCapturedContext: false);
 
             return Ok(blogs);
         }
@@ -83,7 +87,8 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             // Example: Custom Repository
             var repository = _unitOfWork.CustomRepository<ICustomBlogRepository>();
 
-            var urls = await repository.GetAllBlogUrlsAsync();
+            var urls = await repository.GetAllBlogUrlsAsync()
+                                       .ConfigureAwait(continueOnCapturedContext: false);
 
             return Ok(urls);
         }
@@ -98,7 +103,8 @@ namespace EntityFrameworkCore.WebAPI.Controllers
                                   .AndFilter(blog => blog.Id == id)
                                   .Include(source => source.Include(blog => blog.Type).Include(blog => blog.Posts).ThenInclude(post => post.Comments));
 
-            var blogResult = await repository.SingleOrDefaultAsync(query);
+            var blogResult = await repository.SingleOrDefaultAsync(query)
+                                             .ConfigureAwait(continueOnCapturedContext: false);
 
             return Ok(blogResult);
         }
@@ -109,9 +115,11 @@ namespace EntityFrameworkCore.WebAPI.Controllers
         {
             var repository = _unitOfWork.Repository<Blog>();
 
-            await repository.AddAsync(model);
+            await repository.AddAsync(model)
+                            .ConfigureAwait(continueOnCapturedContext: false);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync()
+                             .ConfigureAwait(continueOnCapturedContext: false);
 
             return NoContent();
         }
@@ -122,7 +130,8 @@ namespace EntityFrameworkCore.WebAPI.Controllers
         {
             var repository = _unitOfWork.Repository<Blog>();
 
-            if (!await repository.AnyAsync(blog => blog.Id == id))
+            if (!await repository.AnyAsync(blog => blog.Id == id)
+                                 .ConfigureAwait(continueOnCapturedContext: false))
             {
                 return Conflict();
             }
@@ -133,7 +142,8 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             // Example: Update Model
             repository.Update(model);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync()
+                             .ConfigureAwait(continueOnCapturedContext: false);
 
             return NoContent();
         }
@@ -144,7 +154,8 @@ namespace EntityFrameworkCore.WebAPI.Controllers
         {
             var repository = _unitOfWork.Repository<Blog>();
 
-            if (!await repository.AnyAsync(blog => blog.Id == id))
+            if (!await repository.AnyAsync(blog => blog.Id == id)
+                                 .ConfigureAwait(continueOnCapturedContext: false))
             {
                 return Conflict();
             }
@@ -159,22 +170,27 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             using (var transactionScope = TransactionScopeFactory.CreateTransactionScope(transactionScopeAsyncFlowOption: TransactionScopeAsyncFlowOption.Enabled))
             {
                 // Without Parameters
-                await repository.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = '{title}' WHERE Id = {id};");
+                await repository.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = '{title}' WHERE Id = {id};")
+                                .ConfigureAwait(continueOnCapturedContext: false);
 
                 // With Parameters
-                await repository.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = @Title WHERE Id = @Id;", parameters);
+                await repository.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = @Title WHERE Id = @Id;", parameters)
+                                .ConfigureAwait(continueOnCapturedContext: false);
 
                 transactionScope.Complete();
             }
 
             // Example: IDbContextTransaction
-            await _unitOfWork.BeginTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync()
+                             .ConfigureAwait(continueOnCapturedContext: false);
 
             // Without Parameters
-            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = '{title}' WHERE Id = {id};");
+            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = '{title}' WHERE Id = {id};")
+                             .ConfigureAwait(continueOnCapturedContext: false);
 
             // With Parameters
-            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = @Title WHERE Id = @Id;", parameters);
+            await _unitOfWork.ExecuteSqlCommandAsync($"UPDATE Blog SET Title = @Title WHERE Id = @Id;", parameters)
+                             .ConfigureAwait(continueOnCapturedContext: false);
 
             _unitOfWork.Commit();
 
@@ -187,14 +203,16 @@ namespace EntityFrameworkCore.WebAPI.Controllers
         {
             var repository = _unitOfWork.Repository<Blog>();
 
-            if (!await repository.AnyAsync(blog => blog.Id == id))
+            if (!await repository.AnyAsync(blog => blog.Id == id)
+                                 .ConfigureAwait(continueOnCapturedContext: false))
             {
                 return Conflict();
             }
 
             repository.Remove(x => x.Id == id);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync()
+                             .ConfigureAwait(continueOnCapturedContext: false);
 
             return NoContent();
         }
@@ -209,11 +227,7 @@ namespace EntityFrameworkCore.WebAPI.Controllers
             {
                 if (disposing)
                 {
-                    if (_unitOfWork != null)
-                    {
-                        _unitOfWork.Dispose();
-                        _unitOfWork = null;
-                    }
+                    _unitOfWork.Dispose();
                 }
 
                 _disposed = true;
