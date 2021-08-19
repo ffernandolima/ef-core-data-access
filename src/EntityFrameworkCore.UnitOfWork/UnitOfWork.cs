@@ -323,11 +323,11 @@ namespace EntityFrameworkCore.UnitOfWork
 
         #region IAsyncUnitOfWork Members
 
-        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, CancellationToken cancellationToken = default)
+        public async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, CancellationToken cancellationToken = default)
         {
             if (!HasChanges())
             {
-                return Task.FromResult(0);
+                return await Task.FromResult(0).ConfigureAwait(continueOnCapturedContext: false);
             }
 
             bool autoDetectChangesEnabled;
@@ -344,7 +344,7 @@ namespace EntityFrameworkCore.UnitOfWork
                     DbContext.EnsureAutoHistory();
                 }
 
-                return DbContext.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+                return await DbContext.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
             }
             finally
             {
@@ -364,7 +364,9 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new InvalidOperationException("There's already an active transaction.");
             }
 
-            _transaction = !transactionId.HasValue ? await DbContext.Database.UseTransactionAsync(transaction, cancellationToken) : await DbContext.Database.UseTransactionAsync(transaction, transactionId.Value, cancellationToken);
+            _transaction = !transactionId.HasValue
+                ? await DbContext.Database.UseTransactionAsync(transaction, cancellationToken).ConfigureAwait(continueOnCapturedContext: false)
+                : await DbContext.Database.UseTransactionAsync(transaction, transactionId.Value, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         }
 
         public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
@@ -374,7 +376,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new InvalidOperationException("There's already an active transaction.");
             }
 
-            _transaction = await DbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+            _transaction = await DbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         }
 
         public async Task CommitAsync(CancellationToken cancellationToken = default)
@@ -386,20 +388,20 @@ namespace EntityFrameworkCore.UnitOfWork
                     throw new InvalidOperationException("There's no active transaction.");
                 }
 
-                await _transaction.CommitAsync(cancellationToken);
+                await _transaction.CommitAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
             }
             catch
             {
                 using (var source = new CancellationTokenSource())
                 {
-                    await RollbackAsync(source.Token);
+                    await RollbackAsync(source.Token).ConfigureAwait(continueOnCapturedContext: false);
                 }
 
                 throw;
             }
             finally
             {
-                await DisposeTransactionAsync();
+                await DisposeTransactionAsync().ConfigureAwait(continueOnCapturedContext: false);
             }
         }
 
@@ -409,7 +411,7 @@ namespace EntityFrameworkCore.UnitOfWork
             {
                 if (_transaction != null)
                 {
-                    await _transaction.RollbackAsync(cancellationToken);
+                    await _transaction.RollbackAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
                 }
             }
             catch
@@ -418,18 +420,18 @@ namespace EntityFrameworkCore.UnitOfWork
             }
             finally
             {
-                await DisposeTransactionAsync();
+                await DisposeTransactionAsync().ConfigureAwait(continueOnCapturedContext: false);
             }
         }
 
-        public Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
+        public async Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var affectedRows = DbContext.Database.ExecuteSqlRawAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken);
+            var affectedRows = await DbContext.Database.ExecuteSqlRawAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
 
             return affectedRows;
         }
@@ -476,7 +478,7 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             if (!(unitOfWorks?.Any() ?? false))
             {
-                return await Task.FromResult(0);
+                return await Task.FromResult(0).ConfigureAwait(continueOnCapturedContext: false);
             }
 
             var count = 0;
@@ -485,7 +487,7 @@ namespace EntityFrameworkCore.UnitOfWork
             {
                 foreach (var unitOfWork in unitOfWorks)
                 {
-                    count += await unitOfWork.SaveChangesAsync(acceptAllChangesOnSuccess, ensureAutoHistory, cancellationToken);
+                    count += await unitOfWork.SaveChangesAsync(acceptAllChangesOnSuccess, ensureAutoHistory, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
                 }
             }
 
@@ -537,7 +539,7 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             if (_transaction != null)
             {
-                await _transaction.DisposeAsync();
+                await _transaction.DisposeAsync().ConfigureAwait(continueOnCapturedContext: false);
                 _transaction = null;
             }
         }
