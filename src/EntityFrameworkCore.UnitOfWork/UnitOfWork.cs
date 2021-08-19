@@ -322,11 +322,11 @@ namespace EntityFrameworkCore.UnitOfWork
 
         #region IAsyncUnitOfWork Members
 
-        public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, CancellationToken cancellationToken = default)
+        public async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false, CancellationToken cancellationToken = default)
         {
             if (!HasChanges())
             {
-                return Task.FromResult(0);
+                return await Task.FromResult(0).ConfigureAwait(continueOnCapturedContext: false);
             }
 
             bool autoDetectChangesEnabled;
@@ -343,7 +343,7 @@ namespace EntityFrameworkCore.UnitOfWork
                     DbContext.EnsureAutoHistory();
                 }
 
-                return DbContext.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+                return await DbContext.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
             }
             finally
             {
@@ -358,17 +358,17 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new InvalidOperationException("There's already an active transaction.");
             }
 
-            _transaction = await DbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+            _transaction = await DbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         }
 
-        public Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
+        public async Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
                 throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
             }
 
-            var affectedRows = DbContext.Database.ExecuteSqlCommandAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken);
+            var affectedRows = await DbContext.Database.ExecuteSqlCommandAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
 
             return affectedRows;
         }
@@ -415,7 +415,7 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             if (!(unitOfWorks?.Any() ?? false))
             {
-                return await Task.FromResult(0);
+                return await Task.FromResult(0).ConfigureAwait(continueOnCapturedContext: false);
             }
 
             var count = 0;
@@ -424,7 +424,7 @@ namespace EntityFrameworkCore.UnitOfWork
             {
                 foreach (var unitOfWork in unitOfWorks)
                 {
-                    count += await unitOfWork.SaveChangesAsync(acceptAllChangesOnSuccess, ensureAutoHistory, cancellationToken);
+                    count += await unitOfWork.SaveChangesAsync(acceptAllChangesOnSuccess, ensureAutoHistory, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
                 }
             }
 
