@@ -563,15 +563,12 @@ namespace EntityFrameworkCore.UnitOfWork
 
                     DbContext.Dispose();
 
-                    if (_repositories != null)
+                    foreach (var repository in _repositories.Values)
                     {
-                        foreach (var repository in _repositories.Values)
-                        {
-                            repository.Dispose();
-                        }
-
-                        _repositories.Clear();
+                        repository.Dispose();
                     }
+
+                    _repositories.Clear();
                 }
             }
 
