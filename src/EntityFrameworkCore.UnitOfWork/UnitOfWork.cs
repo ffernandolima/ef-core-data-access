@@ -420,7 +420,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
             var count = 0;
 
-            async void SaveChangesAsyncInternal()
+            async Task SaveChangesAsyncInternal()
             {
                 foreach (var unitOfWork in unitOfWorks)
                 {
@@ -432,14 +432,14 @@ namespace EntityFrameworkCore.UnitOfWork
             {
                 using (var transactionScope = TransactionScopeFactory.CreateTransactionScope(timeout: timeout ?? TransactionManager.MaximumTimeout, transactionScopeAsyncFlowOption: TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    SaveChangesAsyncInternal();
+                    await SaveChangesAsyncInternal().ConfigureAwait(continueOnCapturedContext: false);
 
                     transactionScope.Complete();
                 }
             }
             else
             {
-                SaveChangesAsyncInternal();
+                await SaveChangesAsyncInternal().ConfigureAwait(continueOnCapturedContext: false);
             }
 
             return count;
