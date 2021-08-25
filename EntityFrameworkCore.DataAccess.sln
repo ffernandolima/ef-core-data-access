@@ -43,8 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{4064
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8530E691-3926-4659-8ECB-16B5780B3FB6}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-publish.yml = .github\workflows\build-and-publish.yml
 		.github\workflows\build-and-tests.yml = .github\workflows\build-and-tests.yml
-		.github\workflows\EntityFrameworkCore.DataAccess.yml = .github\workflows\EntityFrameworkCore.DataAccess.yml
 	EndProjectSection
 EndProject
 Global
