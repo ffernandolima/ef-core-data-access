@@ -2,7 +2,9 @@ name: Build and tests
 
 on:
   push:
+     branches: [ ef-core-2, ef-core-3, ef-core-5 ]
   pull_request:
+     branches: [ ef-core-2, ef-core-3, ef-core-5 ]
 
 jobs:
   build:
