@@ -1,0 +1,28 @@
+name: EntityFrameworkCore.DataAccess
+
+env:
+  PROJECT: EntityFrameworkCore.DataAccess
+  NUGET_USER: ${{ secrets.NUGET_USER }}
+  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+  NUGET_SOURCE: ${{ secrets.NUGET_SOURCE }}
+  NUGET_SOURCE_NAME: ${{ secrets.NUGET_SOURCE_NAME }}
+
+on:
+  push:
+  pull_request:
+  
+jobs:
+  build-and-publish:
+    if: github.ref == 'refs/heads/ef-core-2' || github.ref == 'refs/heads/ef-core-3' || github.ref == 'refs/heads/ef-core-5'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Nuget Config
+        shell: bash
+        run: dotnet nuget add source $NUGET_SOURCE -n $NUGET_SOURCE_NAME -u $NUGET_USER -p $NUGET_API_KEY --store-password-in-clear-text
+      - name: Restore
+        run: dotnet restore
+      - name: Build projects
+        run: dotnet build -c Release
+      - name: Push packages
+        run: dotnet nuget push "**/$PROJECT*.nupkg" -s $NUGET_SOURCE_NAME --skip-duplicate
