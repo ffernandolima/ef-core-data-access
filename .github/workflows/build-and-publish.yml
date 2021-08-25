@@ -1,0 +1,24 @@
+name: build-and-publish
+
+env:
+  PROJECT: EntityFrameworkCore
+  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+  NUGET_SOURCE: ${{ secrets.NUGET_SOURCE }}
+
+on:
+  push:
+    branches: [ ef-core-2, ef-core-3, ef-core-5 ]
+  pull_request:
+    branches: [ ef-core-2, ef-core-3, ef-core-5 ]
+  
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Restore
+        run: dotnet restore
+      - name: Build projects
+        run: dotnet build -c Release
+      - name: Push packages
+        run: dotnet nuget push "**/$PROJECT*.nupkg" -k $NUGET_API_KEY -s $NUGET_SOURCE --skip-duplicate
