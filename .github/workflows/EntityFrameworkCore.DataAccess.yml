@@ -9,11 +9,12 @@ env:
 
 on:
   push:
+    branches: [ ef-core-2, ef-core-3, ef-core-5 ]
   pull_request:
+    branches: [ ef-core-2, ef-core-3, ef-core-5 ]
   
 jobs:
   build-and-publish:
-    if: github.ref == 'refs/heads/ef-core-2' || github.ref == 'refs/heads/ef-core-3' || github.ref == 'refs/heads/ef-core-5'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
