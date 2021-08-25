@@ -8,20 +8,20 @@ It's a modern and generic data access structure for .NET and Microsoft.EntityFra
 
  | Package | NuGet |
  | ------- | ----- |
- | EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v3.0.16-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/3.0.16) |
- | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v3.0.16-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/3.0.16) |
- | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v3.0.16-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/3.0.16) |
- | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v3.0.16-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/3.0.16) |
+ | EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v3.1.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/3.1.0) |
+ | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v3.1.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/3.1.0) |
+ | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v3.1.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/3.1.0) |
+ | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v3.1.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/3.1.0) |
 
 ## Installation
 
 EntityFrameworkCore.DataAccess is available on Nuget.
 
 ```
-Install-Package EntityFrameworkCore.Data.AutoHistory -Version 3.0.16
-Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 3.0.16
-Install-Package EntityFrameworkCore.Data.Repository -Version 3.0.16
-Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 3.0.16
+Install-Package EntityFrameworkCore.Data.AutoHistory -Version 3.1.0
+Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 3.1.0
+Install-Package EntityFrameworkCore.Data.Repository -Version 3.1.0
+Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 3.1.0
 ```
 
 P.S.: EntityFrameworkCore.Data.UnitOfWork depends on the other three packages, so installing this package is enough.
