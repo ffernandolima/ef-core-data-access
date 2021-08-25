@@ -1,4 +1,4 @@
-name: EntityFrameworkCore.DataAccess
+name: build-and-publish
 
 env:
   PROJECT: EntityFrameworkCore
