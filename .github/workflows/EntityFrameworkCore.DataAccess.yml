@@ -1,7 +1,7 @@
 name: EntityFrameworkCore.DataAccess
 
 env:
-  PROJECT: EntityFrameworkCore.DataAccess
+  PROJECT: EntityFrameworkCore
   NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
   NUGET_SOURCE: ${{ secrets.NUGET_SOURCE }}
 
