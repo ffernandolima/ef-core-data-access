@@ -5,8 +5,10 @@ using EntityFrameworkCore.UnitOfWork.Factories;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -60,14 +62,14 @@ namespace EntityFrameworkCore.UnitOfWork
                                              .SingleOrDefault();
             }
 
-            return (T)GetRepository(typeof(T), Factory, "Custom");
+            return DbContext.GetInfrastructure()?.GetService<T>() ?? (T)GetRepository(typeof(T), Factory, "Custom");
         }
 
         public IRepository<T> Repository<T>() where T : class
         {
             IRepository Factory(DbContext dbContext, Type type) => new Repository<T>(dbContext);
 
-            return (IRepository<T>)GetRepository(typeof(T), Factory, "Generic");
+            return DbContext.GetInfrastructure()?.GetService<IRepository<T>>() ?? (IRepository<T>)GetRepository(typeof(T), Factory, "Generic");
         }
 
         #endregion IRepositoryFactory Members
