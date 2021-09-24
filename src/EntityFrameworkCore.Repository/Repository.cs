@@ -1,4 +1,5 @@
-﻿using EntityFrameworkCore.QueryBuilder.Interfaces;
+﻿using EntityFrameworkCore.QueryBuilder;
+using EntityFrameworkCore.QueryBuilder.Interfaces;
 using EntityFrameworkCore.Repository.Extensions;
 using EntityFrameworkCore.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -827,7 +828,7 @@ namespace EntityFrameworkCore.Repository
                     countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
                 }
 
-                multipleResultQuery.Paging.TotalCount = countQueryable.Count();
+                ((Paging)multipleResultQuery.Paging).TotalCount = countQueryable.Count();
 
                 queryable = queryable.Page(multipleResultQuery.Paging);
             }
@@ -885,7 +886,7 @@ namespace EntityFrameworkCore.Repository
                     countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
                 }
 
-                multipleResultQuery.Paging.TotalCount = countQueryable.Count();
+                ((Paging)multipleResultQuery.Paging).TotalCount = countQueryable.Count();
 
                 queryable = queryable.Page(multipleResultQuery.Paging);
             }

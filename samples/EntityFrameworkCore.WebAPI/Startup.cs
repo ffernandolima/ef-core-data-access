@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,7 @@ namespace EntityFrameworkCore.WebAPI
                 options.ReportApiVersions = true;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
                 options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
             });
 
             services.AddVersionedApiExplorer(options =>
@@ -152,23 +154,22 @@ namespace EntityFrameworkCore.WebAPI
 
             var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
 
-            using (var serviceScope = serviceScopeFactory.CreateScope())
+            using var serviceScope = serviceScopeFactory.CreateScope();
+
+            var context = serviceScope.ServiceProvider.GetService<BloggingContext>();
+
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            var unitOfWork = serviceScope.ServiceProvider.GetService<IUnitOfWork>();
+            var repository = unitOfWork.Repository<Blog>();
+
+            if (!repository.Any())
             {
-                var context = serviceScope.ServiceProvider.GetService<BloggingContext>();
+                var blogs = Seeder.SeedBlogs();
 
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
-                var unitOfWork = serviceScope.ServiceProvider.GetService<IUnitOfWork>();
-                var repository = unitOfWork.Repository<Blog>();
-
-                if (!repository.Any())
-                {
-                    var blogs = Seeder.SeedBlogs();
-
-                    repository.AddRange(blogs);
-                    unitOfWork.SaveChanges();
-                }
+                repository.AddRange(blogs);
+                unitOfWork.SaveChanges();
             }
         }
     }

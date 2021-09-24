@@ -1,30 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <NoWarn>1701;1702;1705;1591</NoWarn>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <AssemblyName>EntityFrameworkCore.Repository</AssemblyName>
-        <PackageId>EntityFrameworkCore.Data.Repository</PackageId>
-        <Authors>Lima Technology Services;Fernando Luiz de Lima</Authors>
-        <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
-        <Description>Provides the Repository pattern for Microsoft.EntityFrameworkCore.</Description>
-        <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-3</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;Repository</PackageTags>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>5.1.0</Version>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>EntityFrameworkCore.Repository</AssemblyName>
+    <PackageId>EntityFrameworkCore.Data.Repository</PackageId>
+    <Authors>Lima Technology Services;Fernando Luiz de Lima</Authors>
+    <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
+    <Description>Provides the Repository pattern for Microsoft.EntityFrameworkCore.</Description>
+    <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-5</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;Repository</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>5.2.0</Version>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="5.2.7" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="5.2.7" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\EntityFrameworkCore.QueryBuilder\EntityFrameworkCore.QueryBuilder.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EntityFrameworkCore.QueryBuilder\EntityFrameworkCore.QueryBuilder.csproj" />
+    <ProjectReference Include="..\EntityFrameworkCore.Repository.Abstractions\EntityFrameworkCore.Repository.Abstractions.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -1,33 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <NoWarn>1701;1702;1705;1591</NoWarn>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <AssemblyName>EntityFrameworkCore.QueryBuilder</AssemblyName>
-        <PackageId>EntityFrameworkCore.Data.QueryBuilder</PackageId>
-        <Authors>Lima Technology Services;Fernando Luiz de Lima</Authors>
-        <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
-        <Description>Provides the QueryBuilder pattern for Microsoft.EntityFrameworkCore.</Description>
-        <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-3</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;QueryBuilder;Query Builder;query-builder</PackageTags>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>5.1.0</Version>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>EntityFrameworkCore.QueryBuilder</AssemblyName>
+    <PackageId>EntityFrameworkCore.Data.QueryBuilder</PackageId>
+    <Authors>Lima Technology Services;Fernando Luiz de Lima</Authors>
+    <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
+    <Description>Provides the QueryBuilder pattern for Microsoft.EntityFrameworkCore.</Description>
+    <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-5</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;QueryBuilder;Query Builder;query-builder</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>5.2.0</Version>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="5.0.26" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.9" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="5.0.26" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>EntityFrameworkCore.Repository</_Parameter1>
-        </AssemblyAttribute>
-    </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>EntityFrameworkCore.Repository</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EntityFrameworkCore.QueryBuilder.Abstractions\EntityFrameworkCore.QueryBuilder.Abstractions.csproj" />
+  </ItemGroup>
 
 </Project>

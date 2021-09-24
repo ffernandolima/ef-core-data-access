@@ -15,20 +15,20 @@ namespace EntityFrameworkCore.QueryBuilder
 
         #region IMultipleResultQuery<T> Members
 
-        public Paging Paging { get; internal set; } = new Paging();
-        public Topping Topping { get; internal set; } = new Topping();
+        public IPaging Paging { get; internal set; } = new Paging();
+        public ITopping Topping { get; internal set; } = new Topping();
 
         public IMultipleResultQuery<T> Page(int? pageIndex, int? pageSize)
         {
-            Paging.PageIndex = pageIndex;
-            Paging.PageSize = pageSize;
+            ((Paging)Paging).PageIndex = pageIndex;
+            ((Paging)Paging).PageSize = pageSize;
 
             return this;
         }
 
         public IMultipleResultQuery<T> Top(int? topRows)
         {
-            Topping.TopRows = topRows;
+            ((Topping)Topping).TopRows = topRows;
 
             return this;
         }
@@ -48,21 +48,20 @@ namespace EntityFrameworkCore.QueryBuilder
         #endregion Ctor
 
         #region IMultipleResultQuery<T, TResult> Members
-
-        public Paging Paging { get; internal set; } = new Paging();
-        public Topping Topping { get; internal set; } = new Topping();
+        public IPaging Paging { get; internal set; } = new Paging();
+        public ITopping Topping { get; internal set; } = new Topping();
 
         public IMultipleResultQuery<T, TResult> Page(int? pageIndex, int? pageSize)
         {
-            Paging.PageIndex = pageIndex;
-            Paging.PageSize = pageSize;
+            ((Paging)Paging).PageIndex = pageIndex;
+            ((Paging)Paging).PageSize = pageSize;
 
             return this;
         }
 
         public IMultipleResultQuery<T, TResult> Top(int? topRows)
         {
-            Topping.TopRows = topRows;
+            ((Topping)Topping).TopRows = topRows;
 
             return this;
         }
