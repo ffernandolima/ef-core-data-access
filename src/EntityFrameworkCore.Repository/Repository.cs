@@ -828,7 +828,10 @@ namespace EntityFrameworkCore.Repository
                     countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
                 }
 
-                ((Paging)multipleResultQuery.Paging).TotalCount = countQueryable.Count();
+                if (multipleResultQuery.Paging is Paging paging)
+                {
+                    paging.TotalCount = countQueryable.Count();
+                }
 
                 queryable = queryable.Page(multipleResultQuery.Paging);
             }
@@ -886,7 +889,10 @@ namespace EntityFrameworkCore.Repository
                     countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
                 }
 
-                ((Paging)multipleResultQuery.Paging).TotalCount = countQueryable.Count();
+                if (multipleResultQuery.Paging is Paging paging)
+                {
+                    paging.TotalCount = countQueryable.Count();
+                }
 
                 queryable = queryable.Page(multipleResultQuery.Paging);
             }

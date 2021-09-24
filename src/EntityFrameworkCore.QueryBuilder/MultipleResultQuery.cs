@@ -20,15 +20,21 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public IMultipleResultQuery<T> Page(int? pageIndex, int? pageSize)
         {
-            ((Paging)Paging).PageIndex = pageIndex;
-            ((Paging)Paging).PageSize = pageSize;
+            if (Paging is Paging paging)
+            {
+                paging.PageIndex = pageIndex;
+                paging.PageSize = pageSize;
+            }
 
             return this;
         }
 
         public IMultipleResultQuery<T> Top(int? topRows)
         {
-            ((Topping)Topping).TopRows = topRows;
+            if (Topping is Topping topping)
+            {
+                topping.TopRows = topRows;
+            }
 
             return this;
         }
@@ -53,15 +59,21 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public IMultipleResultQuery<T, TResult> Page(int? pageIndex, int? pageSize)
         {
-            ((Paging)Paging).PageIndex = pageIndex;
-            ((Paging)Paging).PageSize = pageSize;
+            if (Paging is Paging paging)
+            {
+                paging.PageIndex = pageIndex;
+                paging.PageSize = pageSize;
+            }
 
             return this;
         }
 
         public IMultipleResultQuery<T, TResult> Top(int? topRows)
         {
-            ((Topping)Topping).TopRows = topRows;
+            if (Topping is Topping topping)
+            {
+                topping.TopRows = topRows;
+            }
 
             return this;
         }
