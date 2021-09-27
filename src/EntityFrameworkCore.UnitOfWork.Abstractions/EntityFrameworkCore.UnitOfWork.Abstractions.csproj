@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,24 +6,23 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <AssemblyName>EntityFrameworkCore.UnitOfWork</AssemblyName>
-    <PackageId>EntityFrameworkCore.Data.UnitOfWork</PackageId>
+    <RootNamespace>EntityFrameworkCore.UnitOfWork</RootNamespace>
+    <AssemblyName>EntityFrameworkCore.UnitOfWork.Abstractions</AssemblyName>
+    <PackageId>EntityFrameworkCore.Data.UnitOfWork.Abstractions</PackageId>
     <Authors>Lima Technology Services;Fernando Luiz de Lima</Authors>
     <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
-    <Description>Provides the UnitOfWork pattern for Microsoft.EntityFrameworkCore.</Description>
+    <Description>Provides UnitOfWork abstractions in order to implement UnitOfWork pattern for Microsoft.EntityFrameworkCore.</Description>
     <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-3</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;UnitOfWork;Unit Of Work;unit-of-work</PackageTags>
+    <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;UnitOfWork;Unit Of Work;unit-of-work;Abstractions</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>3.2.0</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EntityFrameworkCore.AutoHistory\EntityFrameworkCore.AutoHistory.csproj" />
-    <ProjectReference Include="..\EntityFrameworkCore.Repository\EntityFrameworkCore.Repository.csproj" />
-    <ProjectReference Include="..\EntityFrameworkCore.UnitOfWork.Abstractions\EntityFrameworkCore.UnitOfWork.Abstractions.csproj" />
+    <ProjectReference Include="..\EntityFrameworkCore.Repository.Abstractions\EntityFrameworkCore.Repository.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
