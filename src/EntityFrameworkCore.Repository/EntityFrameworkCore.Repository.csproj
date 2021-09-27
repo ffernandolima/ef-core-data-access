@@ -17,6 +17,7 @@
     <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;Repository</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>5.2.0</Version>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
