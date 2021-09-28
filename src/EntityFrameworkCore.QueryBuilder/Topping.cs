@@ -1,7 +1,8 @@
-﻿
+﻿using EntityFrameworkCore.QueryBuilder.Interfaces;
+
 namespace EntityFrameworkCore.QueryBuilder
 {
-    public class Topping
+    public class Topping : ITopping
     {
         internal Topping()
         { }

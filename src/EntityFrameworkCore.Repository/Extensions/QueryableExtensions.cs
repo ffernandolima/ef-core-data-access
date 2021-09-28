@@ -1,4 +1,5 @@
 ﻿using EntityFrameworkCore.QueryBuilder;
+using EntityFrameworkCore.QueryBuilder.Interfaces;
 using LinqKit;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
@@ -30,7 +31,7 @@ namespace EntityFrameworkCore.Repository.Extensions
             return source.AsExpandable().Where(predicate);
         }
 
-        public static IQueryable<T> Top<T>(this IQueryable<T> source, Topping topping) where T : class
+        public static IQueryable<T> Top<T>(this IQueryable<T> source, ITopping topping) where T : class
         {
             if (!(topping?.TopRows > 0))
             {
@@ -40,7 +41,7 @@ namespace EntityFrameworkCore.Repository.Extensions
             return source.Take(topping.TopRows.Value);
         }
 
-        public static IQueryable<T> Page<T>(this IQueryable<T> source, Paging paging) where T : class
+        public static IQueryable<T> Page<T>(this IQueryable<T> source, IPaging paging) where T : class
         {
             if (!(paging?.PageSize > 0))
             {
@@ -52,7 +53,7 @@ namespace EntityFrameworkCore.Repository.Extensions
             return skipCount < 0 ? source : source.Skip(skipCount).Take(paging.PageSize.Value);
         }
 
-        public static IQueryable<T> Sort<T>(this IQueryable<T> source, IList<Sorting<T>> sortings) where T : class
+        public static IQueryable<T> Sort<T>(this IQueryable<T> source, IList<ISorting<T>> sortings) where T : class
         {
             if (!(sortings?.Any() ?? false))
             {

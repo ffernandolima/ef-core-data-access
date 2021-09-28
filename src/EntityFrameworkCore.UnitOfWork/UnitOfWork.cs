@@ -67,7 +67,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public IRepository<T> Repository<T>() where T : class
         {
-            IRepository Factory(DbContext dbContext, Type type) => new Repository<T>(dbContext);
+            static IRepository Factory(DbContext dbContext, Type type) => new Repository<T>(dbContext);
 
             return DbContext.GetInfrastructure()?.GetService<IRepository<T>>() ?? (IRepository<T>)GetRepository(typeof(T), Factory, "Generic");
         }
@@ -458,12 +458,11 @@ namespace EntityFrameworkCore.UnitOfWork
 
             if (useTransaction)
             {
-                using (var transactionScope = TransactionScopeFactory.CreateTransactionScope(timeout: timeout ?? TransactionManager.MaximumTimeout))
-                {
-                    SaveChangesInternal();
+                using var transactionScope = TransactionScopeFactory.CreateTransactionScope(timeout: timeout ?? TransactionManager.MaximumTimeout);
 
-                    transactionScope.Complete();
-                }
+                SaveChangesInternal();
+
+                transactionScope.Complete();
             }
             else
             {
@@ -492,12 +491,11 @@ namespace EntityFrameworkCore.UnitOfWork
 
             if (useTransaction)
             {
-                using (var transactionScope = TransactionScopeFactory.CreateTransactionScope(timeout: timeout ?? TransactionManager.MaximumTimeout, transactionScopeAsyncFlowOption: TransactionScopeAsyncFlowOption.Enabled))
-                {
-                    await SaveChangesAsyncInternal().ConfigureAwait(continueOnCapturedContext: false);
+                using var transactionScope = TransactionScopeFactory.CreateTransactionScope(timeout: timeout ?? TransactionManager.MaximumTimeout, transactionScopeAsyncFlowOption: TransactionScopeAsyncFlowOption.Enabled);
 
-                    transactionScope.Complete();
-                }
+                await SaveChangesAsyncInternal().ConfigureAwait(continueOnCapturedContext: false);
+
+                transactionScope.Complete();
             }
             else
             {

@@ -6,7 +6,7 @@ namespace EntityFrameworkCore.AutoHistory
 {
     public sealed class AutoHistoryOptions
     {
-        private static readonly Lazy<AutoHistoryOptions> AutoHistoryOptionsFactory = new Lazy<AutoHistoryOptions>(() => new AutoHistoryOptions(), isThreadSafe: true);
+        private static readonly Lazy<AutoHistoryOptions> AutoHistoryOptionsFactory = new(() => new AutoHistoryOptions(), isThreadSafe: true);
 
         public static AutoHistoryOptions Instance => AutoHistoryOptionsFactory.Value;
 

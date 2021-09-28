@@ -1,7 +1,8 @@
-﻿
+﻿using EntityFrameworkCore.QueryBuilder.Interfaces;
+
 namespace EntityFrameworkCore.QueryBuilder
 {
-    public class Paging
+    public class Paging : IPaging
     {
         internal Paging()
         { }
