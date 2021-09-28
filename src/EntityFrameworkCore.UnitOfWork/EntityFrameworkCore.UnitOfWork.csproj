@@ -16,12 +16,14 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;UnitOfWork;Unit Of Work;unit-of-work</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EntityFrameworkCore.AutoHistory\EntityFrameworkCore.AutoHistory.csproj" />
     <ProjectReference Include="..\EntityFrameworkCore.Repository\EntityFrameworkCore.Repository.csproj" />
+    <ProjectReference Include="..\EntityFrameworkCore.UnitOfWork.Abstractions\EntityFrameworkCore.UnitOfWork.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,20 +15,26 @@ namespace EntityFrameworkCore.QueryBuilder
 
         #region IMultipleResultQuery<T> Members
 
-        public Paging Paging { get; internal set; } = new Paging();
-        public Topping Topping { get; internal set; } = new Topping();
+        public IPaging Paging { get; internal set; } = new Paging();
+        public ITopping Topping { get; internal set; } = new Topping();
 
         public IMultipleResultQuery<T> Page(int? pageIndex, int? pageSize)
         {
-            Paging.PageIndex = pageIndex;
-            Paging.PageSize = pageSize;
+            if (Paging is Paging paging)
+            {
+                paging.PageIndex = pageIndex;
+                paging.PageSize = pageSize;
+            }
 
             return this;
         }
 
         public IMultipleResultQuery<T> Top(int? topRows)
         {
-            Topping.TopRows = topRows;
+            if (Topping is Topping topping)
+            {
+                topping.TopRows = topRows;
+            }
 
             return this;
         }
@@ -49,20 +55,26 @@ namespace EntityFrameworkCore.QueryBuilder
 
         #region IMultipleResultQuery<T, TResult> Members
 
-        public Paging Paging { get; internal set; } = new Paging();
-        public Topping Topping { get; internal set; } = new Topping();
+        public IPaging Paging { get; internal set; } = new Paging();
+        public ITopping Topping { get; internal set; } = new Topping();
 
         public IMultipleResultQuery<T, TResult> Page(int? pageIndex, int? pageSize)
         {
-            Paging.PageIndex = pageIndex;
-            Paging.PageSize = pageSize;
+            if (Paging is Paging paging)
+            {
+                paging.PageIndex = pageIndex;
+                paging.PageSize = pageSize;
+            }
 
             return this;
         }
 
         public IMultipleResultQuery<T, TResult> Top(int? topRows)
         {
-            Topping.TopRows = topRows;
+            if (Topping is Topping topping)
+            {
+                topping.TopRows = topRows;
+            }
 
             return this;
         }

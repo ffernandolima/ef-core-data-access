@@ -3,8 +3,8 @@ namespace EntityFrameworkCore.QueryBuilder.Interfaces
 {
     public interface IMultipleResultQuery
     {
-        Paging Paging { get; }
-        Topping Topping { get; }
+        IPaging Paging { get; }
+        ITopping Topping { get; }
     }
 
     public interface IMultipleResultQuery<T> : IMultipleResultQuery, IQuery<T> where T : class

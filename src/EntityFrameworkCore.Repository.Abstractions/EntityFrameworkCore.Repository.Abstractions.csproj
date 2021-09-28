@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,27 +6,23 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <AssemblyName>EntityFrameworkCore.Repository</AssemblyName>
-    <PackageId>EntityFrameworkCore.Data.Repository</PackageId>
+    <RootNamespace>EntityFrameworkCore.Repository</RootNamespace>
+    <AssemblyName>EntityFrameworkCore.Repository.Abstractions</AssemblyName>
+    <PackageId>EntityFrameworkCore.Data.Repository.Abstractions</PackageId>
     <Authors>Lima Technology Services;Fernando Luiz de Lima</Authors>
     <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
-    <Description>Provides the Repository pattern for Microsoft.EntityFrameworkCore.</Description>
+    <Description>Provides Repository abstractions in order to implement Repository pattern for Microsoft.EntityFrameworkCore.</Description>
     <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-2</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;Repository</PackageTags>
+    <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;Repository;Abstractions</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>2.2.0</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="2.2.13" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\EntityFrameworkCore.QueryBuilder\EntityFrameworkCore.QueryBuilder.csproj" />
-    <ProjectReference Include="..\EntityFrameworkCore.Repository.Abstractions\EntityFrameworkCore.Repository.Abstractions.csproj" />
+    <ProjectReference Include="..\EntityFrameworkCore.QueryBuilder.Abstractions\EntityFrameworkCore.QueryBuilder.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
