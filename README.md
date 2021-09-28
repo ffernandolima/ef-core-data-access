@@ -7,24 +7,32 @@ It's a modern and generic data access structure for .NET and Microsoft.EntityFra
 [![build-and-publish Workflow Status](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-publish.yml/badge.svg?branch=ef-core-2)](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-publish.yml?branch=ef-core-2)
 
  | Package | NuGet |
- | ------- | ----- |
-| EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v2.1.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/2.1.0) |
- | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v2.1.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/2.1.0) |
- | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v2.1.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/2.1.0) |
- | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v2.1.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/2.1.0) |
+ | ------- | ------- |
+ | EntityFrameworkCore.Data.QueryBuilder.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v2.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder.Abstractions/2.2.0) |
+ | EntityFrameworkCore.Data.Repository.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v2.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository.Abstractions/2.2.0) |
+ | EntityFrameworkCore.Data.UnitOfWork.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v2.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork.Abstractions/2.2.0) |
+ | ------- | ------- |
+ | EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v2.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/2.2.0) |
+ | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v2.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/2.2.0) |
+ | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v2.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/2.2.0) |
+ | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v2.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/2.2.0) |
 
 ## Installation
 
 EntityFrameworkCore.DataAccess is available on Nuget.
 
 ```
-Install-Package EntityFrameworkCore.Data.AutoHistory -Version 2.1.0
-Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 2.1.0
-Install-Package EntityFrameworkCore.Data.Repository -Version 2.1.0
-Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 2.1.0
+Install-Package EntityFrameworkCore.Data.QueryBuilder.Abstractions -Version 2.2.0
+Install-Package EntityFrameworkCore.Data.Repository.Abstractions -Version 2.2.0
+Install-Package EntityFrameworkCore.Data.UnitOfWork.Abstractions -Version 2.2.0
+
+Install-Package EntityFrameworkCore.Data.AutoHistory -Version 2.2.0
+Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 2.2.0
+Install-Package EntityFrameworkCore.Data.Repository -Version 2.2.0
+Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 2.2.0
 ```
 
-P.S.: EntityFrameworkCore.Data.UnitOfWork depends on the other three packages, so installing this package is enough.
+P.S.: EntityFrameworkCore.Data.UnitOfWork depends on the other packages, so installing this package is enough.
 
 ## Usage
 

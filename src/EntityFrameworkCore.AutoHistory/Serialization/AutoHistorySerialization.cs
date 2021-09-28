@@ -6,7 +6,7 @@ namespace EntityFrameworkCore.AutoHistory.Serialization
 {
     internal static class AutoHistorySerialization
     {
-        private static readonly Lazy<JsonSerializerSettings> DefaultSettingsFactory = new Lazy<JsonSerializerSettings>(() => CreateDefaultSettings(), isThreadSafe: true);
+        private static readonly Lazy<JsonSerializerSettings> DefaultSettingsFactory = new(() => CreateDefaultSettings(), isThreadSafe: true);
 
         public static JsonSerializerSettings DefaultSettings => DefaultSettingsFactory.Value;
 
