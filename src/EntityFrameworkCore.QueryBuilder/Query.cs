@@ -25,7 +25,7 @@ namespace EntityFrameworkCore.QueryBuilder
         public QueryTrackingBehavior QueryTrackingBehavior { get; internal set; } = QueryTrackingBehavior.NoTracking;
         public Expression<Func<T, bool>> Predicate { get; internal set; } = PredicateBuilder.New<T>(defaultExpression: true);
         public IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; internal set; } = new List<Func<IQueryable<T>, IIncludableQueryable<T, object>>>();
-        public IList<Sorting<T>> Sortings { get; internal set; } = new List<Sorting<T>>();
+        public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
         public Expression<Func<T, T>> Selector { get; internal set; }
 
         public IQuery<T> UseIgnoreQueryFilters(bool ignoreQueryFilters)
@@ -180,7 +180,7 @@ namespace EntityFrameworkCore.QueryBuilder
         public QueryTrackingBehavior QueryTrackingBehavior { get; internal set; } = QueryTrackingBehavior.NoTracking;
         public Expression<Func<T, bool>> Predicate { get; internal set; } = PredicateBuilder.New<T>(defaultExpression: true);
         public IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; internal set; } = new List<Func<IQueryable<T>, IIncludableQueryable<T, object>>>();
-        public IList<Sorting<T>> Sortings { get; internal set; } = new List<Sorting<T>>();
+        public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
         public Expression<Func<T, TResult>> Selector { get; internal set; }
 
         public IQuery<T, TResult> UseIgnoreQueryFilters(bool ignoreQueryFilters)

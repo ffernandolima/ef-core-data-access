@@ -1,9 +1,10 @@
-﻿using System;
+﻿using EntityFrameworkCore.QueryBuilder.Interfaces;
+using System;
 using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.QueryBuilder
 {
-    public class Sorting<T> : Sorting
+    public class Sorting<T> : Sorting, ISorting<T>
     {
         internal Sorting()
         { }
@@ -11,7 +12,7 @@ namespace EntityFrameworkCore.QueryBuilder
         public Expression<Func<T, object>> KeySelector { get; internal set; }
     }
 
-    public class Sorting
+    public class Sorting : ISorting
     {
         internal Sorting()
         { }

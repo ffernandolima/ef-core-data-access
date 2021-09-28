@@ -461,12 +461,11 @@ namespace EntityFrameworkCore.UnitOfWork
 
             if (useTransaction)
             {
-                using (var transactionScope = TransactionScopeFactory.CreateTransactionScope(timeout: timeout ?? TransactionManager.MaximumTimeout))
-                {
-                    SaveChangesInternal();
+                using var transactionScope = TransactionScopeFactory.CreateTransactionScope(timeout: timeout ?? TransactionManager.MaximumTimeout);
 
-                    transactionScope.Complete();
-                }
+                SaveChangesInternal();
+
+                transactionScope.Complete();
             }
             else
             {
@@ -495,12 +494,11 @@ namespace EntityFrameworkCore.UnitOfWork
 
             if (useTransaction)
             {
-                using (var transactionScope = TransactionScopeFactory.CreateTransactionScope(timeout: timeout ?? TransactionManager.MaximumTimeout, transactionScopeAsyncFlowOption: TransactionScopeAsyncFlowOption.Enabled))
-                {
-                    await SaveChangesAsyncInternal().ConfigureAwait(continueOnCapturedContext: false);
+                using var transactionScope = TransactionScopeFactory.CreateTransactionScope(timeout: timeout ?? TransactionManager.MaximumTimeout, transactionScopeAsyncFlowOption: TransactionScopeAsyncFlowOption.Enabled);
 
-                    transactionScope.Complete();
-                }
+                await SaveChangesAsyncInternal().ConfigureAwait(continueOnCapturedContext: false);
+
+                transactionScope.Complete();
             }
             else
             {
