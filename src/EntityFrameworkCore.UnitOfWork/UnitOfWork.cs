@@ -30,15 +30,18 @@ namespace EntityFrameworkCore.UnitOfWork
 
         private IDbContextTransaction _transaction;
         private readonly ConcurrentDictionary<string, IRepository> _repositories;
+        private readonly IServiceProvider _IServiceProvider;
 
         #endregion Private Fields
 
         #region Ctor
 
         /// <param name="dbContext">Injected</param>
-        public UnitOfWork(DbContext dbContext)
+        /// <param name="serviceProvider">Injected</param>
+        public UnitOfWork(DbContext dbContext, IServiceProvider serviceProvider)
         {
             DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} cannot be null.");
+            _IServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider), $"{nameof(serviceProvider)} cannot be null.");
             _repositories = new ConcurrentDictionary<string, IRepository>();
         }
 
@@ -54,12 +57,12 @@ namespace EntityFrameworkCore.UnitOfWork
                 throw new ArgumentException("Generic type should be an interface.");
             }
 
-            static IRepository Factory(DbContext dbContext, Type type)
+            static IRepository Factory(DbContext dbContext, IServiceProvider _IServiceProvider, Type type)
             {
                 return (IRepository)AppDomain.CurrentDomain.GetAssemblies()
                                              .SelectMany(selector => selector.GetTypes())
                                              .Where(predicate => type.IsAssignableFrom(predicate) && !predicate.IsInterface && !predicate.IsAbstract)
-                                             .Select(selector => Activator.CreateInstance(selector, dbContext))
+                                             .Select(selector => ActivatorUtilities.CreateInstance(_IServiceProvider, selector, dbContext))
                                              .SingleOrDefault();
             }
 
@@ -68,7 +71,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public IRepository<T> Repository<T>() where T : class
         {
-            static IRepository Factory(DbContext dbContext, Type type) => new Repository<T>(dbContext);
+            static IRepository Factory(DbContext dbContext, IServiceProvider _IServiceProvider, Type type) => new Repository<T>(dbContext);
 
             return DbContext.GetInfrastructure()?.GetService<IRepository<T>>() ?? (IRepository<T>)GetRepository(typeof(T), Factory, "Generic");
         }
@@ -512,13 +515,13 @@ namespace EntityFrameworkCore.UnitOfWork
 
         #region Private Methods
 
-        private IRepository GetRepository(Type objectType, Func<DbContext, Type, IRepository> repositoryFactory, string prefix)
+        private IRepository GetRepository(Type objectType, Func<DbContext, IServiceProvider, Type, IRepository> repositoryFactory, string prefix)
         {
             var typeName = $"{prefix}.{objectType.FullName}";
 
             if (!_repositories.TryGetValue(typeName, out var repository))
             {
-                repository = repositoryFactory.Invoke(DbContext, objectType);
+                repository = repositoryFactory.Invoke(DbContext, _IServiceProvider, objectType);
 
                 _repositories[typeName] = repository;
             }
@@ -591,8 +594,8 @@ namespace EntityFrameworkCore.UnitOfWork
     {
         #region Ctor
 
-        public UnitOfWork(T dbContext)
-            : base(dbContext)
+        public UnitOfWork(T dbContext, IServiceProvider IServiceProvider)
+            : base(dbContext, IServiceProvider)
         { }
 
         #endregion Ctor

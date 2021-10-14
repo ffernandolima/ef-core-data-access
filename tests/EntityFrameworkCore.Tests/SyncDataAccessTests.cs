@@ -1,4 +1,5 @@
 ﻿using EntityFrameworkCore.Data;
+using EntityFrameworkCore.Data.Repositories.Interfaces;
 using EntityFrameworkCore.Models;
 using EntityFrameworkCore.QueryBuilder.Interfaces;
 using EntityFrameworkCore.Repository.Extensions;
@@ -295,6 +296,13 @@ namespace EntityFrameworkCore.Tests
 
                 _unitOfWork.SaveChanges();
             }
+        }
+        [Fact]
+        public void CustomRepository()
+        {
+            var repositorio = _unitOfWork.CustomRepository<ICustomBlogRepository>();
+            var urls = repositorio.GetAllBlogUrls();
+            Assert.True(urls.Any());
         }
     }
 }
