@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EntityFrameworkCore.AutoHistory.Attributes;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json.Linq;
 using System;
@@ -33,7 +34,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
             return primaryKey;
         }
 
-        public static TAutoHistory AutoHistory<TAutoHistory>(this EntityEntry entityEntry, Func<TAutoHistory> historyFactory) where TAutoHistory : AutoHistory
+        public static TAutoHistory AutoHistory<TAutoHistory>(this EntityEntry entityEntry, EntityState entityState, Func<TAutoHistory> historyFactory) where TAutoHistory : AutoHistory
         {
             var history = historyFactory();
             {
@@ -42,13 +43,17 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
             // Gets the mapped properties for the entity type
             // Includes shadow properties, but doesn't include navigations and references
-            var properties = entityEntry.Properties;
+            var excludedProperties = entityEntry.Metadata.ClrType.GetProperties()
+                                                                 .Where(property => property.GetCustomAttributes(typeof(ExcludeFromHistoryAttribute), inherit: true).Length > 0)
+                                                                 .Select(property => property.Name);
 
-            switch (entityEntry.State)
+            var properties = entityEntry.Properties.Where(entry => !excludedProperties.Contains(entry.Metadata.Name));
+
+            switch (entityState)
             {
                 case EntityState.Added:
                     {
-                        history = HandleAdded(history, properties);
+                        history = HandleAdded(history, entityEntry, properties);
                     }
                     break;
                 case EntityState.Modified:
@@ -65,24 +70,24 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
                 case EntityState.Unchanged:
                 default:
                     {
-                        throw new NotSupportedException("AutoHistory only supports Deleted and Modified entities.");
+                        throw new NotSupportedException($"Unsupported '{nameof(EntityState)}'.");
                     }
             }
 
             return history;
         }
 
-        private static TAutoHistory HandleAdded<TAutoHistory>(TAutoHistory history, IEnumerable<PropertyEntry> properties) where TAutoHistory : AutoHistory
+        private static TAutoHistory HandleAdded<TAutoHistory>(TAutoHistory history, EntityEntry entityEntry, IEnumerable<PropertyEntry> properties) where TAutoHistory : AutoHistory
         {
             var json = new JObject();
             var options = AutoHistoryOptions.Instance;
 
-            foreach (var property in properties.Where(entry => !entry.Metadata.IsKey() && !entry.Metadata.IsForeignKey()))
+            foreach (var property in properties)
             {
                 json[property.Metadata.Name] = property.CurrentValue != null ? JToken.FromObject(property.CurrentValue, options.JsonSerializer) : JValue.CreateNull();
             }
 
-            history.RowId = "0";
+            history.RowId = entityEntry.PrimaryKey();
             history.Kind = EntityState.Added;
             history.Changed = json.ToString(options.JsonSerializerSettings.Formatting);
 
@@ -91,6 +96,11 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
         private static TAutoHistory HandleModified<TAutoHistory>(TAutoHistory history, EntityEntry entityEntry, IEnumerable<PropertyEntry> properties) where TAutoHistory : AutoHistory
         {
+            if (!properties.Any(entry => entry.IsModified))
+            {
+                return null;
+            }
+
             var json = new JObject();
 
             var before = new JObject();
@@ -98,7 +108,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
             var options = AutoHistoryOptions.Instance;
 
-            var databaseValues = entityEntry.GetDatabaseValues();
+            PropertyValues databaseValues = null;
 
             foreach (var property in properties.Where(entry => entry.IsModified))
             {
@@ -110,6 +120,8 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
                     }
                     else
                     {
+                        databaseValues ??= entityEntry.GetDatabaseValues();
+
                         var originalValue = databaseValues.GetValue<object>(property.Metadata.Name);
 
                         before[property.Metadata.Name] = originalValue != null ? JToken.FromObject(originalValue, options.JsonSerializer) : JValue.CreateNull();
