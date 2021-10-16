@@ -9,6 +9,9 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
         public static ModelBuilder EnableAutoHistory(this ModelBuilder modelBuilder, int? changedMaxLength = null)
             => EnableAutoHistory<AutoHistory>(modelBuilder, options => { options.ChangedMaxLength = changedMaxLength; options.LimitChangedLength = false; });
 
+        public static ModelBuilder EnableAutoHistory<TAutoHistory>(this ModelBuilder modelBuilder, int? changedMaxLength = null) where TAutoHistory : AutoHistory
+            => EnableAutoHistory<TAutoHistory>(modelBuilder, options => { options.ChangedMaxLength = changedMaxLength; options.LimitChangedLength = false; });
+
         public static ModelBuilder EnableAutoHistory<TAutoHistory>(this ModelBuilder modelBuilder, Action<AutoHistoryOptions> configure) where TAutoHistory : AutoHistory
         {
             if (modelBuilder == null)
