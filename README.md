@@ -8,35 +8,35 @@ It's a modern and generic data access structure for .NET and Microsoft.EntityFra
 
  | Package | NuGet |
  | ------- | ------- |
- | EntityFrameworkCore.Data.QueryBuilder.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder.Abstractions/5.2.0) |
- | EntityFrameworkCore.Data.Repository.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository.Abstractions/5.2.0) |
- | EntityFrameworkCore.Data.UnitOfWork.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork.Abstractions/5.2.0) |
+ | EntityFrameworkCore.Data.QueryBuilder.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.3.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder.Abstractions/5.3.0) |
+ | EntityFrameworkCore.Data.Repository.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.3.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository.Abstractions/5.3.0) |
+ | EntityFrameworkCore.Data.UnitOfWork.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.3.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork.Abstractions/5.3.0) |
  | ------- | ------- |
- | EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v5.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/5.2.0) |
- | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v5.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/5.2.0) |
- | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v5.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/5.2.0) |
- | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v5.2.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/5.2.0) |
+ | EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v5.3.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/5.3.0) |
+ | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v5.3.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/5.3.0) |
+ | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v5.3.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/5.3.0) |
+ | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v5.3.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/5.3.0) |
 
 ## Installation
 
 EntityFrameworkCore.DataAccess is available on Nuget.
 
 ```
-Install-Package EntityFrameworkCore.Data.QueryBuilder.Abstractions -Version 5.2.0
-Install-Package EntityFrameworkCore.Data.Repository.Abstractions -Version 5.2.0
-Install-Package EntityFrameworkCore.Data.UnitOfWork.Abstractions -Version 5.2.0
+Install-Package EntityFrameworkCore.Data.QueryBuilder.Abstractions -Version 5.3.0
+Install-Package EntityFrameworkCore.Data.Repository.Abstractions -Version 5.3.0
+Install-Package EntityFrameworkCore.Data.UnitOfWork.Abstractions -Version 5.3.0
 
-Install-Package EntityFrameworkCore.Data.AutoHistory -Version 5.2.0
-Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 5.2.0
-Install-Package EntityFrameworkCore.Data.Repository -Version 5.2.0
-Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 5.2.0
+Install-Package EntityFrameworkCore.Data.AutoHistory -Version 5.3.0
+Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 5.3.0
+Install-Package EntityFrameworkCore.Data.Repository -Version 5.3.0
+Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 5.3.0
 ```
 
 P.S.: EntityFrameworkCore.Data.UnitOfWork depends on the other packages, so installing this package is enough.
 
 ## Usage
 
-The following code demonstrates basic usage.
+#### The following code demonstrates basic usage of UnitOfWork, Repository and QueryBuilder patterns.
 
 First of all, please register the dependencies into the MS Built-In container:
 
@@ -282,6 +282,165 @@ The operations above are also available as async.
 
 Please check some available samples [here](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-5/samples)
 
+
+####  The following code demonstrates basic usage of AutoHistory utilities
+
+```AutoHistory``` will save all entity changes into a table named ```AutoHistories```. By default, it saves ```Modified``` and ```Deleted``` entities.
+
+First of all, please enable ```AutoHistory``` through a ```ModelBuilder``` instance:
+
+```C#
+
+public class BloggingContext : DbContext
+{
+    public BloggingContext(DbContextOptions<BloggingContext> options)
+       : base(options)
+    {
+        ChangeTracker.LazyLoadingEnabled = false;
+        ChangeTracker.AutoDetectChangesEnabled = false;
+        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder) 
+    {
+        // Enables auto history functionality.
+        builder.EnableAutoHistory();
+        builder.ApplyConfigurationsFromAssembly(typeof(BloggingContext).Assembly); 
+    }
+}
+```
+
+After that, to ensure that entity changes will be saved automatically, the method ```EnsureAutoHistory()``` must be called before ```SaveChanges()``` or ```SaveChangesAsync()```. It can be done globally by overriding ```SaveChanges()``` and ```SaveChangesAsync()```:
+
+
+```C#
+
+public class BloggingContext : DbContext
+{
+    public BloggingContext(DbContextOptions<BloggingContext> options)
+       : base(options)
+    {
+        ChangeTracker.LazyLoadingEnabled = false;
+        ChangeTracker.AutoDetectChangesEnabled = false;
+        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+    }
+
+    public override int SaveChanges()
+    {
+        this.EnsureAutoHistory();
+        return base.SaveChanges();
+    }
+    
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        this.EnsureAutoHistory();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder) 
+    {
+        // Enables auto history functionality.
+        builder.EnableAutoHistory();
+        builder.ApplyConfigurationsFromAssembly(typeof(BloggingContext).Assembly); 
+    }
+}
+```
+
+PS.: By default, it saves ```Modified``` and ```Deleted``` entities.
+
+```Added``` entities can be saved as well by changing the default behaviour:
+
+```C#
+
+public class BloggingContext : DbContext
+{
+    public BloggingContext(DbContextOptions<BloggingContext> options)
+       : base(options)
+    {
+        ChangeTracker.LazyLoadingEnabled = false;
+        ChangeTracker.AutoDetectChangesEnabled = false;
+        ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+    }
+
+    public override int SaveChanges()
+    {
+        var addedEntities = this.DetectChanges(EntityState.Added);
+
+        this.EnsureAutoHistory();
+        var affectedRows = base.SaveChanges();
+
+        this.EnsureAutoHistory(addedEntities);
+        affectedRows += base.SaveChanges();
+
+        return affectedRows;
+    }
+    
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        var addedEntities = this.DetectChanges(EntityState.Added);
+
+        this.EnsureAutoHistory();
+        var affectedRows = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        this.EnsureAutoHistory(addedEntities);
+        affectedRows += await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        return affectedRows;
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder) 
+    {
+        // Enables auto history functionality.
+        builder.EnableAutoHistory();
+        builder.ApplyConfigurationsFromAssembly(typeof(BloggingContext).Assembly); 
+    }
+}
+```
+
+```Added``` entities should be handled in a different step to ensure that the auto-increment PK values have already been generated by EF Core/Database before.
+
+##### Custom AutoHistory Entity
+
+A custom auto history entity can be used by extending the ```AutoHistory``` class:
+
+```C#
+
+public class CustomAutoHistory : AutoHistory
+{
+    public String CustomField { get; set; }
+}
+
+```
+
+Then register it into through a ```ModelBuilder``` instance:
+
+```C#
+
+modelBuilder.EnableAutoHistory<CustomAutoHistory>();
+
+
+```
+
+Then provide a custom history entity factory when calling ```EnsureAutoHistory()```:
+
+```C#
+
+this.EnsureAutoHistory(() => new CustomAutoHistory { CustomField = "CustomValue" });
+
+```
+
+##### Excluding properties from AutoHistory
+
+Properties can be excluded from being serialized and saved into the ```AutoHistory``` table by adding ```[ExcludeFromHistoryAttribute]``` attribute to model properties:
+
+```C#
+public class Blog
+{        
+    [ExcludeFromHistory]
+    public string PrivateURL { get; set; }
+}
+```
+
 ## Support / Contributing
 If you want to help with the project, feel free to open pull requests and submit issues. 
 
@@ -290,5 +449,3 @@ If you want to help with the project, feel free to open pull requests and submit
 If you would like to show your support for this project, then please feel free to buy me a coffee.
 
 <a href="https://www.buymeacoffee.com/fernandolima" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
-
-

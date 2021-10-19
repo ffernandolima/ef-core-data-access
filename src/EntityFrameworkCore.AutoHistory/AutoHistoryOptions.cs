@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkCore.AutoHistory.Serialization;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 
 namespace EntityFrameworkCore.AutoHistory
 {
@@ -13,10 +14,12 @@ namespace EntityFrameworkCore.AutoHistory
         private AutoHistoryOptions()
         { }
 
+        public int RowIdMaxLength { get; set; } = AutoHistoryOptionsDefaults.RowIdMaxLength;
+        public int TableNameMaxLength { get; set; } = AutoHistoryOptionsDefaults.TableNameMaxLength;
+        public bool LimitChangedLength { get; set; } = AutoHistoryOptionsDefaults.LimitChangedLength;
         public int? ChangedMaxLength { get; set; }
-        public bool LimitChangedLength { get; set; } = true;
-        public int RowIdMaxLength { get; set; } = 50;
-        public int TableMaxLength { get; set; } = 128;
+        public string AutoHistoryTableName { get; set; } = AutoHistoryOptionsDefaults.AutoHistoryTableName;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         internal JsonSerializer JsonSerializer { get; set; }
         public JsonSerializerSettings JsonSerializerSettings { get; set; } = AutoHistorySerialization.DefaultSettings;
     }
