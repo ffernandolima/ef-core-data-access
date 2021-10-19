@@ -6,10 +6,11 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 {
     public static class ModelBuilderExtensions
     {
-        private const int DefaultChangedMaxLength = 2048;
-
         public static ModelBuilder EnableAutoHistory(this ModelBuilder modelBuilder, int? changedMaxLength = null)
             => EnableAutoHistory<AutoHistory>(modelBuilder, options => { options.ChangedMaxLength = changedMaxLength; options.LimitChangedLength = false; });
+
+        public static ModelBuilder EnableAutoHistory<TAutoHistory>(this ModelBuilder modelBuilder, int? changedMaxLength = null) where TAutoHistory : AutoHistory
+            => EnableAutoHistory<TAutoHistory>(modelBuilder, options => { options.ChangedMaxLength = changedMaxLength; options.LimitChangedLength = false; });
 
         public static ModelBuilder EnableAutoHistory<TAutoHistory>(this ModelBuilder modelBuilder, Action<AutoHistoryOptions> configure) where TAutoHistory : AutoHistory
         {
@@ -32,20 +33,29 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
                 entityTypeBuilder.Property(autoHistory => autoHistory.TableName)
                                  .IsRequired()
-                                 .HasMaxLength(options.TableMaxLength);
+                                 .HasMaxLength(options.TableNameMaxLength);
 
                 if (options.LimitChangedLength)
                 {
-                    var maxLength = options.ChangedMaxLength ?? DefaultChangedMaxLength;
+                    var changedMaxLength = options.ChangedMaxLength.GetValueOrDefault();
 
-                    if (maxLength <= 0)
+                    if (changedMaxLength <= 0)
                     {
-                        maxLength = DefaultChangedMaxLength;
+                        changedMaxLength = AutoHistoryOptionsDefaults.ChangedMaxLength;
                     }
 
                     entityTypeBuilder.Property(autoHistory => autoHistory.Changed)
-                                     .HasMaxLength(maxLength);
+                                     .HasMaxLength(changedMaxLength);
                 }
+
+                var autoHistoryTableName = options.AutoHistoryTableName;
+
+                if (string.IsNullOrWhiteSpace(autoHistoryTableName))
+                {
+                    autoHistoryTableName = AutoHistoryOptionsDefaults.AutoHistoryTableName;
+                }
+
+                entityTypeBuilder.ToTable(autoHistoryTableName);
             });
 
             return modelBuilder;
