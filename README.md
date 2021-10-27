@@ -6,6 +6,8 @@ It's a modern and generic data access structure for .NET and Microsoft.EntityFra
 
 If you like or are using this project to learn or start your solution, please give it a star. Thanks!
 
+## Status
+
 [![build-and-tests Workflow Status](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-tests.yml/badge.svg?branch=ef-core-5)](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-tests.yml?branch=ef-core-5)
 
 [![build-and-publish Workflow Status](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-publish.yml/badge.svg?branch=ef-core-5)](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-publish.yml?branch=ef-core-5)
