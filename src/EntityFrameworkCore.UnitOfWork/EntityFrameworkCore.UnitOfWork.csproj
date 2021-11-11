@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
@@ -12,11 +12,11 @@
     <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
     <Description>Provides the UnitOfWork pattern for Microsoft.EntityFrameworkCore.</Description>
     <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-5</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-6</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;UnitOfWork;Unit Of Work;unit-of-work</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>5.3.0</Version>
+    <Version>6.0.0</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
