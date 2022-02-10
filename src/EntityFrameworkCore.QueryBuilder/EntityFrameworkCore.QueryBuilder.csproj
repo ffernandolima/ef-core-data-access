@@ -16,12 +16,12 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;QueryBuilder;Query Builder;query-builder</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>6.0.1</Version>
+    <Version>6.0.2</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="6.0.27" />
+    <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
