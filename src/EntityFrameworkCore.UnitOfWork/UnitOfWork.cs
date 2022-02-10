@@ -558,13 +558,16 @@ namespace EntityFrameworkCore.UnitOfWork
                 {
                     DisposeTransaction();
 
-                    var connection = DbContext.Database.GetDbConnection();
-                    if (connection != null && connection.State != ConnectionState.Closed)
+                    if (DbContext.Database.IsRelational())
                     {
-                        connection.Close();
-                    }
+                        var connection = DbContext.Database.GetDbConnection();
+                        if (connection != null && connection.State != ConnectionState.Closed)
+                        {
+                            connection.Close();
+                        }
 
-                    DbContext.Dispose();
+                        DbContext.Dispose();
+                    }
 
                     foreach (var repository in _repositories.Values)
                     {
