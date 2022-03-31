@@ -435,6 +435,18 @@ this.EnsureAutoHistory(() => new CustomAutoHistory { CustomField = "CustomValue"
 
 ```
 
+##### Excluding entities from AutoHistory
+
+Entities can be excluded from being serialized and saved into the ```AutoHistory``` table by adding ```[ExcludeFromHistoryAttribute]``` attribute directly to the entity:
+
+```C#
+[ExcludeFromHistory]
+public class Blog
+{
+    public string PrivateURL { get; set; }
+}
+```
+
 ##### Excluding properties from AutoHistory
 
 Properties can be excluded from being serialized and saved into the ```AutoHistory``` table by adding ```[ExcludeFromHistoryAttribute]``` attribute to model properties:
