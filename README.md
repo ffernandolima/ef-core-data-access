@@ -14,28 +14,28 @@ If you like or are using this project to learn or start your solution, please gi
 
  | Package | NuGet |
  | ------- | ------- |
- | EntityFrameworkCore.Data.QueryBuilder.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.3.1-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder.Abstractions/5.3.1) |
- | EntityFrameworkCore.Data.Repository.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.3.1-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository.Abstractions/5.3.1) |
- | EntityFrameworkCore.Data.UnitOfWork.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.3.1-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork.Abstractions/5.3.1) |
+ | EntityFrameworkCore.Data.QueryBuilder.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.3.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder.Abstractions/5.3.2) |
+ | EntityFrameworkCore.Data.Repository.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.3.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository.Abstractions/5.3.2) |
+ | EntityFrameworkCore.Data.UnitOfWork.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v5.3.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork.Abstractions/5.3.2) |
  | ------- | ------- |
- | EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v5.3.1-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/5.3.1) |
- | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v5.3.1-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/5.3.1) |
- | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v5.3.1-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/5.3.1) |
- | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v5.3.1-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/5.3.1) |
+ | EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v5.3.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/5.3.2) |
+ | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v5.3.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/5.3.2) |
+ | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v5.3.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/5.3.2) |
+ | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v5.3.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/5.3.2) |
 
 ## Installation
 
 EntityFrameworkCore.DataAccess is available on Nuget.
 
 ```
-Install-Package EntityFrameworkCore.Data.QueryBuilder.Abstractions -Version 5.3.1
-Install-Package EntityFrameworkCore.Data.Repository.Abstractions -Version 5.3.1
-Install-Package EntityFrameworkCore.Data.UnitOfWork.Abstractions -Version 5.3.1
+Install-Package EntityFrameworkCore.Data.QueryBuilder.Abstractions -Version 5.3.2
+Install-Package EntityFrameworkCore.Data.Repository.Abstractions -Version 5.3.2
+Install-Package EntityFrameworkCore.Data.UnitOfWork.Abstractions -Version 5.3.2
 
-Install-Package EntityFrameworkCore.Data.AutoHistory -Version 5.3.1
-Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 5.3.1
-Install-Package EntityFrameworkCore.Data.Repository -Version 5.3.1
-Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 5.3.1
+Install-Package EntityFrameworkCore.Data.AutoHistory -Version 5.3.2
+Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 5.3.2
+Install-Package EntityFrameworkCore.Data.Repository -Version 5.3.2
+Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 5.3.2
 ```
 
 P.S.: EntityFrameworkCore.Data.UnitOfWork depends on the other packages, so installing this package is enough.
@@ -433,6 +433,18 @@ Then provide a custom history entity factory when calling ```EnsureAutoHistory()
 
 this.EnsureAutoHistory(() => new CustomAutoHistory { CustomField = "CustomValue" });
 
+```
+
+##### Excluding entities from AutoHistory
+
+Entities can be excluded from being serialized and saved into the ```AutoHistory``` table by adding ```[ExcludeFromHistoryAttribute]``` attribute directly to the entity:
+
+```C#
+[ExcludeFromHistory]
+public class Blog
+{
+    public string PrivateURL { get; set; }
+}
 ```
 
 ##### Excluding properties from AutoHistory
