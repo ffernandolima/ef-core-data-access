@@ -68,7 +68,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
             // .ToArray() is needed here for excluding the AutoHistory model
             var trackedEntities = dbContext.ChangeTracker.Entries()
-                                                         .Where(entry => entry.Entity.GetType().GetCustomAttributes(typeof(ExcludeFromHistoryAttribute), inherit: true).Length == 0)
+                                                         .Where(entry => entry.Metadata.ClrType.GetCustomAttributes(typeof(ExcludeFromHistoryAttribute), inherit: true).Length == 0)
                                                          .Where(entry => entityStates.Contains(entry.State))
                                                          .Select(entry => new TrackedEntity(entry))
                                                          .ToArray();
