@@ -89,18 +89,21 @@ namespace EntityFrameworkCore.UnitOfWork.Extensions
                     {
                         services.TryAddSingleton<IRepositoryFactory<T>, PooledUnitOfWork<T>>();
                         services.TryAddSingleton<IUnitOfWork<T>, PooledUnitOfWork<T>>();
+                        services.TryAddSingleton<IPooledUnitOfWork<T>, PooledUnitOfWork<T>>();
                     }
                     break;
                 case ServiceLifetime.Scoped:
                     {
                         services.TryAddScoped<IRepositoryFactory<T>, PooledUnitOfWork<T>>();
                         services.TryAddScoped<IUnitOfWork<T>, PooledUnitOfWork<T>>();
+                        services.TryAddScoped<IPooledUnitOfWork<T>, PooledUnitOfWork<T>>();
                     }
                     break;
                 case ServiceLifetime.Transient:
                     {
                         services.TryAddTransient<IRepositoryFactory<T>, PooledUnitOfWork<T>>();
                         services.TryAddTransient<IUnitOfWork<T>, PooledUnitOfWork<T>>();
+                        services.TryAddTransient<IPooledUnitOfWork<T>, PooledUnitOfWork<T>>();
                     }
                     break;
                 default:
