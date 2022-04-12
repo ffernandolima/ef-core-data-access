@@ -75,5 +75,39 @@ namespace EntityFrameworkCore.UnitOfWork.Extensions
 
             return services;
         }
+
+        public static IServiceCollection AddPooledUnitOfWork<T>(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped) where T : DbContext
+        {
+            if (services == null)
+            {
+                throw new ArgumentNullException(nameof(services), $"{nameof(services)} cannot be null.");
+            }
+
+            switch (serviceLifetime)
+            {
+                case ServiceLifetime.Singleton:
+                    {
+                        services.TryAddSingleton<IRepositoryFactory<T>, PooledUnitOfWork<T>>();
+                        services.TryAddSingleton<IUnitOfWork<T>, PooledUnitOfWork<T>>();
+                    }
+                    break;
+                case ServiceLifetime.Scoped:
+                    {
+                        services.TryAddScoped<IRepositoryFactory<T>, PooledUnitOfWork<T>>();
+                        services.TryAddScoped<IUnitOfWork<T>, PooledUnitOfWork<T>>();
+                    }
+                    break;
+                case ServiceLifetime.Transient:
+                    {
+                        services.TryAddTransient<IRepositoryFactory<T>, PooledUnitOfWork<T>>();
+                        services.TryAddTransient<IUnitOfWork<T>, PooledUnitOfWork<T>>();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return services;
+        }
     }
 }
