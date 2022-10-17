@@ -884,7 +884,7 @@ namespace EntityFrameworkCore.Repository
             return result;
         }
 
-        public Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
+        public virtual Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
