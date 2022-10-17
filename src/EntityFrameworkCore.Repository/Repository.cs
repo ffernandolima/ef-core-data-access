@@ -781,9 +781,7 @@ namespace EntityFrameworkCore.Repository
 
         #endregion IAsyncRepository<T> Members
 
-        #region Private Methods
-
-        private IQueryable<T> ToQueryable(IQuery<T> query)
+        public IQueryable<T> ToQueryable(IQuery<T> query)
         {
             IMultipleResultQuery<T> multipleResultQuery = null;
 
@@ -844,7 +842,7 @@ namespace EntityFrameworkCore.Repository
             return queryable;
         }
 
-        private IQueryable<TResult> ToQueryable<TResult>(IQuery<T, TResult> query)
+        public IQueryable<TResult> ToQueryable<TResult>(IQuery<T, TResult> query)
         {
             IMultipleResultQuery<T, TResult> multipleResultQuery = null;
 
@@ -899,6 +897,8 @@ namespace EntityFrameworkCore.Repository
 
             return queryable.Select(query.Selector);
         }
+
+        #region Private Methods
 
         private IQueryable<T> GetQueryable(QueryTrackingBehavior? queryTrackingBehavior = null, bool? ignoreQueryFilters = null)
         {
