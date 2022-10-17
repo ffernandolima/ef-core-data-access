@@ -427,7 +427,7 @@ namespace EntityFrameworkCore.Repository
             DbSet.RemoveRange(entities);
         }
 
-        public int ExecuteSqlCommand(string sql, params object[] parameters)
+        public virtual int ExecuteSqlCommand(string sql, params object[] parameters)
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
@@ -504,6 +504,123 @@ namespace EntityFrameworkCore.Repository
             }
 
             DbContext.ChangeTracker.TrackGraph<TState>(rootEntity, state, callback);
+        }
+
+        public virtual IQueryable<T> ToQueryable(IQuery<T> query)
+        {
+            IMultipleResultQuery<T> multipleResultQuery = null;
+
+            if (query is IMultipleResultQuery<T>)
+            {
+                multipleResultQuery = (IMultipleResultQuery<T>)query;
+            }
+
+            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters);
+
+            if (query.Includes.Any())
+            {
+                queryable = queryable.Include(query.Includes);
+            }
+
+            if (query.Predicate != null)
+            {
+                queryable = queryable.Filter(query.Predicate);
+            }
+
+            if (query.Sortings.Any())
+            {
+                queryable = queryable.Sort(query.Sortings);
+            }
+
+            if (multipleResultQuery != null && multipleResultQuery.Topping.IsEnabled)
+            {
+                queryable = queryable.Top(multipleResultQuery.Topping);
+            }
+
+            if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
+            {
+                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters);
+
+                if (multipleResultQuery.Includes.Any())
+                {
+                    countQueryable = countQueryable.Include(multipleResultQuery.Includes);
+                }
+
+                if (multipleResultQuery.Predicate != null)
+                {
+                    countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
+                }
+
+                if (multipleResultQuery.Paging is Paging paging)
+                {
+                    paging.TotalCount = countQueryable.Count();
+                }
+
+                queryable = queryable.Page(multipleResultQuery.Paging);
+            }
+
+            if (query.Selector != null)
+            {
+                queryable = queryable.Select(query.Selector);
+            }
+
+            return queryable;
+        }
+
+        public virtual IQueryable<TResult> ToQueryable<TResult>(IQuery<T, TResult> query)
+        {
+            IMultipleResultQuery<T, TResult> multipleResultQuery = null;
+
+            if (query is IMultipleResultQuery<T, TResult>)
+            {
+                multipleResultQuery = (IMultipleResultQuery<T, TResult>)query;
+            }
+
+            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters);
+
+            if (query.Includes.Any())
+            {
+                queryable = queryable.Include(query.Includes);
+            }
+
+            if (query.Predicate != null)
+            {
+                queryable = queryable.Filter(query.Predicate);
+            }
+
+            if (query.Sortings.Any())
+            {
+                queryable = queryable.Sort(query.Sortings);
+            }
+
+            if (multipleResultQuery != null && multipleResultQuery.Topping.IsEnabled)
+            {
+                queryable = queryable.Top(multipleResultQuery.Topping);
+            }
+
+            if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
+            {
+                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters);
+
+                if (multipleResultQuery.Includes.Any())
+                {
+                    countQueryable = countQueryable.Include(multipleResultQuery.Includes);
+                }
+
+                if (multipleResultQuery.Predicate != null)
+                {
+                    countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
+                }
+
+                if (multipleResultQuery.Paging is Paging paging)
+                {
+                    paging.TotalCount = countQueryable.Count();
+                }
+
+                queryable = queryable.Page(multipleResultQuery.Paging);
+            }
+
+            return queryable.Select(query.Selector);
         }
 
         #endregion ISyncRepository<T> Members
@@ -767,7 +884,7 @@ namespace EntityFrameworkCore.Repository
             return result;
         }
 
-        public Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
+        public virtual Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
@@ -782,123 +899,6 @@ namespace EntityFrameworkCore.Repository
         #endregion IAsyncRepository<T> Members
 
         #region Private Methods
-
-        private IQueryable<T> ToQueryable(IQuery<T> query)
-        {
-            IMultipleResultQuery<T> multipleResultQuery = null;
-
-            if (query is IMultipleResultQuery<T>)
-            {
-                multipleResultQuery = (IMultipleResultQuery<T>)query;
-            }
-
-            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters);
-
-            if (query.Includes.Any())
-            {
-                queryable = queryable.Include(query.Includes);
-            }
-
-            if (query.Predicate != null)
-            {
-                queryable = queryable.Filter(query.Predicate);
-            }
-
-            if (query.Sortings.Any())
-            {
-                queryable = queryable.Sort(query.Sortings);
-            }
-
-            if (multipleResultQuery != null && multipleResultQuery.Topping.IsEnabled)
-            {
-                queryable = queryable.Top(multipleResultQuery.Topping);
-            }
-
-            if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
-            {
-                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters);
-
-                if (multipleResultQuery.Includes.Any())
-                {
-                    countQueryable = countQueryable.Include(multipleResultQuery.Includes);
-                }
-
-                if (multipleResultQuery.Predicate != null)
-                {
-                    countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
-                }
-
-                if (multipleResultQuery.Paging is Paging paging)
-                {
-                    paging.TotalCount = countQueryable.Count();
-                }
-
-                queryable = queryable.Page(multipleResultQuery.Paging);
-            }
-
-            if (query.Selector != null)
-            {
-                queryable = queryable.Select(query.Selector);
-            }
-
-            return queryable;
-        }
-
-        private IQueryable<TResult> ToQueryable<TResult>(IQuery<T, TResult> query)
-        {
-            IMultipleResultQuery<T, TResult> multipleResultQuery = null;
-
-            if (query is IMultipleResultQuery<T, TResult>)
-            {
-                multipleResultQuery = (IMultipleResultQuery<T, TResult>)query;
-            }
-
-            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters);
-
-            if (query.Includes.Any())
-            {
-                queryable = queryable.Include(query.Includes);
-            }
-
-            if (query.Predicate != null)
-            {
-                queryable = queryable.Filter(query.Predicate);
-            }
-
-            if (query.Sortings.Any())
-            {
-                queryable = queryable.Sort(query.Sortings);
-            }
-
-            if (multipleResultQuery != null && multipleResultQuery.Topping.IsEnabled)
-            {
-                queryable = queryable.Top(multipleResultQuery.Topping);
-            }
-
-            if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
-            {
-                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters);
-
-                if (multipleResultQuery.Includes.Any())
-                {
-                    countQueryable = countQueryable.Include(multipleResultQuery.Includes);
-                }
-
-                if (multipleResultQuery.Predicate != null)
-                {
-                    countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
-                }
-
-                if (multipleResultQuery.Paging is Paging paging)
-                {
-                    paging.TotalCount = countQueryable.Count();
-                }
-
-                queryable = queryable.Page(multipleResultQuery.Paging);
-            }
-
-            return queryable.Select(query.Selector);
-        }
 
         private IQueryable<T> GetQueryable(QueryTrackingBehavior? queryTrackingBehavior = null, bool? ignoreQueryFilters = null)
         {

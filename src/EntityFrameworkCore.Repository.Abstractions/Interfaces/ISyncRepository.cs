@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.Repository.Interfaces
@@ -43,5 +44,7 @@ namespace EntityFrameworkCore.Repository.Interfaces
         void ChangeState(T entity, EntityState state);
         void TrackGraph(T rootEntity, Action<EntityEntryGraphNode> callback);
         void TrackGraph<TState>(T rootEntity, TState state, Func<EntityEntryGraphNode, TState, bool> callback);
+        IQueryable<T> ToQueryable(IQuery<T> query);
+        IQueryable<TResult> ToQueryable<TResult>(IQuery<T, TResult> query);
     }
 }
