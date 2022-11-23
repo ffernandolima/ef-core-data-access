@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkCore.QueryBuilder.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace EntityFrameworkCore.Repository.Interfaces
         T Add(T entity);
         void AddRange(IEnumerable<T> entities);
         T Update(T entity, params Expression<Func<T, object>>[] properties);
-        int Update(Expression<Func<T, bool>> predicate, Expression<Func<T, T>> expression);
+        int Update(Expression<Func<T, bool>> predicate, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> expression);
         void UpdateRange(IEnumerable<T> entities, params Expression<Func<T, object>>[] properties);
         T Remove(T entity);
         int Remove(Expression<Func<T, bool>> predicate);

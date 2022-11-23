@@ -5,13 +5,13 @@ using EntityFrameworkCore.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Z.EntityFramework.Plus;
 
 namespace EntityFrameworkCore.Repository
 {
@@ -353,7 +353,7 @@ namespace EntityFrameworkCore.Repository
             return entity;
         }
 
-        public virtual int Update(Expression<Func<T, bool>> predicate, Expression<Func<T, T>> expression)
+        public virtual int Update(Expression<Func<T, bool>> predicate, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> expression)
         {
             if (predicate == null)
             {
@@ -365,7 +365,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(expression), $"{nameof(expression)} cannot be null.");
             }
 
-            var result = DbSet.Where(predicate).Update(expression);
+            var result = DbSet.Where(predicate).ExecuteUpdate(expression);
 
             return result;
         }
@@ -382,9 +382,16 @@ namespace EntityFrameworkCore.Repository
                 return;
             }
 
-            foreach (var entity in entities)
+            if (properties?.Any() ?? false)
             {
-                Update(entity, properties);
+                foreach (var entity in entities)
+                {
+                    Update(entity, properties);
+                }
+            }
+            else
+            {
+                DbSet.UpdateRange(entities);
             }
         }
 
@@ -407,7 +414,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
             }
 
-            var result = DbSet.Where(predicate).Delete();
+            var result = DbSet.Where(predicate).ExecuteDelete();
 
             return result;
         }
@@ -855,7 +862,7 @@ namespace EntityFrameworkCore.Repository
             return DbSet.AddRangeAsync(entities, cancellationToken);
         }
 
-        public virtual Task<int> UpdateAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, T>> expression, CancellationToken cancellationToken = default)
+        public virtual Task<int> UpdateAsync(Expression<Func<T, bool>> predicate, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> expression, CancellationToken cancellationToken = default)
         {
             if (predicate == null)
             {
@@ -867,7 +874,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(expression), $"{nameof(expression)} cannot be null.");
             }
 
-            var result = DbSet.Where(predicate).UpdateAsync(expression, cancellationToken);
+            var result = DbSet.Where(predicate).ExecuteUpdateAsync(expression, cancellationToken);
 
             return result;
         }
@@ -879,7 +886,7 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
             }
 
-            var result = DbSet.Where(predicate).DeleteAsync();
+            var result = DbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken);
 
             return result;
         }
