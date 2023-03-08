@@ -1,5 +1,6 @@
 ﻿using EntityFrameworkCore.AutoHistory.Extensions;
 using EntityFrameworkCore.Repository;
+using EntityFrameworkCore.Repository.Extensions;
 using EntityFrameworkCore.Repository.Interfaces;
 using EntityFrameworkCore.UnitOfWork.Factories;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
@@ -421,6 +422,20 @@ namespace EntityFrameworkCore.UnitOfWork
             {
                 await DisposeTransactionAsync().ConfigureAwait(continueOnCapturedContext: false);
             }
+        }
+
+        public async Task<IList<T>> FromSqlAsync<T>(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default) where T : class
+        {
+            if (string.IsNullOrWhiteSpace(sql))
+            {
+                throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
+            }
+
+            var dbSet = DbContext.Set<T>();
+
+            var entities = await dbSet.FromSqlRaw(sql, parameters ?? Enumerable.Empty<object>()).ToListAsync(cancellationToken).Then<List<T>, IList<T>>(result => result, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+
+            return entities;
         }
 
         public async Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
