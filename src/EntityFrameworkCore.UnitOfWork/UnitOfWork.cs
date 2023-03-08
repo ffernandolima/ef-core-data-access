@@ -436,7 +436,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
             var dbSet = DbContext.Set<T>();
 
-            var entities = await dbSet.FromSqlRaw(sql, parameters ?? Enumerable.Empty<object>()).ToListAsync(cancellationToken).Then<List<T>, IList<T>>(result => result, cancellationToken);
+            var entities = await dbSet.FromSqlRaw(sql, parameters ?? Enumerable.Empty<object>()).ToListAsync(cancellationToken).Then<List<T>, IList<T>>(result => result, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
 
             return entities;
         }
