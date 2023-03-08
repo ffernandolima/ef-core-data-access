@@ -21,21 +21,29 @@ namespace EntityFrameworkCore.QueryBuilder
 
         #region IQuery<T> Members
 
-        public bool IgnoreQueryFilters { get; internal set; } = false;
-        public QueryTrackingBehavior QueryTrackingBehavior { get; internal set; } = QueryTrackingBehavior.NoTracking;
+        public bool? IgnoreQueryFilters { get; internal set; }
+        public bool? IgnoreAutoIncludes { get; internal set; }
+        public QueryTrackingBehavior? QueryTrackingBehavior { get; internal set; }
         public Expression<Func<T, bool>> Predicate { get; internal set; } = PredicateBuilder.New<T>(defaultExpression: true);
         public IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; internal set; } = new List<Func<IQueryable<T>, IIncludableQueryable<T, object>>>();
         public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
         public Expression<Func<T, T>> Selector { get; internal set; }
 
-        public IQuery<T> UseIgnoreQueryFilters(bool ignoreQueryFilters)
+        public IQuery<T> UseIgnoreQueryFilters(bool? ignoreQueryFilters)
         {
             IgnoreQueryFilters = ignoreQueryFilters;
 
             return this;
         }
 
-        public IQuery<T> UseQueryTrackingBehavior(QueryTrackingBehavior queryTrackingBehavior)
+        public IQuery<T> UseIgnoreAutoIncludes(bool? ignoreAutoIncludes)
+        {
+            IgnoreAutoIncludes = ignoreAutoIncludes;
+
+            return this;
+        }
+
+        public IQuery<T> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior)
         {
             QueryTrackingBehavior = queryTrackingBehavior;
 
@@ -176,21 +184,29 @@ namespace EntityFrameworkCore.QueryBuilder
 
         #region IQuery<T, TResult> Members
 
-        public bool IgnoreQueryFilters { get; internal set; } = false;
-        public QueryTrackingBehavior QueryTrackingBehavior { get; internal set; } = QueryTrackingBehavior.NoTracking;
+        public bool? IgnoreQueryFilters { get; internal set; }
+        public bool? IgnoreAutoIncludes { get; internal set; }
+        public QueryTrackingBehavior? QueryTrackingBehavior { get; internal set; }
         public Expression<Func<T, bool>> Predicate { get; internal set; } = PredicateBuilder.New<T>(defaultExpression: true);
         public IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; internal set; } = new List<Func<IQueryable<T>, IIncludableQueryable<T, object>>>();
         public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
         public Expression<Func<T, TResult>> Selector { get; internal set; }
 
-        public IQuery<T, TResult> UseIgnoreQueryFilters(bool ignoreQueryFilters)
+        public IQuery<T, TResult> UseIgnoreQueryFilters(bool? ignoreQueryFilters)
         {
             IgnoreQueryFilters = ignoreQueryFilters;
 
             return this;
         }
 
-        public IQuery<T, TResult> UseQueryTrackingBehavior(QueryTrackingBehavior queryTrackingBehavior)
+        public IQuery<T, TResult> UseIgnoreAutoIncludes(bool? ignoreAutoIncludes)
+        {
+            IgnoreAutoIncludes = ignoreAutoIncludes;
+
+            return this;
+        }
+
+        public IQuery<T, TResult> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior)
         {
             QueryTrackingBehavior = queryTrackingBehavior;
 
