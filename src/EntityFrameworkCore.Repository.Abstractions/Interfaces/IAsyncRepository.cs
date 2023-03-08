@@ -31,6 +31,7 @@ namespace EntityFrameworkCore.Repository.Interfaces
         Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
         Task<int> UpdateAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, T>> expression, CancellationToken cancellationToken = default);
         Task<int> RemoveAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+        Task<IList<T>> FromSqlAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default);
         Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default);
     }
 }
