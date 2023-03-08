@@ -515,7 +515,7 @@ namespace EntityFrameworkCore.Repository
                 multipleResultQuery = (IMultipleResultQuery<T>)query;
             }
 
-            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters);
+            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters, query.IgnoreAutoIncludes);
 
             if (query.Includes.Any())
             {
@@ -539,7 +539,7 @@ namespace EntityFrameworkCore.Repository
 
             if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
             {
-                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters);
+                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters, multipleResultQuery.IgnoreAutoIncludes);
 
                 if (multipleResultQuery.Includes.Any())
                 {
@@ -576,7 +576,7 @@ namespace EntityFrameworkCore.Repository
                 multipleResultQuery = (IMultipleResultQuery<T, TResult>)query;
             }
 
-            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters);
+            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters, query.IgnoreAutoIncludes);
 
             if (query.Includes.Any())
             {
@@ -600,7 +600,7 @@ namespace EntityFrameworkCore.Repository
 
             if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
             {
-                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters);
+                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters, multipleResultQuery.IgnoreAutoIncludes);
 
                 if (multipleResultQuery.Includes.Any())
                 {
@@ -912,7 +912,7 @@ namespace EntityFrameworkCore.Repository
 
         #region Private Methods
 
-        private IQueryable<T> GetQueryable(QueryTrackingBehavior? queryTrackingBehavior = null, bool? ignoreQueryFilters = null)
+        private IQueryable<T> GetQueryable(QueryTrackingBehavior? queryTrackingBehavior = null, bool? ignoreQueryFilters = null, bool? ignoreAutoInclude = null)
         {
             IQueryable<T> queryable = DbSet;
 
@@ -935,6 +935,11 @@ namespace EntityFrameworkCore.Repository
             if (ignoreQueryFilters ?? false)
             {
                 queryable = queryable.IgnoreQueryFilters();
+            }
+
+            if (ignoreAutoInclude ?? false)
+            {
+                queryable = queryable.IgnoreAutoIncludes();
             }
 
             return queryable;
