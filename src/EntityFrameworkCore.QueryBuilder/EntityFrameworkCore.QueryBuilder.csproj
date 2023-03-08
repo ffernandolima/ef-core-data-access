@@ -16,7 +16,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;QueryBuilder;Query Builder;query-builder</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>3.3.3</Version>
+    <Version>3.3.4</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
