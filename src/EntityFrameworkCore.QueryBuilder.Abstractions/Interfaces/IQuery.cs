@@ -9,8 +9,8 @@ namespace EntityFrameworkCore.QueryBuilder.Interfaces
 {
     public interface IQuery
     {
-        bool IgnoreQueryFilters { get; }
-        QueryTrackingBehavior QueryTrackingBehavior { get; }
+        bool? IgnoreQueryFilters { get; }
+        QueryTrackingBehavior? QueryTrackingBehavior { get; }
     }
 
     public interface IQuery<T> : IQuery where T : class
@@ -20,8 +20,8 @@ namespace EntityFrameworkCore.QueryBuilder.Interfaces
         IList<ISorting<T>> Sortings { get; }
         Expression<Func<T, T>> Selector { get; }
 
-        IQuery<T> UseIgnoreQueryFilters(bool ignoreQueryFilters);
-        IQuery<T> UseQueryTrackingBehavior(QueryTrackingBehavior queryTrackingBehavior);
+        IQuery<T> UseIgnoreQueryFilters(bool? ignoreQueryFilters);
+        IQuery<T> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior);
 
         IQuery<T> AndFilter(Expression<Func<T, bool>> predicate);
         IQuery<T> OrFilter(Expression<Func<T, bool>> predicate);
@@ -49,8 +49,8 @@ namespace EntityFrameworkCore.QueryBuilder.Interfaces
         Expression<Func<T, TResult>> Selector { get; }
         IList<ISorting<T>> Sortings { get; }
 
-        IQuery<T, TResult> UseIgnoreQueryFilters(bool ignoreQueryFilters);
-        IQuery<T, TResult> UseQueryTrackingBehavior(QueryTrackingBehavior queryTrackingBehavior);
+        IQuery<T, TResult> UseIgnoreQueryFilters(bool? ignoreQueryFilters);
+        IQuery<T, TResult> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior);
 
         IQuery<T, TResult> AndFilter(Expression<Func<T, bool>> predicate);
         IQuery<T, TResult> OrFilter(Expression<Func<T, bool>> predicate);
