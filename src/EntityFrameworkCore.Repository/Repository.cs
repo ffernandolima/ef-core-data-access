@@ -884,6 +884,18 @@ namespace EntityFrameworkCore.Repository
             return result;
         }
 
+        public virtual Task<IList<T>> FromSqlAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(sql))
+            {
+                throw new ArgumentException($"{nameof(sql)} cannot be null or white-space.", nameof(sql));
+            }
+
+            var entities = DbSet.FromSql(sql, parameters ?? Enumerable.Empty<object>()).ToListAsync(cancellationToken).Then<List<T>, IList<T>>(result => result, cancellationToken);
+
+            return entities;
+        }
+
         public virtual Task<int> ExecuteSqlCommandAsync(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql))
