@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="5.1.2" />
+    <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="5.1.3" />
   </ItemGroup>
 
   <ItemGroup>
