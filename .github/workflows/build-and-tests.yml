@@ -2,9 +2,9 @@ name: build-and-tests
 
 on:
   push:
-     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6 ]
+     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7 ]
   pull_request:
-     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6 ]
+     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7 ]
 
 jobs:
   build:
@@ -29,6 +29,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
+    - name: Setup .NET 7.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 7.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
