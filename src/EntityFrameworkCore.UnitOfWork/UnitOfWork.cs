@@ -427,7 +427,7 @@ namespace EntityFrameworkCore.UnitOfWork
             }
         }
 
-        public virtual Task<IList<T>> FromSqlAsync<T>(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default) where T : class
+        public async Task<IList<T>> FromSqlAsync<T>(string sql, IEnumerable<object> parameters = null, CancellationToken cancellationToken = default) where T : class
         {
             if (string.IsNullOrWhiteSpace(sql))
             {
@@ -436,7 +436,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
             var dbSet = DbContext.Set<T>();
 
-            var entities = dbSet.FromSqlRaw(sql, parameters ?? Enumerable.Empty<object>()).ToListAsync(cancellationToken).Then<List<T>, IList<T>>(result => result, cancellationToken);
+            var entities = await dbSet.FromSqlRaw(sql, parameters ?? Enumerable.Empty<object>()).ToListAsync(cancellationToken).Then<List<T>, IList<T>>(result => result, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
 
             return entities;
         }
