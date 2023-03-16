@@ -42,6 +42,7 @@ namespace EntityFrameworkCore.Repository.Interfaces
         IList<T> FromSql(string sql, params object[] parameters);
         void ChangeTable(string table);
         void ChangeState(T entity, EntityState state);
+        void Reload(T entity);
         void TrackGraph(T rootEntity, Action<EntityEntryGraphNode> callback);
         void TrackGraph<TState>(T rootEntity, TState state, Func<EntityEntryGraphNode<TState>, bool> callback);
         IQueryable<T> ToQueryable(IQuery<T> query);
