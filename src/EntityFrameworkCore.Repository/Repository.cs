@@ -476,6 +476,17 @@ namespace EntityFrameworkCore.Repository
             DbContext.Entry(entity).State = state;
         }
 
+        public virtual void Reload(T entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
+            }
+
+            DbContext.Entry(entity).Reload();
+        }
+
+
         public virtual void TrackGraph(T rootEntity, Action<EntityEntryGraphNode> callback)
         {
             if (rootEntity == null)
@@ -835,9 +846,9 @@ namespace EntityFrameworkCore.Repository
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
 
-            var entityResult = DbSet.AddAsync(entity, cancellationToken).AsTask().Then(result => result.Entity, cancellationToken);
+            var result = DbSet.AddAsync(entity, cancellationToken).AsTask().Then(result => result.Entity, cancellationToken);
 
-            return entityResult;
+            return result;
         }
 
         public virtual Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
@@ -906,6 +917,16 @@ namespace EntityFrameworkCore.Repository
             var affectedRows = DbContext.Database.ExecuteSqlRawAsync(sql, parameters ?? Enumerable.Empty<object>(), cancellationToken);
 
             return affectedRows;
+        }
+
+        public virtual Task ReloadAsync(T entity, CancellationToken cancellationToken = default)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
+            }
+
+            return DbContext.Entry(entity).ReloadAsync(cancellationToken);
         }
 
         #endregion IAsyncRepository<T> Members
