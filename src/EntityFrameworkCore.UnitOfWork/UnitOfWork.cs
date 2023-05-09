@@ -2,11 +2,11 @@
 using EntityFrameworkCore.Repository;
 using EntityFrameworkCore.Repository.Extensions;
 using EntityFrameworkCore.Repository.Interfaces;
+using EntityFrameworkCore.UnitOfWork.Extensions;
 using EntityFrameworkCore.UnitOfWork.Factories;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,18 +59,18 @@ namespace EntityFrameworkCore.UnitOfWork
                 return (IRepository)AppDomain.CurrentDomain.GetAssemblies()
                                              .SelectMany(selector => selector.GetTypes())
                                              .Where(predicate => type.IsAssignableFrom(predicate) && !predicate.IsInterface && !predicate.IsAbstract)
-                                             .Select(selector => Activator.CreateInstance(selector, dbContext))
+                                             .Select(selector => ActivatorUtilities.CreateInstance(dbContext.TryGetApplicationServiceProvider(), selector, dbContext))
                                              .SingleOrDefault();
             }
 
-            return DbContext.GetInfrastructure()?.GetService<T>() ?? (T)GetRepository(typeof(T), Factory, "Custom");
+            return DbContext.TryGetService<T>() ?? (T)GetRepository(typeof(T), Factory, "Custom");
         }
 
         public IRepository<T> Repository<T>() where T : class
         {
             static IRepository Factory(DbContext dbContext, Type type) => new Repository<T>(dbContext);
 
-            return DbContext.GetInfrastructure()?.GetService<IRepository<T>>() ?? (IRepository<T>)GetRepository(typeof(T), Factory, "Generic");
+            return DbContext.TryGetService<IRepository<T>>() ?? (IRepository<T>)GetRepository(typeof(T), Factory, "Generic");
         }
 
         #endregion IRepositoryFactory Members
