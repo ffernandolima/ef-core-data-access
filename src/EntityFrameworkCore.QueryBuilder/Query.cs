@@ -24,6 +24,7 @@ namespace EntityFrameworkCore.QueryBuilder
         public bool? IgnoreQueryFilters { get; internal set; }
         public bool? IgnoreAutoIncludes { get; internal set; }
         public QueryTrackingBehavior? QueryTrackingBehavior { get; internal set; }
+        public QuerySplittingBehavior? QuerySplittingBehavior { get; internal set; }
         public Expression<Func<T, bool>> Predicate { get; internal set; } = PredicateBuilder.New<T>(defaultExpression: true);
         public IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; internal set; } = new List<Func<IQueryable<T>, IIncludableQueryable<T, object>>>();
         public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
@@ -46,6 +47,13 @@ namespace EntityFrameworkCore.QueryBuilder
         public IQuery<T> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior)
         {
             QueryTrackingBehavior = queryTrackingBehavior;
+
+            return this;
+        }
+
+        public IQuery<T> UseQuerySplittingBehavior(QuerySplittingBehavior? querySplittingBehavior)
+        {
+            QuerySplittingBehavior = querySplittingBehavior;
 
             return this;
         }
@@ -187,6 +195,7 @@ namespace EntityFrameworkCore.QueryBuilder
         public bool? IgnoreQueryFilters { get; internal set; }
         public bool? IgnoreAutoIncludes { get; internal set; }
         public QueryTrackingBehavior? QueryTrackingBehavior { get; internal set; }
+        public QuerySplittingBehavior? QuerySplittingBehavior { get; internal set; }
         public Expression<Func<T, bool>> Predicate { get; internal set; } = PredicateBuilder.New<T>(defaultExpression: true);
         public IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; internal set; } = new List<Func<IQueryable<T>, IIncludableQueryable<T, object>>>();
         public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
@@ -209,6 +218,13 @@ namespace EntityFrameworkCore.QueryBuilder
         public IQuery<T, TResult> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior)
         {
             QueryTrackingBehavior = queryTrackingBehavior;
+
+            return this;
+        }
+
+        public IQuery<T, TResult> UseQuerySplittingBehavior(QuerySplittingBehavior? querySplittingBehavior)
+        {
+            QuerySplittingBehavior = querySplittingBehavior;
 
             return this;
         }

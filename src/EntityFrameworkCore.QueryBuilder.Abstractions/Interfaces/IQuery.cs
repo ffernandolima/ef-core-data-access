@@ -12,6 +12,7 @@ namespace EntityFrameworkCore.QueryBuilder.Interfaces
         bool? IgnoreQueryFilters { get; }
         bool? IgnoreAutoIncludes { get; }
         QueryTrackingBehavior? QueryTrackingBehavior { get; }
+        QuerySplittingBehavior? QuerySplittingBehavior { get; }
     }
 
     public interface IQuery<T> : IQuery where T : class
@@ -24,6 +25,7 @@ namespace EntityFrameworkCore.QueryBuilder.Interfaces
         IQuery<T> UseIgnoreQueryFilters(bool? ignoreQueryFilters);
         IQuery<T> UseIgnoreAutoIncludes(bool? ignoreAutoIncludes);
         IQuery<T> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior);
+        IQuery<T> UseQuerySplittingBehavior(QuerySplittingBehavior? querySplittingBehavior);
 
         IQuery<T> AndFilter(Expression<Func<T, bool>> predicate);
         IQuery<T> OrFilter(Expression<Func<T, bool>> predicate);
@@ -54,6 +56,7 @@ namespace EntityFrameworkCore.QueryBuilder.Interfaces
         IQuery<T, TResult> UseIgnoreQueryFilters(bool? ignoreQueryFilters);
         IQuery<T, TResult> UseIgnoreAutoIncludes(bool? ignoreAutoIncludes);
         IQuery<T, TResult> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior);
+        IQuery<T, TResult> UseQuerySplittingBehavior(QuerySplittingBehavior? querySplittingBehavior);
 
         IQuery<T, TResult> AndFilter(Expression<Func<T, bool>> predicate);
         IQuery<T, TResult> OrFilter(Expression<Func<T, bool>> predicate);
