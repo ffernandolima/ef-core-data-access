@@ -526,7 +526,7 @@ namespace EntityFrameworkCore.Repository
                 multipleResultQuery = (IMultipleResultQuery<T>)query;
             }
 
-            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters, query.IgnoreAutoIncludes);
+            var queryable = GetQueryable(query.QueryTrackingBehavior, query.QuerySplittingBehavior, query.IgnoreQueryFilters, query.IgnoreAutoIncludes);
 
             if (query.Includes.Any())
             {
@@ -550,7 +550,7 @@ namespace EntityFrameworkCore.Repository
 
             if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
             {
-                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters, multipleResultQuery.IgnoreAutoIncludes);
+                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, query.QuerySplittingBehavior, multipleResultQuery.IgnoreQueryFilters, multipleResultQuery.IgnoreAutoIncludes);
 
                 if (multipleResultQuery.Includes.Any())
                 {
@@ -587,7 +587,7 @@ namespace EntityFrameworkCore.Repository
                 multipleResultQuery = (IMultipleResultQuery<T, TResult>)query;
             }
 
-            var queryable = GetQueryable(query.QueryTrackingBehavior, query.IgnoreQueryFilters, query.IgnoreAutoIncludes);
+            var queryable = GetQueryable(query.QueryTrackingBehavior, query.QuerySplittingBehavior, query.IgnoreQueryFilters, query.IgnoreAutoIncludes);
 
             if (query.Includes.Any())
             {
@@ -611,7 +611,7 @@ namespace EntityFrameworkCore.Repository
 
             if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
             {
-                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, multipleResultQuery.IgnoreQueryFilters, multipleResultQuery.IgnoreAutoIncludes);
+                var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, query.QuerySplittingBehavior, multipleResultQuery.IgnoreQueryFilters, multipleResultQuery.IgnoreAutoIncludes);
 
                 if (multipleResultQuery.Includes.Any())
                 {
@@ -933,7 +933,7 @@ namespace EntityFrameworkCore.Repository
 
         #region Private Methods
 
-        private IQueryable<T> GetQueryable(QueryTrackingBehavior? queryTrackingBehavior = null, bool? ignoreQueryFilters = null, bool? ignoreAutoInclude = null)
+        private IQueryable<T> GetQueryable(QueryTrackingBehavior? queryTrackingBehavior = null, QuerySplittingBehavior? querySplittingBehavior = null, bool? ignoreQueryFilters = null, bool? ignoreAutoInclude = null)
         {
             IQueryable<T> queryable = DbSet;
 
@@ -947,6 +947,22 @@ namespace EntityFrameworkCore.Repository
                 case QueryTrackingBehavior.NoTracking:
                     {
                         queryable = queryable.AsNoTracking();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            switch (querySplittingBehavior)
+            {
+                case QuerySplittingBehavior.SingleQuery:
+                    {
+                        queryable = queryable.AsSingleQuery();
+                    }
+                    break;
+                case QuerySplittingBehavior.SplitQuery:
+                    {
+                        queryable = queryable.AsSplitQuery();
                     }
                     break;
                 default:
