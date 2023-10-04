@@ -9,10 +9,10 @@ using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.Repository.Interfaces
 {
-    public interface ISyncRepository : IRepository, IDisposable
+    public interface ISyncRepository : IRepository
     { }
 
-    public interface ISyncRepository<T> : ISyncRepository, IQueryFactory<T>, IDisposable where T : class
+    public interface ISyncRepository<T> : ISyncRepository, IQueryFactory<T> where T : class
     {
         IList<T> Search(IQuery<T> query);
         IList<TResult> Search<TResult>(IQuery<T, TResult> query);
@@ -43,6 +43,7 @@ namespace EntityFrameworkCore.Repository.Interfaces
         IList<T> FromSql(string sql, params object[] parameters);
         void ChangeTable(string table);
         void ChangeState(T entity, EntityState state);
+        EntityState GetState(T entity);
         void Reload(T entity);
         void TrackGraph(T rootEntity, Action<EntityEntryGraphNode> callback);
         void TrackGraph<TState>(T rootEntity, TState state, Func<EntityEntryGraphNode<TState>, bool> callback);
