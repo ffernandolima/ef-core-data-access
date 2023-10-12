@@ -482,6 +482,15 @@ namespace EntityFrameworkCore.Repository
 
             DbContext.Entry(entity).State = state;
         }
+        public EntityState GetState(T entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
+            }
+
+            return DbContext.Entry(entity).State;
+        }
 
         public virtual void Reload(T entity)
         {

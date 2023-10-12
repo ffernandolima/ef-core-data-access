@@ -567,30 +567,27 @@ namespace EntityFrameworkCore.UnitOfWork
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (!_disposed && disposing)
             {
-                if (disposing)
+                DisposeTransaction();
+
+                if (IsRelational())
                 {
-                    DisposeTransaction();
-
-                    if (DbContext.Database.IsRelational())
+                    var connection = DbContext.Database.GetDbConnection();
+                    if (connection != null && connection.State != ConnectionState.Closed)
                     {
-                        var connection = DbContext.Database.GetDbConnection();
-                        if (connection != null && connection.State != ConnectionState.Closed)
-                        {
-                            connection.Close();
-                        }
-
-                        DbContext.Dispose();
+                        connection.Close();
                     }
 
-                    foreach (var repository in _repositories.Values)
-                    {
-                        repository.Dispose();
-                    }
-
-                    _repositories.Clear();
+                    DbContext.Dispose();
                 }
+
+                foreach (var repository in _repositories.Values)
+                {
+                    repository.Dispose();
+                }
+
+                _repositories.Clear();
             }
 
             _disposed = true;
@@ -600,6 +597,16 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+
+        private bool IsRelational()
+        {
+            try
+            {
+                return DbContext.Database.IsRelational();
+            }
+            catch { return false; }
         }
 
         #endregion IDisposable Members
