@@ -9,10 +9,10 @@ using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.Repository.Interfaces
 {
-    public interface ISyncRepository : IRepository
+    public interface ISyncRepository : IRepository, IDisposable
     { }
 
-    public interface ISyncRepository<T> : ISyncRepository, IQueryFactory<T> where T : class
+    public interface ISyncRepository<T> : ISyncRepository, IQueryFactory<T>, IDisposable where T : class
     {
         IList<T> Search(IQuery<T> query);
         IList<TResult> Search<TResult>(IQuery<T, TResult> query);

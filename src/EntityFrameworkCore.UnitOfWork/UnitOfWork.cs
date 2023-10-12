@@ -550,6 +550,18 @@ namespace EntityFrameworkCore.UnitOfWork
             }
         }
 
+        private bool IsRelational()
+        {
+            try
+            {
+                return DbContext.Database.IsRelational();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private async Task DisposeTransactionAsync()
         {
             if (_transaction != null)
@@ -567,46 +579,39 @@ namespace EntityFrameworkCore.UnitOfWork
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposed && disposing)
+            if (!_disposed)
             {
-                DisposeTransaction();
-
-                if (IsRelational())
+                if (disposing)
                 {
-                    var connection = DbContext.Database.GetDbConnection();
-                    if (connection != null && connection.State != ConnectionState.Closed)
+                    DisposeTransaction();
+
+                    if (IsRelational())
                     {
-                        connection.Close();
+                        var connection = DbContext.Database.GetDbConnection();
+                        if (connection != null && connection.State != ConnectionState.Closed)
+                        {
+                            connection.Close();
+                        }
+
+                        DbContext.Dispose();
                     }
 
-                    DbContext.Dispose();
+                    foreach (var repository in _repositories.Values)
+                    {
+                        repository.Dispose();
+                    }
+
+                    _repositories.Clear();
                 }
 
-                foreach (var repository in _repositories.Values)
-                {
-                    repository.Dispose();
-                }
-
-                _repositories.Clear();
+                _disposed = true;
             }
-
-            _disposed = true;
         }
 
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-
-        private bool IsRelational()
-        {
-            try
-            {
-                return DbContext.Database.IsRelational();
-            }
-            catch { return false; }
         }
 
         #endregion IDisposable Members
