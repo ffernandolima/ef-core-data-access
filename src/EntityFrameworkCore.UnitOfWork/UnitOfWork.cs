@@ -541,6 +541,18 @@ namespace EntityFrameworkCore.UnitOfWork
             return repository;
         }
 
+        private bool IsRelational()
+        {
+            try
+            {
+                return DbContext.Database.IsRelational();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private void DisposeTransaction()
         {
             if (_transaction != null)
@@ -573,7 +585,7 @@ namespace EntityFrameworkCore.UnitOfWork
                 {
                     DisposeTransaction();
 
-                    if (DbContext.Database.IsRelational())
+                    if (IsRelational())
                     {
                         var connection = DbContext.Database.GetDbConnection();
                         if (connection != null && connection.State != ConnectionState.Closed)
@@ -591,9 +603,9 @@ namespace EntityFrameworkCore.UnitOfWork
 
                     _repositories.Clear();
                 }
-            }
 
-            _disposed = true;
+                _disposed = true;
+            }
         }
 
         public void Dispose()
