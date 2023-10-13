@@ -16,7 +16,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;AutoHistory;Auto History;auto-history</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>5.3.11</Version>
+    <Version>5.3.12</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
