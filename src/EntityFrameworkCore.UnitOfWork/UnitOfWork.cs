@@ -541,15 +541,6 @@ namespace EntityFrameworkCore.UnitOfWork
             return repository;
         }
 
-        private void DisposeTransaction()
-        {
-            if (_transaction != null)
-            {
-                _transaction.Dispose();
-                _transaction = null;
-            }
-        }
-
         private bool IsRelational()
         {
             try
@@ -559,6 +550,15 @@ namespace EntityFrameworkCore.UnitOfWork
             catch
             {
                 return false;
+            }
+        }
+
+        private void DisposeTransaction()
+        {
+            if (_transaction != null)
+            {
+                _transaction.Dispose();
+                _transaction = null;
             }
         }
 
