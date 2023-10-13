@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.19" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.23" />
   </ItemGroup>
 
 </Project>
