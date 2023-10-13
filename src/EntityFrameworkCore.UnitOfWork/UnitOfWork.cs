@@ -516,9 +516,9 @@ namespace EntityFrameworkCore.UnitOfWork
 
                     _repositories.Clear();
                 }
-            }
 
-            _disposed = true;
+                _disposed = true;
+            }
         }
 
         public void Dispose()
