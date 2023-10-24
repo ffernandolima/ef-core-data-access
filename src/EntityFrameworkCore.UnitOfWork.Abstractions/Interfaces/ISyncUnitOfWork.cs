@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -15,6 +16,7 @@ namespace EntityFrameworkCore.UnitOfWork.Interfaces
         bool HasChanges();
         int SaveChanges(bool acceptAllChangesOnSuccess = true, bool ensureAutoHistory = false);
         void DiscardChanges();
+        IExecutionStrategy CreateExecutionStrategy();
         void UseTransaction(DbTransaction transaction, Guid? transactionId = null);
         void EnlistTransaction(Transaction transaction);
         Transaction GetEnlistedTransaction();

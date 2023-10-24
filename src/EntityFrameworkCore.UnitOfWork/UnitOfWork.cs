@@ -162,6 +162,14 @@ namespace EntityFrameworkCore.UnitOfWork
             }
         }
 
+        public IExecutionStrategy CreateExecutionStrategy()
+        {
+            var strategy = DbContext.Database.CreateExecutionStrategy();
+
+            return strategy;
+        }
+
+
         public void UseTransaction(DbTransaction transaction, Guid? transactionId = null)
         {
             if (transaction == null)
