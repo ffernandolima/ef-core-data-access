@@ -46,11 +46,11 @@ namespace EntityFrameworkCore.Tests
         {
             var repository = _unitOfWork.Repository<Blog>();
 
-            var count = await repository.CountAsync().ConfigureAwait(continueOnCapturedContext: false);
+            var count = await repository.CountAsync();
 
             Assert.Equal(50, count);
 
-            var longCount = await repository.LongCountAsync().ConfigureAwait(continueOnCapturedContext: false);
+            var longCount = await repository.LongCountAsync();
 
             Assert.Equal(50, longCount);
         }
@@ -59,13 +59,13 @@ namespace EntityFrameworkCore.Tests
         {
             var repository = _unitOfWork.Repository<Blog>();
 
-            if (!await repository.AnyAsync().ConfigureAwait(continueOnCapturedContext: false))
+            if (!await repository.AnyAsync())
             {
                 var blogs = Seeder.SeedBlogs();
 
-                await repository.AddRangeAsync(blogs).ConfigureAwait(continueOnCapturedContext: false);
+                await repository.AddRangeAsync(blogs);
 
-                await _unitOfWork.SaveChangesAsync().ConfigureAwait(continueOnCapturedContext: false);
+                await _unitOfWork.SaveChangesAsync();
             }
         }
     }
