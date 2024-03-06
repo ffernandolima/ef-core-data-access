@@ -7,7 +7,7 @@ env:
 
 on:
   push:
-    branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7 ]
+    branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7, ef-core-8 ]
 
 jobs:
   build-and-publish:
