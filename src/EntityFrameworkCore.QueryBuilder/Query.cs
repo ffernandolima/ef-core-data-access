@@ -4,15 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.QueryBuilder
 {
-    public abstract class Query<T, TBuilder> : IQueryBuilder<T, TBuilder>
+    public abstract class Query<T, TBuilder> : IQuery<T>, IQueryBuilder<T, TBuilder>
         where T : class
         where TBuilder : IQueryBuilder<T, TBuilder>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected abstract TBuilder BuilderInstance { get; }
 
         #region Ctor
@@ -32,6 +34,10 @@ namespace EntityFrameworkCore.QueryBuilder
         public IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; internal set; } = new List<Func<IQueryable<T>, IIncludableQueryable<T, object>>>();
         public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
         public Expression<Func<T, T>> Selector { get; internal set; }
+
+        #endregion IQuery<T> Members
+
+        #region IQueryBuilder<T, TBuilder> Members
 
         public TBuilder UseIgnoreQueryFilters(bool? ignoreQueryFilters)
         {
@@ -179,13 +185,14 @@ namespace EntityFrameworkCore.QueryBuilder
             return BuilderInstance;
         }
 
-        #endregion IQuery<T> Members
+        #endregion IQueryBuilder<T, TBuilder> Members
     }
 
-    public abstract class Query<T, TResult, TBuilder> : IQueryBuilder<T, TResult, TBuilder>
+    public abstract class Query<T, TResult, TBuilder> : IQuery<T, TResult>, IQueryBuilder<T, TResult, TBuilder>
         where T : class
         where TBuilder : IQueryBuilder<T, TResult, TBuilder>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected abstract TBuilder BuilderInstance { get; }
 
         #region Ctor
@@ -205,6 +212,10 @@ namespace EntityFrameworkCore.QueryBuilder
         public IList<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; internal set; } = new List<Func<IQueryable<T>, IIncludableQueryable<T, object>>>();
         public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
         public Expression<Func<T, TResult>> Selector { get; internal set; }
+
+        #endregion IQuery<T, TResult> Members
+
+        #region IQueryBuilder<T, TResult, TBuilder> Members
 
         public TBuilder UseIgnoreQueryFilters(bool? ignoreQueryFilters)
         {
@@ -352,6 +363,6 @@ namespace EntityFrameworkCore.QueryBuilder
             return BuilderInstance;
         }
 
-        #endregion IQuery<T, TResult> Members
+        #endregion IQueryBuilder<T, TResult, TBuilder> Members
     }
 }

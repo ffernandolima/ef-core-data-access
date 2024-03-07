@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkCore.QueryBuilder.Extensions;
 using EntityFrameworkCore.QueryBuilder.Interfaces;
 using System;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.QueryBuilder
@@ -9,6 +10,7 @@ namespace EntityFrameworkCore.QueryBuilder
     {
         public static ISingleResultQuery<T> New() => new SingleResultQuery<T>();
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override ISingleResultQuery<T> BuilderInstance => this;
 
         #region Ctor
@@ -29,6 +31,7 @@ namespace EntityFrameworkCore.QueryBuilder
     {
         public static ISingleResultQuery<T, TResult> New() => new SingleResultQuery<T, TResult>();
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override ISingleResultQuery<T, TResult> BuilderInstance => this;
 
         #region Ctor

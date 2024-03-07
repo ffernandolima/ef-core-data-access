@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkCore.QueryBuilder.Extensions;
 using EntityFrameworkCore.QueryBuilder.Interfaces;
 using System;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.QueryBuilder
@@ -9,6 +10,7 @@ namespace EntityFrameworkCore.QueryBuilder
     {
         public static IMultipleResultQuery<T> New() => new MultipleResultQuery<T>();
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override IMultipleResultQuery<T> BuilderInstance => this;
 
         #region Ctor
@@ -18,10 +20,14 @@ namespace EntityFrameworkCore.QueryBuilder
 
         #endregion Ctor
 
-        #region IMultipleResultQuery<T> Members
+        #region IMultipleResultQuery Members
 
         public IPaging Paging { get; internal set; } = new Paging();
         public ITopping Topping { get; internal set; } = new Topping();
+
+        #endregion IMultipleResultQuery Members
+
+        #region IMultipleResultQuery<T> Members
 
         public IMultipleResultQuery<T> Page(int? pageIndex, int? pageSize)
         {
@@ -53,6 +59,7 @@ namespace EntityFrameworkCore.QueryBuilder
     {
         public static IMultipleResultQuery<T, TResult> New() => new MultipleResultQuery<T, TResult>();
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override IMultipleResultQuery<T, TResult> BuilderInstance => this;
 
         #region Ctor
@@ -62,10 +69,14 @@ namespace EntityFrameworkCore.QueryBuilder
 
         #endregion Ctor
 
-        #region IMultipleResultQuery<T, TResult> Members
+        #region IMultipleResultQuery Members
 
         public IPaging Paging { get; internal set; } = new Paging();
         public ITopping Topping { get; internal set; } = new Topping();
+
+        #endregion IMultipleResultQuery Members
+
+        #region IMultipleResultQuery<T, TResult> Members
 
         public IMultipleResultQuery<T, TResult> Page(int? pageIndex, int? pageSize)
         {
