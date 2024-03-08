@@ -16,13 +16,13 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
             var key = entityEntry.Metadata.FindPrimaryKey();
 
-            if (key != null)
+            if (key is not null)
             {
                 foreach (var property in key.Properties)
                 {
                     var propertyEntry = entityEntry.Property(property.Name);
 
-                    if (propertyEntry.CurrentValue != null)
+                    if (propertyEntry.CurrentValue is not null)
                     {
                         currentValues.Add(propertyEntry.CurrentValue);
                     }
@@ -84,7 +84,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
             foreach (var property in properties)
             {
-                json[property.Metadata.Name] = property.CurrentValue != null ? JToken.FromObject(property.CurrentValue, options.JsonSerializer) : JValue.CreateNull();
+                json[property.Metadata.Name] = property.CurrentValue is not null ? JToken.FromObject(property.CurrentValue, options.JsonSerializer) : JValue.CreateNull();
             }
 
             history.RowId = entityEntry.PrimaryKey();
@@ -112,7 +112,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
             foreach (var property in properties.Where(entry => entry.IsModified))
             {
-                if (property.OriginalValue != null)
+                if (property.OriginalValue is not null)
                 {
                     if (!property.OriginalValue.Equals(property.CurrentValue))
                     {
@@ -124,7 +124,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
                         var originalValue = databaseValues.GetValue<object>(property.Metadata.Name);
 
-                        before[property.Metadata.Name] = originalValue != null ? JToken.FromObject(originalValue, options.JsonSerializer) : JValue.CreateNull();
+                        before[property.Metadata.Name] = originalValue is not null ? JToken.FromObject(originalValue, options.JsonSerializer) : JValue.CreateNull();
                     }
                 }
                 else
@@ -132,7 +132,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
                     before[property.Metadata.Name] = JValue.CreateNull();
                 }
 
-                after[property.Metadata.Name] = property.CurrentValue != null ? JToken.FromObject(property.CurrentValue, options.JsonSerializer) : JValue.CreateNull();
+                after[property.Metadata.Name] = property.CurrentValue is not null ? JToken.FromObject(property.CurrentValue, options.JsonSerializer) : JValue.CreateNull();
             }
 
             json["before"] = before;
@@ -152,7 +152,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
             foreach (var property in properties)
             {
-                json[property.Metadata.Name] = property.OriginalValue != null ? JToken.FromObject(property.OriginalValue, options.JsonSerializer) : JValue.CreateNull();
+                json[property.Metadata.Name] = property.OriginalValue is not null ? JToken.FromObject(property.OriginalValue, options.JsonSerializer) : JValue.CreateNull();
             }
 
             history.RowId = entityEntry.PrimaryKey();

@@ -24,22 +24,22 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
         public static void EnsureAutoHistory<TAutoHistory>(this DbContext dbContext, Func<TAutoHistory> historyFactory, params TrackedEntity[] trackedEntities) where TAutoHistory : AutoHistory
         {
-            if (dbContext == null)
+            if (dbContext is null)
             {
                 throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} cannot be null.");
             }
 
-            if (historyFactory == null)
+            if (historyFactory is null)
             {
                 throw new ArgumentNullException(nameof(historyFactory), $"{nameof(historyFactory)} cannot be null.");
             }
 
-            if (trackedEntities == null)
+            if (trackedEntities is null)
             {
                 throw new ArgumentNullException(nameof(trackedEntities), $"{nameof(trackedEntities)} cannot be null.");
             }
 
-            foreach (var trackedEntity in trackedEntities.Where(entity => entity != null))
+            foreach (var trackedEntity in trackedEntities.Where(entity => entity is not null))
             {
                 // The EntityState property is not affected by SaveChanges
                 var entityEntry = trackedEntity.EntityEntry;
@@ -47,7 +47,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
                 var autoHistory = entityEntry.AutoHistory(entityState, historyFactory);
 
-                if (autoHistory != null)
+                if (autoHistory is not null)
                 {
                     dbContext.Add(autoHistory);
                 }
@@ -56,12 +56,12 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
         public static TrackedEntity[] DetectChanges(this DbContext dbContext, params EntityState[] entityStates)
         {
-            if (dbContext == null)
+            if (dbContext is null)
             {
                 throw new ArgumentNullException(nameof(dbContext), $"{nameof(dbContext)} cannot be null.");
             }
 
-            if (entityStates == null)
+            if (entityStates is null)
             {
                 throw new ArgumentNullException(nameof(entityStates), $"{nameof(entityStates)} cannot be null.");
             }
