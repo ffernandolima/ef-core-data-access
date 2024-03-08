@@ -18,12 +18,12 @@ namespace EntityFrameworkCore.Repository.Extensions
                 return source;
             }
 
-            return includes.Aggregate(source, (queryable, include) => include == null ? queryable : include(queryable));
+            return includes.Aggregate(source, (queryable, include) => include is null ? queryable : include(queryable));
         }
 
         public static IQueryable<T> Filter<T>(this IQueryable<T> source, Expression<Func<T, bool>> predicate) where T : class
         {
-            if (predicate == null)
+            if (predicate is null)
             {
                 return source;
             }
@@ -62,7 +62,7 @@ namespace EntityFrameworkCore.Repository.Extensions
 
             var orderedQueryable = false;
 
-            foreach (var sorting in sortings.Where(s => s != null))
+            foreach (var sorting in sortings.Where(s => s is not null))
             {
                 if (sorting.SortDirection == SortDirection.Ascending)
                 {
@@ -77,7 +77,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                                 orderedQueryable = true;
                             }
                         }
-                        else if (sorting.KeySelector != null)
+                        else if (sorting.KeySelector is not null)
                         {
                             source = source.OrderBy(sorting.KeySelector);
 
@@ -90,7 +90,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                         {
                             source = ((IOrderedQueryable<T>)source).ThenBy(sorting.FieldName, out _);
                         }
-                        else if (sorting.KeySelector != null)
+                        else if (sorting.KeySelector is not null)
                         {
                             source = ((IOrderedQueryable<T>)source).ThenBy(sorting.KeySelector);
                         }
@@ -109,7 +109,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                                 orderedQueryable = true;
                             }
                         }
-                        else if (sorting.KeySelector != null)
+                        else if (sorting.KeySelector is not null)
                         {
                             source = source.OrderByDescending(sorting.KeySelector);
 
@@ -122,7 +122,7 @@ namespace EntityFrameworkCore.Repository.Extensions
                         {
                             source = ((IOrderedQueryable<T>)source).ThenByDescending(sorting.FieldName, out _);
                         }
-                        else if (sorting.KeySelector != null)
+                        else if (sorting.KeySelector is not null)
                         {
                             source = ((IOrderedQueryable<T>)source).ThenByDescending(sorting.KeySelector);
                         }
@@ -137,7 +137,7 @@ namespace EntityFrameworkCore.Repository.Extensions
         {
             var expression = GenerateMethodCall(source, nameof(OrderBy), fieldName, out success);
 
-            var queryable = (expression == null ? source : source.Provider.CreateQuery<T>(expression)) as IOrderedQueryable<T>;
+            var queryable = (expression is null ? source : source.Provider.CreateQuery<T>(expression)) as IOrderedQueryable<T>;
 
             return queryable;
         }
@@ -146,7 +146,7 @@ namespace EntityFrameworkCore.Repository.Extensions
         {
             var expression = GenerateMethodCall(source, nameof(OrderByDescending), fieldName, out success);
 
-            var queryable = (expression == null ? source : source.Provider.CreateQuery<T>(expression)) as IOrderedQueryable<T>;
+            var queryable = (expression is null ? source : source.Provider.CreateQuery<T>(expression)) as IOrderedQueryable<T>;
 
             return queryable;
         }
@@ -155,7 +155,7 @@ namespace EntityFrameworkCore.Repository.Extensions
         {
             var expression = GenerateMethodCall(source, nameof(ThenBy), fieldName, out success);
 
-            var queryable = expression == null ? source : source.Provider.CreateQuery<T>(expression) as IOrderedQueryable<T>;
+            var queryable = expression is null ? source : source.Provider.CreateQuery<T>(expression) as IOrderedQueryable<T>;
 
             return queryable;
         }
@@ -164,7 +164,7 @@ namespace EntityFrameworkCore.Repository.Extensions
         {
             var expression = GenerateMethodCall(source, nameof(ThenByDescending), fieldName, out success);
 
-            var queryable = expression == null ? source : source.Provider.CreateQuery<T>(expression) as IOrderedQueryable<T>;
+            var queryable = expression is null ? source : source.Provider.CreateQuery<T>(expression) as IOrderedQueryable<T>;
 
             return queryable;
         }
@@ -179,7 +179,7 @@ namespace EntityFrameworkCore.Repository.Extensions
 
                 var selector = Expression.Lambda(body, parameter);
 
-                if (success = selector != null)
+                if (success = selector is not null)
                 {
                     var expression = Expression.Call(typeof(Queryable), methodName, new[] { typeof(T), body.Type }, source.Expression, selector);
 
