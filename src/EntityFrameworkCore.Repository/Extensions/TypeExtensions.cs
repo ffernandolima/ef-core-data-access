@@ -8,12 +8,12 @@ namespace EntityFrameworkCore.Repository.Extensions
 
         public static bool IsGenericType(this Type sourceType, Type targetType, out Type[] sourceArguments)
         {
-            if (sourceType == null)
+            if (sourceType is null)
             {
                 throw new ArgumentNullException(nameof(sourceType), $"{nameof(sourceType)} cannot be null.");
             }
 
-            if (targetType == null)
+            if (targetType is null)
             {
                 throw new ArgumentNullException(nameof(targetType), $"{nameof(targetType)} cannot be null.");
             }
