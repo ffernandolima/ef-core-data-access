@@ -48,7 +48,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual IList<T> Search(IQuery<T> query)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
@@ -62,12 +62,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual IList<TResult> Search<TResult>(IQuery<T, TResult> query)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
 
-            if (query.Selector == null)
+            if (query.Selector is null)
             {
                 throw new ArgumentNullException(nameof(query.Selector), $"{nameof(query.Selector)} cannot be null.");
             }
@@ -81,7 +81,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual T SingleOrDefault(IQuery<T> query)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
@@ -95,12 +95,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual TResult SingleOrDefault<TResult>(IQuery<T, TResult> query)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
 
-            if (query.Selector == null)
+            if (query.Selector is null)
             {
                 throw new ArgumentNullException(nameof(query.Selector), $"{nameof(query.Selector)} cannot be null.");
             }
@@ -114,7 +114,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual T FirstOrDefault(IQuery<T> query)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
@@ -128,12 +128,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual TResult FirstOrDefault<TResult>(IQuery<T, TResult> query)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
 
-            if (query.Selector == null)
+            if (query.Selector is null)
             {
                 throw new ArgumentNullException(nameof(query.Selector), $"{nameof(query.Selector)} cannot be null.");
             }
@@ -147,7 +147,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual T LastOrDefault(IQuery<T> query)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
@@ -161,12 +161,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual TResult LastOrDefault<TResult>(IQuery<T, TResult> query)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
 
-            if (query.Selector == null)
+            if (query.Selector is null)
             {
                 throw new ArgumentNullException(nameof(query.Selector), $"{nameof(query.Selector)} cannot be null.");
             }
@@ -180,76 +180,76 @@ namespace EntityFrameworkCore.Repository
 
         public virtual bool Any(Expression<Func<T, bool>> predicate = null)
         {
-            var result = predicate == null ? DbSet.Any() : DbSet.Any(predicate);
+            var result = predicate is null ? DbSet.Any() : DbSet.Any(predicate);
 
             return result;
         }
 
         public virtual int Count(Expression<Func<T, bool>> predicate = null)
         {
-            var result = predicate == null ? DbSet.Count() : DbSet.Count(predicate);
+            var result = predicate is null ? DbSet.Count() : DbSet.Count(predicate);
 
             return result;
         }
 
         public virtual long LongCount(Expression<Func<T, bool>> predicate = null)
         {
-            var result = predicate == null ? DbSet.LongCount() : DbSet.LongCount(predicate);
+            var result = predicate is null ? DbSet.LongCount() : DbSet.LongCount(predicate);
 
             return result;
         }
 
         public virtual TResult Max<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null)
         {
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var result = predicate == null ? DbSet.Max(selector) : DbSet.Where(predicate).Max(selector);
+            var result = predicate is null ? DbSet.Max(selector) : DbSet.Where(predicate).Max(selector);
 
             return result;
         }
 
         public virtual TResult Min<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null)
         {
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var result = predicate == null ? DbSet.Min(selector) : DbSet.Where(predicate).Min(selector);
+            var result = predicate is null ? DbSet.Min(selector) : DbSet.Where(predicate).Min(selector);
 
             return result;
         }
 
         public virtual decimal Average(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null)
         {
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var result = predicate == null ? DbSet.Average(selector) : DbSet.Where(predicate).Average(selector);
+            var result = predicate is null ? DbSet.Average(selector) : DbSet.Where(predicate).Average(selector);
 
             return result;
         }
 
         public virtual decimal Sum(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null)
         {
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var result = predicate == null ? DbSet.Sum(selector) : DbSet.Where(predicate).Sum(selector);
+            var result = predicate is null ? DbSet.Sum(selector) : DbSet.Where(predicate).Sum(selector);
 
             return result;
         }
 
         public virtual T Attach(T entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
@@ -261,7 +261,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual void AttachRange(IEnumerable<T> entities)
         {
-            if (entities == null)
+            if (entities is null)
             {
                 throw new ArgumentNullException(nameof(entities), $"{nameof(entities)} cannot be null.");
             }
@@ -276,7 +276,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual T Add(T entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
@@ -288,7 +288,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual void AddRange(IEnumerable<T> entities)
         {
-            if (entities == null)
+            if (entities is null)
             {
                 throw new ArgumentNullException(nameof(entities), $"{nameof(entities)} cannot be null.");
             }
@@ -303,7 +303,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual T Update(T entity, params Expression<Func<T, object>>[] properties)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
@@ -322,7 +322,7 @@ namespace EntityFrameworkCore.Repository
                     }
                     catch { propertyEntry = null; }
 
-                    if (propertyEntry != null)
+                    if (propertyEntry is not null)
                     {
                         propertyEntry.IsModified = true;
                     }
@@ -336,7 +336,7 @@ namespace EntityFrameworkCore.Repository
                         }
                         catch { referenceEntry = null; }
 
-                        if (referenceEntry != null)
+                        if (referenceEntry is not null)
                         {
                             var referenceEntityEntry = referenceEntry.TargetEntry;
 
@@ -355,12 +355,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual int Update(Expression<Func<T, bool>> predicate, Expression<Func<T, T>> expression)
         {
-            if (predicate == null)
+            if (predicate is null)
             {
                 throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
             }
 
-            if (expression == null)
+            if (expression is null)
             {
                 throw new ArgumentNullException(nameof(expression), $"{nameof(expression)} cannot be null.");
             }
@@ -372,7 +372,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual void UpdateRange(IEnumerable<T> entities, params Expression<Func<T, object>>[] properties)
         {
-            if (entities == null)
+            if (entities is null)
             {
                 throw new ArgumentNullException(nameof(entities), $"{nameof(entities)} cannot be null.");
             }
@@ -390,7 +390,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual T Remove(T entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
@@ -402,7 +402,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual int Remove(Expression<Func<T, bool>> predicate)
         {
-            if (predicate == null)
+            if (predicate is null)
             {
                 throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
             }
@@ -414,7 +414,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual void RemoveRange(IEnumerable<T> entities)
         {
-            if (entities == null)
+            if (entities is null)
             {
                 throw new ArgumentNullException(nameof(entities), $"{nameof(entities)} cannot be null.");
             }
@@ -468,7 +468,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual void ChangeState(T entity, EntityState state)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
@@ -478,7 +478,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual EntityState GetState(T entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
@@ -488,7 +488,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual void Reload(T entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
@@ -498,12 +498,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual void TrackGraph(T rootEntity, Action<EntityEntryGraphNode> callback)
         {
-            if (rootEntity == null)
+            if (rootEntity is null)
             {
                 throw new ArgumentNullException(nameof(rootEntity), $"{nameof(rootEntity)} cannot be null.");
             }
 
-            if (callback == null)
+            if (callback is null)
             {
                 throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
             }
@@ -513,12 +513,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual void TrackGraph<TState>(T rootEntity, TState state, Func<EntityEntryGraphNode<TState>, bool> callback)
         {
-            if (rootEntity == null)
+            if (rootEntity is null)
             {
                 throw new ArgumentNullException(nameof(rootEntity), $"{nameof(rootEntity)} cannot be null.");
             }
 
-            if (callback == null)
+            if (callback is null)
             {
                 throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
             }
@@ -542,7 +542,7 @@ namespace EntityFrameworkCore.Repository
                 queryable = queryable.Include(query.Includes);
             }
 
-            if (query.Predicate != null)
+            if (query.Predicate is not null)
             {
                 queryable = queryable.Filter(query.Predicate);
             }
@@ -552,12 +552,12 @@ namespace EntityFrameworkCore.Repository
                 queryable = queryable.Sort(query.Sortings);
             }
 
-            if (multipleResultQuery != null && multipleResultQuery.Topping.IsEnabled)
+            if (multipleResultQuery is not null && multipleResultQuery.Topping.IsEnabled)
             {
                 queryable = queryable.Top(multipleResultQuery.Topping);
             }
 
-            if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
+            if (multipleResultQuery is not null && multipleResultQuery.Paging.IsEnabled)
             {
                 var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, query.QuerySplittingBehavior, multipleResultQuery.IgnoreQueryFilters, multipleResultQuery.IgnoreAutoIncludes);
 
@@ -566,7 +566,7 @@ namespace EntityFrameworkCore.Repository
                     countQueryable = countQueryable.Include(multipleResultQuery.Includes);
                 }
 
-                if (multipleResultQuery.Predicate != null)
+                if (multipleResultQuery.Predicate is not null)
                 {
                     countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
                 }
@@ -579,7 +579,7 @@ namespace EntityFrameworkCore.Repository
                 queryable = queryable.Page(multipleResultQuery.Paging);
             }
 
-            if (query.Selector != null)
+            if (query.Selector is not null)
             {
                 queryable = queryable.Select(query.Selector);
             }
@@ -603,7 +603,7 @@ namespace EntityFrameworkCore.Repository
                 queryable = queryable.Include(query.Includes);
             }
 
-            if (query.Predicate != null)
+            if (query.Predicate is not null)
             {
                 queryable = queryable.Filter(query.Predicate);
             }
@@ -613,12 +613,12 @@ namespace EntityFrameworkCore.Repository
                 queryable = queryable.Sort(query.Sortings);
             }
 
-            if (multipleResultQuery != null && multipleResultQuery.Topping.IsEnabled)
+            if (multipleResultQuery is not null && multipleResultQuery.Topping.IsEnabled)
             {
                 queryable = queryable.Top(multipleResultQuery.Topping);
             }
 
-            if (multipleResultQuery != null && multipleResultQuery.Paging.IsEnabled)
+            if (multipleResultQuery is not null && multipleResultQuery.Paging.IsEnabled)
             {
                 var countQueryable = GetQueryable(multipleResultQuery.QueryTrackingBehavior, query.QuerySplittingBehavior, multipleResultQuery.IgnoreQueryFilters, multipleResultQuery.IgnoreAutoIncludes);
 
@@ -627,7 +627,7 @@ namespace EntityFrameworkCore.Repository
                     countQueryable = countQueryable.Include(multipleResultQuery.Includes);
                 }
 
-                if (multipleResultQuery.Predicate != null)
+                if (multipleResultQuery.Predicate is not null)
                 {
                     countQueryable = countQueryable.Filter(multipleResultQuery.Predicate);
                 }
@@ -649,7 +649,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<IList<T>> SearchAsync(IQuery<T> query, CancellationToken cancellationToken = default)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
@@ -663,12 +663,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<IList<TResult>> SearchAsync<TResult>(IQuery<T, TResult> query, CancellationToken cancellationToken = default)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
 
-            if (query.Selector == null)
+            if (query.Selector is null)
             {
                 throw new ArgumentNullException(nameof(query.Selector), $"{nameof(query.Selector)} cannot be null.");
             }
@@ -682,7 +682,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<T> SingleOrDefaultAsync(IQuery<T> query, CancellationToken cancellationToken = default)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
@@ -696,12 +696,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<TResult> SingleOrDefaultAsync<TResult>(IQuery<T, TResult> query, CancellationToken cancellationToken = default)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
 
-            if (query.Selector == null)
+            if (query.Selector is null)
             {
                 throw new ArgumentNullException(nameof(query.Selector), $"{nameof(query.Selector)} cannot be null.");
             }
@@ -715,7 +715,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<T> FirstOrDefaultAsync(IQuery<T> query, CancellationToken cancellationToken = default)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
@@ -729,12 +729,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<TResult> FirstOrDefaultAsync<TResult>(IQuery<T, TResult> query, CancellationToken cancellationToken = default)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
 
-            if (query.Selector == null)
+            if (query.Selector is null)
             {
                 throw new ArgumentNullException(nameof(query.Selector), $"{nameof(query.Selector)} cannot be null.");
             }
@@ -748,7 +748,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<T> LastOrDefaultAsync(IQuery<T> query, CancellationToken cancellationToken = default)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
@@ -762,12 +762,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<TResult> LastOrDefaultAsync<TResult>(IQuery<T, TResult> query, CancellationToken cancellationToken = default)
         {
-            if (query == null)
+            if (query is null)
             {
                 throw new ArgumentNullException(nameof(query), $"{nameof(query)} cannot be null.");
             }
 
-            if (query.Selector == null)
+            if (query.Selector is null)
             {
                 throw new ArgumentNullException(nameof(query.Selector), $"{nameof(query.Selector)} cannot be null.");
             }
@@ -781,76 +781,76 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            var result = predicate == null ? DbSet.AnyAsync(cancellationToken) : DbSet.AnyAsync(predicate, cancellationToken);
+            var result = predicate is null ? DbSet.AnyAsync(cancellationToken) : DbSet.AnyAsync(predicate, cancellationToken);
 
             return result;
         }
 
         public virtual Task<int> CountAsync(Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            var result = predicate == null ? DbSet.CountAsync(cancellationToken) : DbSet.CountAsync(predicate, cancellationToken);
+            var result = predicate is null ? DbSet.CountAsync(cancellationToken) : DbSet.CountAsync(predicate, cancellationToken);
 
             return result;
         }
 
         public virtual Task<long> LongCountAsync(Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            var result = predicate == null ? DbSet.LongCountAsync(cancellationToken) : DbSet.LongCountAsync(predicate, cancellationToken);
+            var result = predicate is null ? DbSet.LongCountAsync(cancellationToken) : DbSet.LongCountAsync(predicate, cancellationToken);
 
             return result;
         }
 
         public virtual Task<TResult> MaxAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var result = predicate == null ? DbSet.MaxAsync(selector, cancellationToken) : DbSet.Where(predicate).MaxAsync(selector, cancellationToken);
+            var result = predicate is null ? DbSet.MaxAsync(selector, cancellationToken) : DbSet.Where(predicate).MaxAsync(selector, cancellationToken);
 
             return result;
         }
 
         public virtual Task<TResult> MinAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var result = predicate == null ? DbSet.MinAsync(selector, cancellationToken) : DbSet.Where(predicate).MinAsync(selector, cancellationToken);
+            var result = predicate is null ? DbSet.MinAsync(selector, cancellationToken) : DbSet.Where(predicate).MinAsync(selector, cancellationToken);
 
             return result;
         }
 
         public virtual Task<decimal> AverageAsync(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var result = predicate == null ? DbSet.AverageAsync(selector, cancellationToken) : DbSet.Where(predicate).AverageAsync(selector, cancellationToken);
+            var result = predicate is null ? DbSet.AverageAsync(selector, cancellationToken) : DbSet.Where(predicate).AverageAsync(selector, cancellationToken);
 
             return result;
         }
 
         public virtual Task<decimal> SumAsync(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>> predicate = null, CancellationToken cancellationToken = default)
         {
-            if (selector == null)
+            if (selector is null)
             {
                 throw new ArgumentNullException(nameof(selector), $"{nameof(selector)} cannot be null.");
             }
 
-            var result = predicate == null ? DbSet.SumAsync(selector, cancellationToken) : DbSet.Where(predicate).SumAsync(selector, cancellationToken);
+            var result = predicate is null ? DbSet.SumAsync(selector, cancellationToken) : DbSet.Where(predicate).SumAsync(selector, cancellationToken);
 
             return result;
         }
 
         public virtual Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }
@@ -862,7 +862,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
         {
-            if (entities == null)
+            if (entities is null)
             {
                 throw new ArgumentNullException(nameof(entities), $"{nameof(entities)} cannot be null.");
             }
@@ -877,12 +877,12 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<int> UpdateAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, T>> expression, CancellationToken cancellationToken = default)
         {
-            if (predicate == null)
+            if (predicate is null)
             {
                 throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
             }
 
-            if (expression == null)
+            if (expression is null)
             {
                 throw new ArgumentNullException(nameof(expression), $"{nameof(expression)} cannot be null.");
             }
@@ -894,7 +894,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task<int> RemoveAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            if (predicate == null)
+            if (predicate is null)
             {
                 throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
             }
@@ -930,7 +930,7 @@ namespace EntityFrameworkCore.Repository
 
         public virtual Task ReloadAsync(T entity, CancellationToken cancellationToken = default)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} cannot be null.");
             }

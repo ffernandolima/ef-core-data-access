@@ -25,7 +25,7 @@ namespace EntityFrameworkCore.WebAPI.Swagger.Filters
 
             operation.Deprecated |= apiDescription.IsDeprecated();
 
-            if (operation.Parameters == null)
+            if (operation.Parameters is null)
             {
                 return;
             }
@@ -34,17 +34,17 @@ namespace EntityFrameworkCore.WebAPI.Swagger.Filters
             {
                 var description = apiDescription.ParameterDescriptions.FirstOrDefault(p => string.Equals(p.Name, parameter.Name, StringComparison.OrdinalIgnoreCase));
 
-                if (description == null)
+                if (description is null)
                 {
                     continue;
                 }
 
-                if (parameter.Description == null)
+                if (parameter.Description is null)
                 {
                     parameter.Description = description.ModelMetadata?.Description;
                 }
 
-                if (parameter.Schema.Default == null && description.DefaultValue != null)
+                if (parameter.Schema.Default is null && description.DefaultValue is not null)
                 {
                     parameter.Schema.Default = new OpenApiString(description.DefaultValue.ToString());
                 }

@@ -11,7 +11,7 @@ namespace EntityFrameworkCore.Repository.Extensions
             where TService : class, IRepository
             where TImplementation : class, TService
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services), $"{nameof(services)} cannot be null.");
             }
@@ -49,7 +49,7 @@ namespace EntityFrameworkCore.Repository.Extensions
             where TService : class, IRepository
             where TImplementation : class, TService
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services), $"{nameof(services)} cannot be null.");
             }
