@@ -6,37 +6,34 @@ namespace EntityFrameworkCore.QueryBuilder.Extensions
 {
     internal static class QueryExtensions
     {
-        public static IQuery<T, TResult> ToQuery<T, TResult>(this IQuery<T> sourceQuery, Expression<Func<T, TResult>> selector = null) where T : class
+        public static ISingleResultQuery<T, TResult> ToQuery<T, TResult>(this ISingleResultQuery<T> sourceQuery, Expression<Func<T, TResult>> selector = null) where T : class
         {
-            Query<T, TResult> destinationQuery = null;
-
-            if (sourceQuery is ISingleResultQuery<T>)
+            var destinationQuery = new SingleResultQuery<T, TResult>
             {
-                destinationQuery = new SingleResultQuery<T, TResult>();
-            }
+                IgnoreQueryFilters = sourceQuery.IgnoreQueryFilters,
+                QueryTrackingBehavior = sourceQuery.QueryTrackingBehavior,
+                Predicate = sourceQuery.Predicate,
+                Includes = sourceQuery.Includes,
+                Sortings = sourceQuery.Sortings,
+                Selector = selector
+            };
 
-            if (sourceQuery is IMultipleResultQuery<T> multipleResultQuery)
+            return destinationQuery;
+        }
+
+        public static IMultipleResultQuery<T, TResult> ToQuery<T, TResult>(this IMultipleResultQuery<T> sourceQuery, Expression<Func<T, TResult>> selector = null) where T : class
+        {
+            var destinationQuery = new MultipleResultQuery<T, TResult>
             {
-                destinationQuery = new MultipleResultQuery<T, TResult>
-                {
-                    Paging = multipleResultQuery.Paging,
-                    Topping = multipleResultQuery.Topping
-                };
-            }
-
-            if (destinationQuery != null)
-            {
-                destinationQuery.IgnoreQueryFilters = sourceQuery.IgnoreQueryFilters;
-                destinationQuery.QueryTrackingBehavior = sourceQuery.QueryTrackingBehavior;
-                destinationQuery.Predicate = sourceQuery.Predicate;
-                destinationQuery.Includes = sourceQuery.Includes;
-                destinationQuery.Sortings = sourceQuery.Sortings;
-
-                if (selector != null)
-                {
-                    destinationQuery.Selector = selector;
-                }
-            }
+                IgnoreQueryFilters = sourceQuery.IgnoreQueryFilters,
+                QueryTrackingBehavior = sourceQuery.QueryTrackingBehavior,
+                Predicate = sourceQuery.Predicate,
+                Includes = sourceQuery.Includes,
+                Sortings = sourceQuery.Sortings,
+                Paging = sourceQuery.Paging,
+                Topping = sourceQuery.Topping,
+                Selector = selector
+            };
 
             return destinationQuery;
         }

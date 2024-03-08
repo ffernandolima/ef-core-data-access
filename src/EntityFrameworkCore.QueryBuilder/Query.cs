@@ -1,17 +1,22 @@
-﻿using EntityFrameworkCore.QueryBuilder.Extensions;
-using EntityFrameworkCore.QueryBuilder.Interfaces;
+﻿using EntityFrameworkCore.QueryBuilder.Interfaces;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace EntityFrameworkCore.QueryBuilder
 {
-    public abstract class Query<T> : IQuery<T> where T : class
+    public abstract class Query<T, TBuilder> : IQuery<T>, IQueryBuilder<T, TBuilder>
+        where T : class
+        where TBuilder : IQueryBuilder<T, TBuilder>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected abstract TBuilder BuilderInstance { get; }
+
         #region Ctor
 
         internal Query()
@@ -28,41 +33,45 @@ namespace EntityFrameworkCore.QueryBuilder
         public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
         public Expression<Func<T, T>> Selector { get; internal set; }
 
-        public IQuery<T> UseIgnoreQueryFilters(bool? ignoreQueryFilters)
+        #endregion IQuery<T> Members
+
+        #region IQueryBuilder<T, TBuilder> Members
+
+        public TBuilder UseIgnoreQueryFilters(bool? ignoreQueryFilters)
         {
             IgnoreQueryFilters = ignoreQueryFilters;
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior)
+        public TBuilder UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior)
         {
             QueryTrackingBehavior = queryTrackingBehavior;
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T> AndFilter(Expression<Func<T, bool>> predicate)
+        public TBuilder AndFilter(Expression<Func<T, bool>> predicate)
         {
             if (predicate != null)
             {
                 Predicate = Predicate.And(predicate);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T> OrFilter(Expression<Func<T, bool>> predicate)
+        public TBuilder OrFilter(Expression<Func<T, bool>> predicate)
         {
             if (predicate != null)
             {
                 Predicate = Predicate.Or(predicate);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T> Include(params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes)
+        public TBuilder Include(params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes)
         {
             if (includes != null)
             {
@@ -75,10 +84,10 @@ namespace EntityFrameworkCore.QueryBuilder
                 }
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T> OrderBy(Expression<Func<T, object>> keySelector)
+        public TBuilder OrderBy(Expression<Func<T, object>> keySelector)
         {
             if (keySelector != null)
             {
@@ -91,12 +100,12 @@ namespace EntityFrameworkCore.QueryBuilder
                 Sortings.Add(sorting);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T> ThenBy(Expression<Func<T, object>> keySelector) => OrderBy(keySelector);
+        public TBuilder ThenBy(Expression<Func<T, object>> keySelector) => OrderBy(keySelector);
 
-        public IQuery<T> OrderBy(string fieldName)
+        public TBuilder OrderBy(string fieldName)
         {
             if (!string.IsNullOrWhiteSpace(fieldName))
             {
@@ -109,12 +118,12 @@ namespace EntityFrameworkCore.QueryBuilder
                 Sortings.Add(sorting);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T> ThenBy(string fieldName) => OrderBy(fieldName);
+        public TBuilder ThenBy(string fieldName) => OrderBy(fieldName);
 
-        public IQuery<T> OrderByDescending(Expression<Func<T, object>> keySelector)
+        public TBuilder OrderByDescending(Expression<Func<T, object>> keySelector)
         {
             if (keySelector != null)
             {
@@ -127,12 +136,12 @@ namespace EntityFrameworkCore.QueryBuilder
                 Sortings.Add(sorting);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T> ThenByDescending(Expression<Func<T, object>> keySelector) => OrderByDescending(keySelector);
+        public TBuilder ThenByDescending(Expression<Func<T, object>> keySelector) => OrderByDescending(keySelector);
 
-        public IQuery<T> OrderByDescending(string fieldName)
+        public TBuilder OrderByDescending(string fieldName)
         {
             if (!string.IsNullOrWhiteSpace(fieldName))
             {
@@ -145,28 +154,31 @@ namespace EntityFrameworkCore.QueryBuilder
                 Sortings.Add(sorting);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T> ThenByDescending(string fieldName) => OrderByDescending(fieldName);
+        public TBuilder ThenByDescending(string fieldName) => OrderByDescending(fieldName);
 
-        public IQuery<T> Select(Expression<Func<T, T>> selector)
+        public TBuilder Select(Expression<Func<T, T>> selector)
         {
             if (selector != null)
             {
                 Selector = selector;
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> Select<TResult>(Expression<Func<T, TResult>> selector) => this.ToQuery(selector);
-
-        #endregion IQuery<T> Members
+        #endregion IQueryBuilder<T, TBuilder> Members
     }
 
-    public abstract class Query<T, TResult> : IQuery<T, TResult> where T : class
+    public abstract class Query<T, TResult, TBuilder> : IQuery<T, TResult>, IQueryBuilder<T, TResult, TBuilder>
+        where T : class
+        where TBuilder : IQueryBuilder<T, TResult, TBuilder>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected abstract TBuilder BuilderInstance { get; }
+
         #region Ctor
 
         internal Query()
@@ -183,41 +195,45 @@ namespace EntityFrameworkCore.QueryBuilder
         public IList<ISorting<T>> Sortings { get; internal set; } = new List<ISorting<T>>();
         public Expression<Func<T, TResult>> Selector { get; internal set; }
 
-        public IQuery<T, TResult> UseIgnoreQueryFilters(bool? ignoreQueryFilters)
+        #endregion IQuery<T, TResult> Members
+
+        #region IQueryBuilder<T, TResult, TBuilder> Members
+
+        public TBuilder UseIgnoreQueryFilters(bool? ignoreQueryFilters)
         {
             IgnoreQueryFilters = ignoreQueryFilters;
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior)
+        public TBuilder UseQueryTrackingBehavior(QueryTrackingBehavior? queryTrackingBehavior)
         {
             QueryTrackingBehavior = queryTrackingBehavior;
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> AndFilter(Expression<Func<T, bool>> predicate)
+        public TBuilder AndFilter(Expression<Func<T, bool>> predicate)
         {
             if (predicate != null)
             {
                 Predicate = Predicate.And(predicate);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> OrFilter(Expression<Func<T, bool>> predicate)
+        public TBuilder OrFilter(Expression<Func<T, bool>> predicate)
         {
             if (predicate != null)
             {
                 Predicate = Predicate.Or(predicate);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> Include(params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes)
+        public TBuilder Include(params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes)
         {
             if (includes != null)
             {
@@ -230,10 +246,10 @@ namespace EntityFrameworkCore.QueryBuilder
                 }
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> OrderBy(Expression<Func<T, object>> keySelector)
+        public TBuilder OrderBy(Expression<Func<T, object>> keySelector)
         {
             if (keySelector != null)
             {
@@ -246,12 +262,12 @@ namespace EntityFrameworkCore.QueryBuilder
                 Sortings.Add(sorting);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> ThenBy(Expression<Func<T, object>> keySelector) => OrderBy(keySelector);
+        public TBuilder ThenBy(Expression<Func<T, object>> keySelector) => OrderBy(keySelector);
 
-        public IQuery<T, TResult> OrderBy(string fieldName)
+        public TBuilder OrderBy(string fieldName)
         {
             if (!string.IsNullOrWhiteSpace(fieldName))
             {
@@ -264,12 +280,12 @@ namespace EntityFrameworkCore.QueryBuilder
                 Sortings.Add(sorting);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> ThenBy(string fieldName) => OrderBy(fieldName);
+        public TBuilder ThenBy(string fieldName) => OrderBy(fieldName);
 
-        public IQuery<T, TResult> OrderByDescending(Expression<Func<T, object>> keySelector)
+        public TBuilder OrderByDescending(Expression<Func<T, object>> keySelector)
         {
             if (keySelector != null)
             {
@@ -282,12 +298,12 @@ namespace EntityFrameworkCore.QueryBuilder
                 Sortings.Add(sorting);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> ThenByDescending(Expression<Func<T, object>> keySelector) => OrderByDescending(keySelector);
+        public TBuilder ThenByDescending(Expression<Func<T, object>> keySelector) => OrderByDescending(keySelector);
 
-        public IQuery<T, TResult> OrderByDescending(string fieldName)
+        public TBuilder OrderByDescending(string fieldName)
         {
             if (!string.IsNullOrWhiteSpace(fieldName))
             {
@@ -300,21 +316,21 @@ namespace EntityFrameworkCore.QueryBuilder
                 Sortings.Add(sorting);
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        public IQuery<T, TResult> ThenByDescending(string fieldName) => OrderByDescending(fieldName);
+        public TBuilder ThenByDescending(string fieldName) => OrderByDescending(fieldName);
 
-        public IQuery<T, TResult> Select(Expression<Func<T, TResult>> selector)
+        public TBuilder Select(Expression<Func<T, TResult>> selector)
         {
             if (selector != null)
             {
                 Selector = selector;
             }
 
-            return this;
+            return BuilderInstance;
         }
 
-        #endregion IQuery<T, TResult> Members
+        #endregion IQueryBuilder<T, TResult, TBuilder> Members
     }
 }
