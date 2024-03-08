@@ -9,7 +9,7 @@ namespace EntityFrameworkCore.UnitOfWork.Extensions
     {
         public static TService TryGetService<TService>(this IInfrastructure<IServiceProvider> accessor) where TService : class
         {
-            if (accessor == null)
+            if (accessor is null)
             {
                 throw new ArgumentNullException(nameof(accessor), $"{nameof(accessor)} cannot be null.");
             }
@@ -22,7 +22,7 @@ namespace EntityFrameworkCore.UnitOfWork.Extensions
 
         public static IServiceProvider TryGetApplicationServiceProvider(this IInfrastructure<IServiceProvider> accessor)
         {
-            if (accessor == null)
+            if (accessor is null)
             {
                 throw new ArgumentNullException(nameof(accessor), $"{nameof(accessor)} cannot be null.");
             }

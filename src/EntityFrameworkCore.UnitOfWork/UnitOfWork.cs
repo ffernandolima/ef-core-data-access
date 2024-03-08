@@ -100,7 +100,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         #region ISyncUnitOfWork Members
 
-        public bool HasTransaction() => _transaction != null;
+        public bool HasTransaction() => _transaction is not null;
 
         public bool HasChanges()
         {
@@ -171,12 +171,12 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public void UseTransaction(DbTransaction transaction, Guid? transactionId = null)
         {
-            if (transaction == null)
+            if (transaction is null)
             {
                 throw new ArgumentNullException(nameof(transaction), $"{nameof(transaction)} cannot be null.");
             }
 
-            if (_transaction != null)
+            if (_transaction is not null)
             {
                 throw new InvalidOperationException("There's already an active transaction.");
             }
@@ -186,7 +186,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public void EnlistTransaction(Transaction transaction)
         {
-            if (transaction == null)
+            if (transaction is null)
             {
                 throw new ArgumentNullException(nameof(transaction), $"{nameof(transaction)} cannot be null.");
             }
@@ -198,7 +198,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public void BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            if (_transaction != null)
+            if (_transaction is not null)
             {
                 throw new InvalidOperationException("There's already an active transaction.");
             }
@@ -210,7 +210,7 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             try
             {
-                if (_transaction == null)
+                if (_transaction is null)
                 {
                     throw new InvalidOperationException("There's no active transaction.");
                 }
@@ -301,12 +301,12 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public void TrackGraph(object rootEntity, Action<EntityEntryGraphNode> callback)
         {
-            if (rootEntity == null)
+            if (rootEntity is null)
             {
                 throw new ArgumentNullException(nameof(rootEntity), $"{nameof(rootEntity)} cannot be null.");
             }
 
-            if (callback == null)
+            if (callback is null)
             {
                 throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
             }
@@ -316,12 +316,12 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public void TrackGraph<TState>(object rootEntity, TState state, Func<EntityEntryGraphNode<TState>, bool> callback)
         {
-            if (rootEntity == null)
+            if (rootEntity is null)
             {
                 throw new ArgumentNullException(nameof(rootEntity), $"{nameof(rootEntity)} cannot be null.");
             }
 
-            if (callback == null)
+            if (callback is null)
             {
                 throw new ArgumentNullException(nameof(callback), $"{nameof(callback)} cannot be null.");
             }
@@ -364,12 +364,12 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public async Task UseTransactionAsync(DbTransaction transaction, Guid? transactionId = null, CancellationToken cancellationToken = default)
         {
-            if (transaction == null)
+            if (transaction is null)
             {
                 throw new ArgumentNullException(nameof(transaction), $"{nameof(transaction)} cannot be null.");
             }
 
-            if (_transaction != null)
+            if (_transaction is not null)
             {
                 throw new InvalidOperationException("There's already an active transaction.");
             }
@@ -381,7 +381,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
         {
-            if (_transaction != null)
+            if (_transaction is not null)
             {
                 throw new InvalidOperationException("There's already an active transaction.");
             }
@@ -393,7 +393,7 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             try
             {
-                if (_transaction == null)
+                if (_transaction is null)
                 {
                     throw new InvalidOperationException("There's no active transaction.");
                 }
@@ -419,7 +419,7 @@ namespace EntityFrameworkCore.UnitOfWork
         {
             try
             {
-                if (_transaction != null)
+                if (_transaction is not null)
                 {
                     await _transaction.RollbackAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
                 }
@@ -562,7 +562,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         private void DisposeTransaction()
         {
-            if (_transaction != null)
+            if (_transaction is not null)
             {
                 _transaction.Dispose();
                 _transaction = null;
@@ -571,7 +571,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         private async Task DisposeTransactionAsync()
         {
-            if (_transaction != null)
+            if (_transaction is not null)
             {
                 await _transaction.DisposeAsync().ConfigureAwait(continueOnCapturedContext: false);
                 _transaction = null;
@@ -595,7 +595,7 @@ namespace EntityFrameworkCore.UnitOfWork
                     if (IsRelational())
                     {
                         var connection = DbContext.Database.GetDbConnection();
-                        if (connection != null && connection.State != ConnectionState.Closed)
+                        if (connection is not null && connection.State != ConnectionState.Closed)
                         {
                             connection.Close();
                         }
@@ -657,7 +657,7 @@ namespace EntityFrameworkCore.UnitOfWork
 
         private static T CreateDbContext(IDbContextFactory<T> dbContextFactory)
         {
-            if (dbContextFactory == null)
+            if (dbContextFactory is null)
             {
                 throw new ArgumentNullException(nameof(dbContextFactory), $"{nameof(dbContextFactory)} cannot be null.");
             }

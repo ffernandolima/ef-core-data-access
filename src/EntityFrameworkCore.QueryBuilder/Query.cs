@@ -69,7 +69,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder AndFilter(Expression<Func<T, bool>> predicate)
         {
-            if (predicate != null)
+            if (predicate is not null)
             {
                 Predicate = Predicate.And(predicate);
             }
@@ -79,7 +79,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder OrFilter(Expression<Func<T, bool>> predicate)
         {
-            if (predicate != null)
+            if (predicate is not null)
             {
                 Predicate = Predicate.Or(predicate);
             }
@@ -89,11 +89,11 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder Include(params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes)
         {
-            if (includes != null)
+            if (includes is not null)
             {
                 foreach (var include in includes)
                 {
-                    if (include != null)
+                    if (include is not null)
                     {
                         Includes.Add(include);
                     }
@@ -105,7 +105,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder OrderBy(Expression<Func<T, object>> keySelector)
         {
-            if (keySelector != null)
+            if (keySelector is not null)
             {
                 var sorting = new Sorting<T>
                 {
@@ -141,7 +141,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder OrderByDescending(Expression<Func<T, object>> keySelector)
         {
-            if (keySelector != null)
+            if (keySelector is not null)
             {
                 var sorting = new Sorting<T>
                 {
@@ -177,7 +177,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder Select(Expression<Func<T, T>> selector)
         {
-            if (selector != null)
+            if (selector is not null)
             {
                 Selector = selector;
             }
@@ -247,7 +247,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder AndFilter(Expression<Func<T, bool>> predicate)
         {
-            if (predicate != null)
+            if (predicate is not null)
             {
                 Predicate = Predicate.And(predicate);
             }
@@ -257,7 +257,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder OrFilter(Expression<Func<T, bool>> predicate)
         {
-            if (predicate != null)
+            if (predicate is not null)
             {
                 Predicate = Predicate.Or(predicate);
             }
@@ -267,11 +267,11 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder Include(params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes)
         {
-            if (includes != null)
+            if (includes is not null)
             {
                 foreach (var include in includes)
                 {
-                    if (include != null)
+                    if (include is not null)
                     {
                         Includes.Add(include);
                     }
@@ -283,7 +283,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder OrderBy(Expression<Func<T, object>> keySelector)
         {
-            if (keySelector != null)
+            if (keySelector is not null)
             {
                 var sorting = new Sorting<T>
                 {
@@ -319,7 +319,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder OrderByDescending(Expression<Func<T, object>> keySelector)
         {
-            if (keySelector != null)
+            if (keySelector is not null)
             {
                 var sorting = new Sorting<T>
                 {
@@ -355,7 +355,7 @@ namespace EntityFrameworkCore.QueryBuilder
 
         public TBuilder Select(Expression<Func<T, TResult>> selector)
         {
-            if (selector != null)
+            if (selector is not null)
             {
                 Selector = selector;
             }
