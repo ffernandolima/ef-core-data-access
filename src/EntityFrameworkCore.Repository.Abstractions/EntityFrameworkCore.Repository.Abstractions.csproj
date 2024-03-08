@@ -17,7 +17,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;Repository;Abstractions</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>7.0.12</Version>
+    <Version>7.0.13</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
