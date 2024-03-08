@@ -11,9 +11,7 @@ namespace EntityFrameworkCore.QueryBuilder.Extensions
             var destinationQuery = new SingleResultQuery<T, TResult>
             {
                 IgnoreQueryFilters = sourceQuery.IgnoreQueryFilters,
-                IgnoreAutoIncludes = sourceQuery.IgnoreAutoIncludes,
                 QueryTrackingBehavior = sourceQuery.QueryTrackingBehavior,
-                QuerySplittingBehavior = sourceQuery.QuerySplittingBehavior,
                 Predicate = sourceQuery.Predicate,
                 Includes = sourceQuery.Includes,
                 Sortings = sourceQuery.Sortings,
@@ -28,9 +26,7 @@ namespace EntityFrameworkCore.QueryBuilder.Extensions
             var destinationQuery = new MultipleResultQuery<T, TResult>
             {
                 IgnoreQueryFilters = sourceQuery.IgnoreQueryFilters,
-                IgnoreAutoIncludes = sourceQuery.IgnoreAutoIncludes,
                 QueryTrackingBehavior = sourceQuery.QueryTrackingBehavior,
-                QuerySplittingBehavior = sourceQuery.QuerySplittingBehavior,
                 Predicate = sourceQuery.Predicate,
                 Includes = sourceQuery.Includes,
                 Sortings = sourceQuery.Sortings,
