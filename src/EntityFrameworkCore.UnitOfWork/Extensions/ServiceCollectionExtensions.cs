@@ -10,7 +10,7 @@ namespace EntityFrameworkCore.UnitOfWork.Extensions
     {
         public static IServiceCollection AddUnitOfWork(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services), $"{nameof(services)} cannot be null.");
             }
@@ -44,7 +44,7 @@ namespace EntityFrameworkCore.UnitOfWork.Extensions
 
         public static IServiceCollection AddUnitOfWork<T>(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped) where T : DbContext
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services), $"{nameof(services)} cannot be null.");
             }

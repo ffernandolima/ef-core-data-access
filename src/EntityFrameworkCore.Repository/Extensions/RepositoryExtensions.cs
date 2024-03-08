@@ -11,7 +11,7 @@ namespace EntityFrameworkCore.Repository.Extensions
             {
                 foreach (var dbEntityEntry in e.Entry.Context.ChangeTracker.Entries())
                 {
-                    if (dbEntityEntry.Entity != null)
+                    if (dbEntityEntry.Entity is not null)
                     {
                         if (dbEntityEntry.State == EntityState.Unchanged)
                         {

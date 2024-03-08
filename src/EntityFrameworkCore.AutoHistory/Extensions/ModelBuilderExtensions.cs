@@ -14,7 +14,7 @@ namespace EntityFrameworkCore.AutoHistory.Extensions
 
         public static ModelBuilder EnableAutoHistory<TAutoHistory>(this ModelBuilder modelBuilder, Action<AutoHistoryOptions> configure) where TAutoHistory : AutoHistory
         {
-            if (modelBuilder == null)
+            if (modelBuilder is null)
             {
                 throw new ArgumentNullException(nameof(modelBuilder), $"{nameof(modelBuilder)} cannot be null.");
             }
