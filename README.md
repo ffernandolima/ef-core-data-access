@@ -8,9 +8,9 @@ If you like or are using this project to learn or start your solution, please gi
 
 ## Status
 
-[![build-and-tests Workflow Status](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-tests.yml/badge.svg?branch=ef-core-8)](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-tests.yml?branch=ef-core-8)
+[![build-and-tests Workflow Status](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-tests.yml/badge.svg?branch=ef-core-9)](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-tests.yml?branch=ef-core-9)
 
-[![build-and-publish Workflow Status](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-publish.yml/badge.svg?branch=ef-core-8)](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-publish.yml?branch=ef-core-8)
+[![build-and-publish Workflow Status](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-publish.yml/badge.svg?branch=ef-core-9)](https://github.com/ffernandolima/ef-core-data-access/actions/workflows/build-and-publish.yml?branch=ef-core-9)
 
  | Package | NuGet |
  | ------- | ------- |
@@ -286,7 +286,7 @@ public void DeleteBlog()
 
 The operations above are also available as async.
 
-Please check some available samples [here](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-8/samples)
+Please check some available samples [here](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-9/samples)
 
 
 ####  The following code demonstrates basic usage of AutoHistory utilities

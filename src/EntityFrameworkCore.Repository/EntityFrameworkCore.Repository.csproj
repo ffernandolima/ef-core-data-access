@@ -12,7 +12,7 @@
     <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
     <Description>Provides the Repository pattern for Microsoft.EntityFrameworkCore.</Description>
     <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-6</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-9</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;Repository</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
