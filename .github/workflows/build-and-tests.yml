@@ -2,9 +2,9 @@ name: build-and-tests
 
 on:
   push:
-     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7 ]
+     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7, ef-core-8, ef-core-9 ]
   pull_request:
-     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7 ]
+     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7, ef-core-8, ef-core-9 ]
 
 jobs:
   build:
@@ -12,27 +12,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Setup .NET Core 2.2
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 2.2.x
     - name: Setup .NET Core 3.1
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 3.1.x
     - name: Setup .NET 5.0
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 5.0.x
     - name: Setup .NET 6.0
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 6.0.x
     - name: Setup .NET 7.0
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 7.0.x
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Setup .NET 9.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
