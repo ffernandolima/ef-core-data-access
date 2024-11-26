@@ -13,7 +13,7 @@
     <Copyright>Copyright © Lima Technology Services;Fernando Luiz de Lima</Copyright>
     <Description>Provides UnitOfWork abstractions in order to implement UnitOfWork pattern for Microsoft.EntityFrameworkCore.</Description>
     <PackageProjectUrl>https://github.com/ffernandolima/ef-core-data-access</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-6</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-8</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>EntityFrameworkCore;Entity Framework Core;entity-framework-core;EFCore;EF;Data;O/RM;UnitOfWork;Unit Of Work;unit-of-work;Abstractions</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
