@@ -14,28 +14,28 @@ If you like or are using this project to learn or start your solution, please gi
 
  | Package | NuGet |
  | ------- | ------- |
- | EntityFrameworkCore.Data.QueryBuilder.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v8.0.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder.Abstractions/8.0.2) |
- | EntityFrameworkCore.Data.Repository.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v8.0.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository.Abstractions/8.0.2) |
- | EntityFrameworkCore.Data.UnitOfWork.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v8.0.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork.Abstractions/8.0.2) |
+ | EntityFrameworkCore.Data.QueryBuilder.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v9.0.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder.Abstractions/9.0.0) |
+ | EntityFrameworkCore.Data.Repository.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v9.0.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository.Abstractions/9.0.0) |
+ | EntityFrameworkCore.Data.UnitOfWork.Abstractions | [![Nuget](https://img.shields.io/badge/nuget-v9.0.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork.Abstractions)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork.Abstractions/9.0.0) |
  | ------- | ------- |
- | EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v8.0.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/8.0.2) |
- | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v8.0.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/8.0.2) |
- | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v8.0.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/8.0.2) |
- | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v8.0.2-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/8.0.2) |
+ | EntityFrameworkCore.Data.AutoHistory | [![Nuget](https://img.shields.io/badge/nuget-v9.0.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.AutoHistory)](https://www.nuget.org/packages/EntityFrameworkCore.Data.AutoHistory/9.0.0) |
+ | EntityFrameworkCore.Data.QueryBuilder | [![Nuget](https://img.shields.io/badge/nuget-v9.0.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.QueryBuilder)](https://www.nuget.org/packages/EntityFrameworkCore.Data.QueryBuilder/9.0.0) |
+ | EntityFrameworkCore.Data.Repository | [![Nuget](https://img.shields.io/badge/nuget-v9.0.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.Repository)](https://www.nuget.org/packages/EntityFrameworkCore.Data.Repository/9.0.0) |
+ | EntityFrameworkCore.Data.UnitOfWork | [![Nuget](https://img.shields.io/badge/nuget-v9.0.0-blue) ![Nuget](https://img.shields.io/nuget/dt/EntityFrameworkCore.Data.UnitOfWork)](https://www.nuget.org/packages/EntityFrameworkCore.Data.UnitOfWork/9.0.0) |
 
 ## Installation
 
 EntityFrameworkCore.DataAccess is available on Nuget.
 
 ```
-Install-Package EntityFrameworkCore.Data.QueryBuilder.Abstractions -Version 8.0.2
-Install-Package EntityFrameworkCore.Data.Repository.Abstractions -Version 8.0.2
-Install-Package EntityFrameworkCore.Data.UnitOfWork.Abstractions -Version 8.0.2
+Install-Package EntityFrameworkCore.Data.QueryBuilder.Abstractions -Version 9.0.0
+Install-Package EntityFrameworkCore.Data.Repository.Abstractions -Version 9.0.0
+Install-Package EntityFrameworkCore.Data.UnitOfWork.Abstractions -Version 9.0.0
 
-Install-Package EntityFrameworkCore.Data.AutoHistory -Version 8.0.2
-Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 8.0.2
-Install-Package EntityFrameworkCore.Data.Repository -Version 8.0.2
-Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 8.0.2
+Install-Package EntityFrameworkCore.Data.AutoHistory -Version 9.0.0
+Install-Package EntityFrameworkCore.Data.QueryBuilder -Version 9.0.0
+Install-Package EntityFrameworkCore.Data.Repository -Version 9.0.0
+Install-Package EntityFrameworkCore.Data.UnitOfWork -Version 9.0.0
 ```
 
 P.S.: EntityFrameworkCore.Data.UnitOfWork depends on the other packages, so installing this package is enough.
