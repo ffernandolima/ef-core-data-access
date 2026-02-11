@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
+using System.Text.Json.Nodes;
 
 namespace EntityFrameworkCore.WebAPI.Swagger.Filters
 {
@@ -30,7 +30,7 @@ namespace EntityFrameworkCore.WebAPI.Swagger.Filters
                 return;
             }
 
-            foreach (var parameter in operation.Parameters)
+            foreach (var parameter in operation.Parameters.OfType<OpenApiParameter>())
             {
                 var description = apiDescription.ParameterDescriptions.FirstOrDefault(p => string.Equals(p.Name, parameter.Name, StringComparison.OrdinalIgnoreCase));
 
@@ -44,9 +44,9 @@ namespace EntityFrameworkCore.WebAPI.Swagger.Filters
                     parameter.Description = description.ModelMetadata?.Description;
                 }
 
-                if (parameter.Schema.Default is null && description.DefaultValue is not null)
+                if (parameter.Schema is OpenApiSchema schema && schema.Default is null && description.DefaultValue is not null)
                 {
-                    parameter.Schema.Default = new OpenApiString(description.DefaultValue.ToString());
+                    schema.Default = JsonValue.Create(description.DefaultValue.ToString());
                 }
 
                 parameter.Required |= description.IsRequired;

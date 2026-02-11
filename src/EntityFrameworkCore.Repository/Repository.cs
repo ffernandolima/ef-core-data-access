@@ -353,19 +353,19 @@ namespace EntityFrameworkCore.Repository
             return entity;
         }
 
-        public virtual int Update(Expression<Func<T, bool>> predicate, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> expression)
+        public virtual int Update(Expression<Func<T, bool>> predicate, Action<UpdateSettersBuilder<T>> setPropertyCalls)
         {
             if (predicate is null)
             {
                 throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
             }
 
-            if (expression is null)
+            if (setPropertyCalls is null)
             {
-                throw new ArgumentNullException(nameof(expression), $"{nameof(expression)} cannot be null.");
+                throw new ArgumentNullException(nameof(setPropertyCalls), $"{nameof(setPropertyCalls)} cannot be null.");
             }
 
-            var result = DbSet.Where(predicate).ExecuteUpdate(expression);
+            var result = DbSet.Where(predicate).ExecuteUpdate(setPropertyCalls);
 
             return result;
         }
@@ -882,19 +882,19 @@ namespace EntityFrameworkCore.Repository
             return DbSet.AddRangeAsync(entities, cancellationToken);
         }
 
-        public virtual Task<int> UpdateAsync(Expression<Func<T, bool>> predicate, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> expression, CancellationToken cancellationToken = default)
+        public virtual Task<int> UpdateAsync(Expression<Func<T, bool>> predicate, Action<UpdateSettersBuilder<T>> setPropertyCalls, CancellationToken cancellationToken = default)
         {
             if (predicate is null)
             {
                 throw new ArgumentNullException(nameof(predicate), $"{nameof(predicate)} cannot be null.");
             }
 
-            if (expression is null)
+            if (setPropertyCalls is null)
             {
-                throw new ArgumentNullException(nameof(expression), $"{nameof(expression)} cannot be null.");
+                throw new ArgumentNullException(nameof(setPropertyCalls), $"{nameof(setPropertyCalls)} cannot be null.");
             }
 
-            var result = DbSet.Where(predicate).ExecuteUpdateAsync(expression, cancellationToken);
+            var result = DbSet.Where(predicate).ExecuteUpdateAsync(setPropertyCalls, cancellationToken);
 
             return result;
         }
