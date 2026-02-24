@@ -46,7 +46,7 @@ namespace EntityFrameworkCore.WebAPI.Swagger.Filters
 
                 if (parameter.Schema is OpenApiSchema schema && schema.Default is null && description.DefaultValue is not null)
                 {
-                    schema.Default = JsonValue.Create(description.DefaultValue.ToString());
+                    schema.Default = JsonValue.Create(description.DefaultValue);
                 }
 
                 parameter.Required |= description.IsRequired;
