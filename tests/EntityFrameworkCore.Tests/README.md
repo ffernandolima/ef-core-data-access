@@ -86,8 +86,8 @@ The In-Memory database provider does **not support** several EF Core features:
 
 Each test uses:
 - **Scoped DbContext** - Fresh context per test
-- **Transactional behavior** - Tests are isolated
-- **Shared container** - Single PostgreSQL instance for test run (faster)
+- **Isolated database state** - Tests run against a clean PostgreSQL instance so data does not leak between tests
+- **Per-test container lifecycle** - Testcontainers starts a new PostgreSQL container for the tests instead of using a long-lived shared instance
 
 ## Troubleshooting
 
