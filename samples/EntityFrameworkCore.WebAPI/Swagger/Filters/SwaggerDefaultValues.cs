@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi;
-using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
@@ -40,10 +39,7 @@ namespace EntityFrameworkCore.WebAPI.Swagger.Filters
                     continue;
                 }
 
-                if (parameter.Description is null)
-                {
-                    parameter.Description = description.ModelMetadata?.Description;
-                }
+                parameter.Description ??= description.ModelMetadata?.Description;
 
                 if (parameter.Schema is OpenApiSchema schema && schema.Default is null && description.DefaultValue is not null)
                 {
