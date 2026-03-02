@@ -11,13 +11,13 @@ This project contains unit tests and integration tests for the Entity Framework 
 - **Coverage**: Standard CRUD operations, queries, filtering, paging
 
 ### 2. Integration Tests (PostgreSQL + Testcontainers)
-- **File**: `RepositoryIntegrationTests.cs`
+- **File**: `DataAccessIntegrationTests.cs`
 - **Database**: PostgreSQL 17 (via Docker container)
-- **Requirements**: **Docker Desktop must be running**
-- **Coverage**: 
+- **Requirements**: **Docker Desktop must be running** (tests are skipped automatically if unavailable)
+- **Coverage**: Data access layer (Unit of Work + Repository)
   - ExecuteUpdate/ExecuteUpdateAsync operations
   - Bulk updates with property setters
-  - Add/AddAsync operations
+  - Add/AddAsync operations via Unit of Work
   - Entity-based updates
 
 ## ⚠️ Running Integration Tests
@@ -45,15 +45,15 @@ This project contains unit tests and integration tests for the Entity Framework 
 # Run all tests (includes in-memory and integration tests)
 dotnet test
 
-# If Docker is not running, integration tests will fail with:
-# "Docker is either not running or misconfigured"
+# If Docker is not running, integration tests will be skipped automatically
+# with a clear message. In-memory tests will still run.
 ```
 
 ### Running Only In-Memory Tests
 
 ```bash
 # Run only tests that don't require Docker
-dotnet test --filter "FullyQualifiedName!~RepositoryIntegrationTests"
+dotnet test --filter "FullyQualifiedName!~DataAccessIntegrationTests"
 ```
 
 ### Running Only Integration Tests
@@ -63,7 +63,7 @@ dotnet test --filter "FullyQualifiedName!~RepositoryIntegrationTests"
 docker ps
 
 # Run only integration tests
-dotnet test --filter "FullyQualifiedName~RepositoryIntegrationTests"
+dotnet test --filter "FullyQualifiedName~DataAccessIntegrationTests"
 ```
 
 ## Why Integration Tests?
@@ -85,18 +85,22 @@ The In-Memory database provider does **not support** several EF Core features:
 ## Test Isolation
 
 Each test uses:
-- **Scoped DbContext** - Fresh context per test
-- **Isolated database state** - Tests run against a clean PostgreSQL instance so data does not leak between tests
-- **Per-test container lifecycle** - Testcontainers starts a new PostgreSQL container for the tests instead of using a long-lived shared instance
+- **Scoped DbContext** - Fresh context per test via `CreateScope()`
+- **Shared PostgreSQL container** - A single container is shared across all integration tests (via `PostgreSqlFixture`), improving speed and reducing flakiness
+- **Seeded data** - Tests run against a database with consistent seed data; each test uses its own scoped Unit of Work and Repository
 
 ## Troubleshooting
 
-### "Docker is either not running or misconfigured"
+### Integration tests are being skipped
+
+**Cause**: Docker is not available or not running. Integration tests automatically skip when Docker/Testcontainers cannot start a container.
 
 **Solution**: Start Docker Desktop and verify it's running:
 ```bash
 docker ps
 ```
+
+Then re-run the tests. They will execute instead of being skipped.
 
 ### "Cannot connect to Docker daemon"
 

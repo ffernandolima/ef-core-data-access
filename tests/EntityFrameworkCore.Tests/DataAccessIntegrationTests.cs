@@ -1,13 +1,8 @@
-using EntityFrameworkCore.Data;
 using EntityFrameworkCore.Models;
-using EntityFrameworkCore.UnitOfWork.Extensions;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Testcontainers.PostgreSql;
 using Xunit;
 
 // ========================================================================================================
@@ -23,20 +18,20 @@ using Xunit;
 // Why Docker is needed:
 //   - These tests use Testcontainers to spin up a real PostgreSQL database
 //   - EF Core's In-Memory provider doesn't support ExecuteUpdate/ExecuteUpdateAsync
-//   - Real database ensures bulk update operations work correctly
+//   - A real database ensures bulk update operations and persistence work correctly
 //
 // To run these tests:
-//   dotnet test --filter "FullyQualifiedName~RepositoryIntegrationTests"
+//   dotnet test --filter "FullyQualifiedName~DataAccessIntegrationTests"
 //
 // To skip these tests (run only in-memory tests):
-//   dotnet test --filter "FullyQualifiedName!~RepositoryIntegrationTests"
+//   dotnet test --filter "FullyQualifiedName!~DataAccessIntegrationTests"
 // ========================================================================================================
 
 namespace EntityFrameworkCore.Tests
 {
     /// <summary>
-    /// Integration tests for Repository using PostgreSQL via Testcontainers.
-    /// These tests verify ExecuteUpdate/ExecuteUpdateAsync functionality which doesn't work with InMemory provider.
+    /// Integration tests for the data access layer (Unit of Work + Repository) using PostgreSQL via Testcontainers.
+    /// These tests verify the full stack including ExecuteUpdate/ExecuteUpdateAsync, which the In-Memory provider does not support.
     /// </summary>
     /// <remarks>
     /// <para><strong>⚠️ DOCKER REQUIRED ⚠️</strong></para>
@@ -54,7 +49,7 @@ namespace EntityFrameworkCore.Tests
     /// <para><strong>To run these tests:</strong></para>
     /// <code>
     /// # Start Docker Desktop first, then:
-    /// dotnet test --filter FullyQualifiedName~RepositoryIntegrationTests
+    /// dotnet test --filter FullyQualifiedName~DataAccessIntegrationTests
     /// </code>
     /// <para>
     /// If Docker is not available, these tests will be skipped automatically with a clear error message.
@@ -62,78 +57,31 @@ namespace EntityFrameworkCore.Tests
     /// will still run without Docker.
     /// </para>
     /// </remarks>
-    public class RepositoryIntegrationTests : IAsyncLifetime
+    [Collection("PostgreSql")]
+    public class DataAccessIntegrationTests
     {
-        private readonly PostgreSqlContainer _postgresContainer;
-        private IServiceProvider _serviceProvider;
-        private IUnitOfWork _unitOfWork;
+        private readonly PostgreSqlFixture _fixture;
 
-        public RepositoryIntegrationTests()
+        public DataAccessIntegrationTests(PostgreSqlFixture fixture)
         {
-            _postgresContainer = new PostgreSqlBuilder()
-                .WithImage("postgres:17-alpine")
-                .WithDatabase("blogging_test")
-                .WithUsername("testuser")
-                .WithPassword("testpass")
-                .Build();
+            _fixture = fixture;
         }
 
-        public async Task InitializeAsync()
-        {
-            // Start the PostgreSQL container
-            await _postgresContainer.StartAsync();
-
-            // Setup services
-            var services = new ServiceCollection();
-
-            services.AddDbContext<BloggingContext>(options =>
-                options.UseNpgsql(_postgresContainer.GetConnectionString()),
-                ServiceLifetime.Scoped);
-
-            services.AddScoped<DbContext, BloggingContext>();
-            services.AddUnitOfWork();
-            services.AddUnitOfWork<BloggingContext>();
-
-            _serviceProvider = services.BuildServiceProvider();
-            _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork>();
-
-            // Create database schema and seed data
-            using var scope = _serviceProvider.CreateScope();
-            var scopedUnitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-            var context = scope.ServiceProvider.GetRequiredService<BloggingContext>();
-            await context.Database.EnsureCreatedAsync();
-            await SeedDataAsync(scopedUnitOfWork);
-        }
-
-        public async Task DisposeAsync()
-        {
-            // Cleanup
-            if (_serviceProvider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-
-            await _postgresContainer.DisposeAsync();
-        }
-
-        private async Task SeedDataAsync(IUnitOfWork unitOfWork)
-        {
-            var repository = unitOfWork.Repository<Blog>();
-            var blogs = Seeder.SeedBlogs();
-            await repository.AddRangeAsync(blogs);
-            await unitOfWork.SaveChangesAsync();
-        }
+        private void SkipIfDockerUnavailable() => Skip.If(_fixture.SkipReason is not null, _fixture.SkipReason ?? "Docker unavailable");
 
         #region Add/Insert Tests
 
-        [Fact]
+        [SkippableFact]
         public async Task AddAsync_ShouldAddNewBlog()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
-            
+
             var newBlog = new Blog
             {
                 Title = "New Integration Blog",
@@ -154,19 +102,22 @@ namespace EntityFrameworkCore.Tests
             Assert.Equal(51, count); // 50 seeded + 1 new
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task AddRangeAsync_ShouldAddMultipleBlogs()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
-            
+
             var newBlogs = new List<Blog>
             {
-                new Blog { Title = "Integration Blog 1", Url = "/integration-blog-1", TypeId = 1 },
-                new Blog { Title = "Integration Blog 2", Url = "/integration-blog-2", TypeId = 2 },
-                new Blog { Title = "Integration Blog 3", Url = "/integration-blog-3", TypeId = 1 }
+                new() { Title = "Integration Blog 1", Url = "/integration-blog-1", TypeId = 1 },
+                new() { Title = "Integration Blog 2", Url = "/integration-blog-2", TypeId = 2 },
+                new() { Title = "Integration Blog 3", Url = "/integration-blog-3", TypeId = 1 }
             };
 
             // Act
@@ -178,14 +129,17 @@ namespace EntityFrameworkCore.Tests
             Assert.Equal(53, count); // 50 seeded + 3 new
         }
 
-        [Fact]
+        [SkippableFact]
         public void Add_ShouldAddNewBlog_Sync()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
-            
+
             var newBlog = new Blog
             {
                 Title = "New Sync Integration Blog",
@@ -206,19 +160,22 @@ namespace EntityFrameworkCore.Tests
             Assert.Equal(51, count); // 50 seeded + 1 new
         }
 
-        [Fact]
+        [SkippableFact]
         public void AddRange_ShouldAddMultipleBlogs_Sync()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
-            
+
             var newBlogs = new List<Blog>
             {
-                new Blog { Title = "Sync Integration Blog 1", Url = "/sync-int-blog-1", TypeId = 1 },
-                new Blog { Title = "Sync Integration Blog 2", Url = "/sync-int-blog-2", TypeId = 2 },
-                new Blog { Title = "Sync Integration Blog 3", Url = "/sync-int-blog-3", TypeId = 1 }
+                new() { Title = "Sync Integration Blog 1", Url = "/sync-int-blog-1", TypeId = 1 },
+                new() { Title = "Sync Integration Blog 2", Url = "/sync-int-blog-2", TypeId = 2 },
+                new() { Title = "Sync Integration Blog 3", Url = "/sync-int-blog-3", TypeId = 1 }
             };
 
             // Act
@@ -230,40 +187,44 @@ namespace EntityFrameworkCore.Tests
             Assert.Equal(53, count); // 50 seeded + 3 new
         }
 
-        #endregion
+        #endregion Add/Insert Tests
 
         #region ExecuteUpdate Tests (Async)
 
-        [Fact]
+        [SkippableFact]
         public async Task UpdateAsync_ShouldUpdateMatchingBlogs()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
             // Act - Update all blogs with TypeId = 1 to have a new title prefix
             var updatedCount = await repository.UpdateAsync(
                 predicate: blog => blog.TypeId == 1,
-                setPropertyCalls: setters => setters.SetProperty(b => b.Title, b => "Updated: " + b.Title)
-            );
+                setPropertyCalls: setters => setters.SetProperty(b => b.Title, b => "Updated: " + b.Title));
 
             // Assert
             Assert.True(updatedCount > 0);
 
             // Verify the updates
             var updatedBlogs = await repository.SearchAsync(
-                repository.MultipleResultQuery().AndFilter(b => b.TypeId == 1)
-            );
+                repository.MultipleResultQuery().AndFilter(b => b.TypeId == 1));
 
             Assert.All(updatedBlogs, blog => Assert.StartsWith("Updated: ", blog.Title));
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task UpdateAsync_ShouldUpdateSingleProperty()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
             var targetBlogId = 1;
@@ -271,25 +232,26 @@ namespace EntityFrameworkCore.Tests
             // Act - Update URL for a specific blog
             var updatedCount = await repository.UpdateAsync(
                 predicate: blog => blog.Id == targetBlogId,
-                setPropertyCalls: setters => setters.SetProperty(b => b.Url, "/updated-url-async")
-            );
+                setPropertyCalls: setters => setters.SetProperty(b => b.Url, "/updated-url-async"));
 
             // Assert
             Assert.Equal(1, updatedCount);
 
             // Verify the update
             var updatedBlog = await repository.FirstOrDefaultAsync(
-                repository.SingleResultQuery().AndFilter(b => b.Id == targetBlogId)
-            );
+                repository.SingleResultQuery().AndFilter(b => b.Id == targetBlogId));
 
             Assert.Equal("/updated-url-async", updatedBlog.Url);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task UpdateAsync_ShouldUpdateMultipleProperties()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
@@ -298,16 +260,14 @@ namespace EntityFrameworkCore.Tests
                 predicate: blog => blog.TypeId == 2,
                 setPropertyCalls: setters => setters
                     .SetProperty(b => b.Title, "Bulk Updated Title Async")
-                    .SetProperty(b => b.Url, "/bulk-updated-async")
-            );
+                    .SetProperty(b => b.Url, "/bulk-updated-async"));
 
             // Assert
             Assert.True(updatedCount > 0);
 
             // Verify the updates
             var updatedBlogs = await repository.SearchAsync(
-                repository.MultipleResultQuery().AndFilter(b => b.TypeId == 2)
-            );
+                repository.MultipleResultQuery().AndFilter(b => b.TypeId == 2));
 
             Assert.All(updatedBlogs, blog =>
             {
@@ -316,83 +276,90 @@ namespace EntityFrameworkCore.Tests
             });
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task UpdateAsync_WithNoMatches_ShouldReturnZero()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
             // Act - Try to update blogs that don't exist
             var updatedCount = await repository.UpdateAsync(
                 predicate: blog => blog.Id == 99999,
-                setPropertyCalls: setters => setters.SetProperty(b => b.Title, "Should Not Update")
-            );
+                setPropertyCalls: setters => setters.SetProperty(b => b.Title, "Should Not Update"));
 
             // Assert
             Assert.Equal(0, updatedCount);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task UpdateAsync_ShouldUpdateBasedOnComputedValue()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
             // Act - Update title by appending existing URL
             var updatedCount = await repository.UpdateAsync(
                 predicate: blog => blog.Id <= 5,
-                setPropertyCalls: setters => setters.SetProperty(b => b.Title, b => b.Title + " [" + b.Url + "]")
-            );
+                setPropertyCalls: setters => setters.SetProperty(b => b.Title, b => b.Title + " [" + b.Url + "]"));
 
             // Assert
             Assert.Equal(5, updatedCount);
 
             // Verify
             var updatedBlogs = await repository.SearchAsync(
-                repository.MultipleResultQuery().AndFilter(b => b.Id <= 5)
-            );
+                repository.MultipleResultQuery().AndFilter(b => b.Id <= 5));
 
             Assert.All(updatedBlogs, blog => Assert.Contains("[", blog.Title));
         }
 
-        #endregion
+        #endregion ExecuteUpdate Tests (Async)
 
         #region ExecuteUpdate Tests (Sync)
 
-        [Fact]
+        [SkippableFact]
         public void Update_ShouldUpdateMatchingBlogs_Sync()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
             // Act - Update all blogs with TypeId = 1 to have a new title prefix
             var updatedCount = repository.Update(
                 predicate: blog => blog.TypeId == 1,
-                setPropertyCalls: setters => setters.SetProperty(b => b.Title, b => "Sync Updated: " + b.Title)
-            );
+                setPropertyCalls: setters => setters.SetProperty(b => b.Title, b => "Sync Updated: " + b.Title));
 
             // Assert
             Assert.True(updatedCount > 0);
 
             // Verify the updates
             var updatedBlogs = repository.Search(
-                repository.MultipleResultQuery().AndFilter(b => b.TypeId == 1)
-            );
+                repository.MultipleResultQuery().AndFilter(b => b.TypeId == 1));
 
             Assert.All(updatedBlogs, blog => Assert.StartsWith("Sync Updated: ", blog.Title));
         }
 
-        [Fact]
+        [SkippableFact]
         public void Update_ShouldUpdateSingleProperty_Sync()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
             var targetBlogId = 2;
@@ -400,25 +367,26 @@ namespace EntityFrameworkCore.Tests
             // Act - Update URL for a specific blog
             var updatedCount = repository.Update(
                 predicate: blog => blog.Id == targetBlogId,
-                setPropertyCalls: setters => setters.SetProperty(b => b.Url, "/updated-url-sync")
-            );
+                setPropertyCalls: setters => setters.SetProperty(b => b.Url, "/updated-url-sync"));
 
             // Assert
             Assert.Equal(1, updatedCount);
 
             // Verify the update
             var updatedBlog = repository.FirstOrDefault(
-                repository.SingleResultQuery().AndFilter(b => b.Id == targetBlogId)
-            );
+                repository.SingleResultQuery().AndFilter(b => b.Id == targetBlogId));
 
             Assert.Equal("/updated-url-sync", updatedBlog.Url);
         }
 
-        [Fact]
+        [SkippableFact]
         public void Update_ShouldUpdateMultipleProperties_Sync()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
@@ -427,16 +395,14 @@ namespace EntityFrameworkCore.Tests
                 predicate: blog => blog.TypeId == 2,
                 setPropertyCalls: setters => setters
                     .SetProperty(b => b.Title, "Bulk Updated Title Sync")
-                    .SetProperty(b => b.Url, "/bulk-updated-sync")
-            );
+                    .SetProperty(b => b.Url, "/bulk-updated-sync"));
 
             // Assert
             Assert.True(updatedCount > 0);
 
             // Verify the updates
             var updatedBlogs = repository.Search(
-                repository.MultipleResultQuery().AndFilter(b => b.TypeId == 2)
-            );
+                repository.MultipleResultQuery().AndFilter(b => b.TypeId == 2));
 
             Assert.All(updatedBlogs, blog =>
             {
@@ -445,38 +411,43 @@ namespace EntityFrameworkCore.Tests
             });
         }
 
-        [Fact]
+        [SkippableFact]
         public void Update_WithNoMatches_ShouldReturnZero_Sync()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
             // Act - Try to update blogs that don't exist
             var updatedCount = repository.Update(
                 predicate: blog => blog.Id == 99999,
-                setPropertyCalls: setters => setters.SetProperty(b => b.Title, "Should Not Update")
-            );
+                setPropertyCalls: setters => setters.SetProperty(b => b.Title, "Should Not Update"));
 
             // Assert
             Assert.Equal(0, updatedCount);
         }
 
-        #endregion
+        #endregion ExecuteUpdate Tests (Sync)
 
         #region Entity-Based Update Tests
 
-        [Fact]
+        [SkippableFact]
         public void UpdateEntity_ShouldUpdateSpecificProperties()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
-            
+
             var blog = repository.FirstOrDefault(repository.SingleResultQuery().AndFilter(b => b.Id == 3));
-            
+
             // Modify the blog
             blog.Title = "Updated via Entity";
             blog.Url = "/updated-via-entity";
@@ -487,27 +458,30 @@ namespace EntityFrameworkCore.Tests
 
             // Assert
             Assert.NotNull(updatedBlog);
-            
-            // Reload from database to verify
-            var reloadedBlog = repository.FirstOrDefault(
-                repository.SingleResultQuery().AndFilter(b => b.Id == 3)
-            );
+
+            // Reload from database via new scope to verify persistence (avoids EF returning tracked instance)
+            using var verifyScope = _fixture.ServiceProvider!.CreateScope();
+
+            var verifyRepository = verifyScope.ServiceProvider.GetRequiredService<IUnitOfWork>().Repository<Blog>();
+            var reloadedBlog = verifyRepository.FirstOrDefault(verifyRepository.SingleResultQuery().AndFilter(b => b.Id == 3));
+
             Assert.Equal("Updated via Entity", reloadedBlog.Title);
             Assert.Equal("/updated-via-entity", reloadedBlog.Url);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task UpdateEntity_ShouldUpdateAllProperties_Async()
         {
+            SkipIfDockerUnavailable();
+
             // Arrange
-            using var scope = _serviceProvider.CreateScope();
+            using var scope = _fixture.ServiceProvider!.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
-            
-            var blog = await repository.FirstOrDefaultAsync(
-                repository.SingleResultQuery().AndFilter(b => b.Id == 4)
-            );
-            
+
+            var blog = await repository.FirstOrDefaultAsync(repository.SingleResultQuery().AndFilter(b => b.Id == 4));
+
             // Modify the blog
             blog.Title = "Fully Updated Blog";
             blog.Url = "/fully-updated";
@@ -517,15 +491,17 @@ namespace EntityFrameworkCore.Tests
             var updatedBlog = repository.Update(blog);
             await unitOfWork.SaveChangesAsync();
 
-            // Assert
-            var reloadedBlog = await repository.FirstOrDefaultAsync(
-                repository.SingleResultQuery().AndFilter(b => b.Id == 4)
-            );
+            // Assert - reload via new scope to verify persistence (avoids EF returning tracked instance)
+            using var verifyScope = _fixture.ServiceProvider!.CreateScope();
+
+            var verifyRepository = verifyScope.ServiceProvider.GetRequiredService<IUnitOfWork>().Repository<Blog>();
+            var reloadedBlog = await verifyRepository.FirstOrDefaultAsync(verifyRepository.SingleResultQuery().AndFilter(b => b.Id == 4));
+
             Assert.Equal("Fully Updated Blog", reloadedBlog.Title);
             Assert.Equal("/fully-updated", reloadedBlog.Url);
             Assert.Equal(2, reloadedBlog.TypeId);
         }
 
-        #endregion
+        #endregion Entity-Based Update Tests
     }
 }
