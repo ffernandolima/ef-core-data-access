@@ -9,7 +9,7 @@ It's a modern and generic data access structure for .NET and Microsoft.EntityFra
 - [Implementation for EntityFrameworkCore 7.x](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-7)
 - [Implementation for EntityFrameworkCore 8.x](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-8)
 - [Implementation for EntityFrameworkCore 9.x](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-9)
-- - [Implementation for EntityFrameworkCore 9.x](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-10)
+- [Implementation for EntityFrameworkCore 10.x](https://github.com/ffernandolima/ef-core-data-access/tree/ef-core-10)
 
 ## Give a Star! :star:
 
