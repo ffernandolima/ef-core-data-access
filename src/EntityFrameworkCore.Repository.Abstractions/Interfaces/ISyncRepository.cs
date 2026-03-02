@@ -34,7 +34,7 @@ namespace EntityFrameworkCore.Repository.Interfaces
         T Add(T entity);
         void AddRange(IEnumerable<T> entities);
         T Update(T entity, params Expression<Func<T, object>>[] properties);
-        int Update(Expression<Func<T, bool>> predicate, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> expression);
+        int Update(Expression<Func<T, bool>> predicate, Action<UpdateSettersBuilder<T>> setPropertyCalls);
         void UpdateRange(IEnumerable<T> entities, params Expression<Func<T, object>>[] properties);
         T Remove(T entity);
         int Remove(Expression<Func<T, bool>> predicate);
