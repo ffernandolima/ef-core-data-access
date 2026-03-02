@@ -2,9 +2,9 @@ name: build-and-tests
 
 on:
   push:
-     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7, ef-core-8, ef-core-9 ]
+     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7, ef-core-8, ef-core-9, ef-core-10 ]
   pull_request:
-     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7, ef-core-8, ef-core-9 ]
+     branches: [ ef-core-2, ef-core-3, ef-core-5, ef-core-6, ef-core-7, ef-core-8, ef-core-9, ef-core-10 ]
 
 jobs:
   build:
@@ -41,6 +41,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
+    - name: Setup .NET 10.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
