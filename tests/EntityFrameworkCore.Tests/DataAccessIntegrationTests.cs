@@ -1,6 +1,7 @@
 using EntityFrameworkCore.Models;
 using EntityFrameworkCore.UnitOfWork.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -113,11 +114,12 @@ namespace EntityFrameworkCore.Tests
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
+            var uniqueSuffix = Guid.NewGuid().ToString("N");
             var newBlogs = new List<Blog>
             {
-                new() { Title = "Integration Blog 1", Url = "/integration-blog-1", TypeId = 1 },
-                new() { Title = "Integration Blog 2", Url = "/integration-blog-2", TypeId = 2 },
-                new() { Title = "Integration Blog 3", Url = "/integration-blog-3", TypeId = 1 }
+                new() { Title = $"Integration Blog 1 {uniqueSuffix}", Url = $"/integration-blog-1-{uniqueSuffix}", TypeId = 1 },
+                new() { Title = $"Integration Blog 2 {uniqueSuffix}", Url = $"/integration-blog-2-{uniqueSuffix}", TypeId = 2 },
+                new() { Title = $"Integration Blog 3 {uniqueSuffix}", Url = $"/integration-blog-3-{uniqueSuffix}", TypeId = 1 }
             };
 
             // Act
@@ -125,8 +127,11 @@ namespace EntityFrameworkCore.Tests
             await unitOfWork.SaveChangesAsync();
 
             // Assert
-            var count = await repository.CountAsync();
-            Assert.Equal(53, count); // 50 seeded + 3 new
+            foreach (var blog in newBlogs)
+            {
+                var exists = await repository.AnyAsync(b => b.Title == blog.Title && b.Url == blog.Url);
+                Assert.True(exists, $"Blog with Title '{blog.Title}' and Url '{blog.Url}' should exist.");
+            }
         }
 
         [SkippableFact]
@@ -140,10 +145,11 @@ namespace EntityFrameworkCore.Tests
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
+            var uniqueSuffix = Guid.NewGuid().ToString("N");
             var newBlog = new Blog
             {
-                Title = "New Sync Integration Blog",
-                Url = "/new-sync-integration-blog",
+                Title = $"New Sync Integration Blog {uniqueSuffix}",
+                Url = $"/new-sync-integration-blog-{uniqueSuffix}",
                 TypeId = 1
             };
 
@@ -153,11 +159,11 @@ namespace EntityFrameworkCore.Tests
 
             // Assert
             Assert.NotNull(addedBlog);
-            Assert.Equal("New Sync Integration Blog", addedBlog.Title);
+            Assert.Equal(newBlog.Title, addedBlog.Title);
             Assert.True(addedBlog.Id > 0);
 
-            var count = repository.Count();
-            Assert.Equal(51, count); // 50 seeded + 1 new
+            var exists = repository.Any(b => b.Title == newBlog.Title && b.Url == newBlog.Url);
+            Assert.True(exists, $"Blog with Title '{newBlog.Title}' and Url '{newBlog.Url}' should exist.");
         }
 
         [SkippableFact]
@@ -171,11 +177,12 @@ namespace EntityFrameworkCore.Tests
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             var repository = unitOfWork.Repository<Blog>();
 
+            var uniqueSuffix = Guid.NewGuid().ToString("N");
             var newBlogs = new List<Blog>
             {
-                new() { Title = "Sync Integration Blog 1", Url = "/sync-int-blog-1", TypeId = 1 },
-                new() { Title = "Sync Integration Blog 2", Url = "/sync-int-blog-2", TypeId = 2 },
-                new() { Title = "Sync Integration Blog 3", Url = "/sync-int-blog-3", TypeId = 1 }
+                new() { Title = $"Sync Integration Blog 1 {uniqueSuffix}", Url = $"/sync-int-blog-1-{uniqueSuffix}", TypeId = 1 },
+                new() { Title = $"Sync Integration Blog 2 {uniqueSuffix}", Url = $"/sync-int-blog-2-{uniqueSuffix}", TypeId = 2 },
+                new() { Title = $"Sync Integration Blog 3 {uniqueSuffix}", Url = $"/sync-int-blog-3-{uniqueSuffix}", TypeId = 1 }
             };
 
             // Act
@@ -183,8 +190,11 @@ namespace EntityFrameworkCore.Tests
             unitOfWork.SaveChanges();
 
             // Assert
-            var count = repository.Count();
-            Assert.Equal(53, count); // 50 seeded + 3 new
+            foreach (var blog in newBlogs)
+            {
+                var exists = repository.Any(b => b.Title == blog.Title && b.Url == blog.Url);
+                Assert.True(exists, $"Blog with Title '{blog.Title}' and Url '{blog.Url}' should exist.");
+            }
         }
 
         #endregion Add/Insert Tests
